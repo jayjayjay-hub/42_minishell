@@ -1,23 +1,19 @@
 #include "minishell.h"
 
-// int	main(void)
-// {
-// 	char *line;
-
-// 	while (1)
-// 	{
-// 		line = readline("minishell$ ");
-// 		if (!line)
-// 			break ;
-// 		write(1, line, ft_strlen(line));
-// 		free(line);
-// 	}
-// }
-
 void	ft_error(void)
 {
 	write(2, "Error\n", 6);
 	exit(1);
+}
+
+void	dp_free(char **arg)
+{
+	int	i;
+
+	i = -1;
+	while (arg[++i])
+		free(arg[i]);
+	free(arg);
 }
 
 char	*search_path(char *cmd, char **envp)
@@ -37,7 +33,7 @@ char	*search_path(char *cmd, char **envp)
 		if (access(*paths, F_OK) == 0)
 		{
 			ret = ft_strdup(*paths);
-			// dp_free(tmp_free);
+			dp_free(tmp_free);
 			return (ret);
 		}
 		paths++;
