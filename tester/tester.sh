@@ -13,7 +13,7 @@ cleanup() {
 
 assert() {
 	# テストケースの表示
-	printf '%-30s:' "\"$1\""
+	printf '%-36s:' "\"$1\""
 
 	# テストケースの実行
 	# bash -c "$1" >cmp 2>&-
@@ -34,20 +34,33 @@ assert() {
 	echo
 }
 
-# テストケースをここに追加していく
+# step3 Exec Path
+# 絶対パスのコマンド
 assert '/bin/pwd'
 assert '/bin/ls'
 assert '/bin/echo'
 
+# step4 Exec Filename
 # 引数なしのコマンド
 assert 'pwd'
 assert 'echo'
 assert 'ls'
 assert './a.out'
-
-# エラーコマンドstatus 127
+# exit status 127 (command not found)
 assert 'a.out'
 assert 'nosuchfile'
+
+# step5 Tokenizer
+# ダブル、シングルクオーテンションのハンドリング
+assert 'ls /'
+assert 'echo hello    world'
+assert "echo 'hello   world' '42Tokyo'"
+assert "echo '\"hello   world\"' '42Tokyo'"
+assert "echo \"hello   world\" \"42Tokyo\""
+assert "echo \"'hello   world'\" \"42Tokyo\""
+assert "echo hello'      world'"
+assert "echo hello'  world  '\"  42Tokyo  \""
+# assert ""
 
 cleanup
 echo 'Done.'
