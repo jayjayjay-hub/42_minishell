@@ -7,6 +7,9 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 
+// exit status
+# define CMD_NOT_FOUND	127
+
 # include "libft.h"
 # include "ft_printf.h"
 # include "get_next_line_bonus.h"

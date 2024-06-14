@@ -14,7 +14,7 @@ void	cmd_not_found(char *cmd)
 	if (cmd)
 		write(2, cmd, ft_strlen(cmd));
 	write(2, ": command not found\n", 20);
-	exit(127);
+	exit(CMD_NOT_FOUND);
 }
 
 // 二次元配列を解放する。
