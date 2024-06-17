@@ -23,13 +23,13 @@ assert() {
 	actual=$?
 
 	# 出力結果の比較
-	diff cmp out >/dev/null && echo -n '  diff OK' || echo -n '  diff NG'
+	diff cmp out >/dev/null && echo -n -e "  diff \033[32mOK\033[0m" || echo -n -e "  diff \033[31mKO\033[0m"
 
 	# exit status の比較
 	if [ "$actual" = "$expected" ]; then
-		echo -n '  status OK'
+		echo -n -e "  status \033[32mOK\033[0m"
 	else
-		echo -n "  status NG, expected $expected but got $actual"
+		echo -n -e "  status \033[31mKO\033[0m, expected $expected but got $actual"
 	fi
 	echo
 }
