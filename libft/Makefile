@@ -63,7 +63,8 @@ STR_SRC		=	ft_strjoin.c\
 				ft_strdup.c\
 				ft_split.c\
 				ft_striteri.c\
-				put_message.c
+				put_message.c\
+				pass_space.c
 
 FD_DIR		= fd/
 FD_SRC		=	ft_putchar_fd.c\
