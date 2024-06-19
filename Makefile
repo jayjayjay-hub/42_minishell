@@ -13,6 +13,7 @@ OBJ_DIR = .obj/
 CC = cc
 LDFRAGS = -lreadline
 # CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -g
 RM = rm -rf
 NORM = norminette
 
