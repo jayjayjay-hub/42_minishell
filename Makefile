@@ -13,13 +13,11 @@ OBJ_DIR = .obj/
 CC = cc
 LDFRAGS = -lreadline
 # CFLAGS = -Wall -Wextra -Werror
-AR = ar
-ARFLAGS = rcs
 RM = rm -rf
 NORM = norminette
 
 # 新しいファイルはここに書いていって！
-SRC_FILES = main.c
+SRC_FILES = main.c tokenizer.c
 OJB_FILES = $(SRC_FILES:%.c=%.o)
 
 SRCS = $(addprefix $(SRC_DIR), $(SRC_FILES))
