@@ -116,7 +116,7 @@ void	ft_error(void)
 
 int main(void)
 {
-	char *line = "ls -l |grep";
+	char *line = "\"ls -l |grep                 || \"test";
 	t_token *token;
 	t_token *token_head;
 
@@ -125,7 +125,7 @@ int main(void)
 	// print token
 	while (token)
 	{
-		printf("str: '%s', type: %d\n", token->str, token->type);
+		printf("str: %s, type: %d\n", token->str, token->type);
 		token = token->next;
 	}
 	// free token
