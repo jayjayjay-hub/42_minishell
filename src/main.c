@@ -114,14 +114,22 @@ void	ft_error(void)
 // 	exit(status);
 // }
 
-t_token *tokenize(char *line);
-
 int main(void)
 {
-	char *line = "ls -l || grep minishell";
+	char *line = "ls -l |grep";
 	t_token *token;
+	t_token *token_head;
 
 	token = tokenize(line);
+	token_head = token;
+	// print token
+	while (token)
+	{
+		printf("str: '%s', type: %d\n", token->str, token->type);
+		token = token->next;
+	}
+	// free token
+	free_token(token_head);
 	return (0);
 }
 

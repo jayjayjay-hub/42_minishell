@@ -6,11 +6,6 @@ int is_metachar(char c)
 	return (c && ft_strchr("|&;()<> \t\n", c));
 }
 
-int	is_blank(char c)
-{
-	return (c == ' ' || c == '\t' || c == '\n');
-}
-
 int	is_word(const char *s)
 {
 	return (*s && !is_metachar(*s));
@@ -19,7 +14,7 @@ int	is_word(const char *s)
 int	is_operator(const char *s)
 {
 	static char	*const operators[] = {"||", "&", "&&", ";", ";;", "(", ")", "|", "\n"};
-	size_t				i = 0;				
+	size_t				i = 0;
 
 	while (i < sizeof(operators) / sizeof(*operators))
 	{
@@ -30,32 +25,7 @@ int	is_operator(const char *s)
 	return (0);
 }
 
-t_token *new_token(char *str, t_token_type type)
-{
-	t_token *ret;
-
-	ret = ft_calloc(1, sizeof(t_token));
-	if (!ret)
-		ft_error();
-	ret->str = str;
-	ret->type = type;
-	return (ret);
-}
-
-int	consume_blank(char **rest, char *line)
-{
-	if (is_blank(*line))
-	{
-		while (*line && is_blank(*line))
-			line++;
-		*rest = line;
-		return (1);
-	}
-	*rest = line;
-	return (0);
-}
-
-t_token *word(char **ret, char *line)
+t_token *word(char *line)
 {
 	const char	*start;
 	char		*word;
@@ -66,24 +36,13 @@ t_token *word(char **ret, char *line)
 	word = strndup(start, line - start);
 	if (!word)
 		ft_error();
-	*ret = line;
-	return (new_token(word, WORD));
+	return (new_token_(word, WORD));
 }
 
-// debug用
-void print_token(t_token *token)
-{
-	while (token)
-	{
-		ft_printf("str: %s, type: %d\n", token->str, token->type);
-		token = token->next;
-	}
-}
-
-t_token	*operator(char **rest, char *line)
+t_token	*operator(char *line)
 {
 	static char	*const	operators[] = {"||", "&", "&&", ";", ";;", "(", ")", "|", "\n"};
-	size_t				i = 0;				
+	size_t				i = 0;
 	char				*op;
 
 	while (i < sizeof(operators) / sizeof(*operators))
@@ -93,8 +52,7 @@ t_token	*operator(char **rest, char *line)
 			op = strdup(operators[i]);
 			if (op == NULL)
 				ft_error();
-			*rest = line + strlen(op);
-			return (new_token(op, OP));
+			return (new_token_(op, OP));
 		}
 		i++;
 	}
@@ -102,28 +60,34 @@ t_token	*operator(char **rest, char *line)
 	return (NULL);
 }
 
+int	get_token(t_token **token, char *line, t_token_type type)
+{
+	t_token	*new_token;
+	char	*rest;
+
+	if (type == WORD)
+		new_token = word(line);
+	else if (type == OP)
+		new_token = operator(line);
+	add_back(token, new_token);
+	return (ft_strlen(new_token->str));
+}
+
 t_token *tokenize(char *line)
 {
-	t_token head;
-	t_token *current;
+	t_token *token = NULL;
+	int	token_len;
 
-	head.next = NULL;
-	current = &head;
 	while (*line)
 	{
-		if (consume_blank(&line, line))
-			continue ;
-		else if (is_operator(line))
-			current->next = operator(&line, line);
+		line = pass_space(line);
+		if (is_operator(line))
+			token_len = get_token(&token, line, OP);
 		else if (is_word(line))
-			current->next = word(&line, line);
+			token_len = get_token(&token, line, WORD);
 		else
 			ft_error();
-		current = current->next;
-		if (*line)
-			line++;
+		line += token_len;
 	}
-	current->next = new_token(NULL, MY_EOF);
-	print_token(head.next);
-	return (head.next);
+	return (token);
 }
