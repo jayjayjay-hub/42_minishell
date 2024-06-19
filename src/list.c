@@ -68,3 +68,16 @@ void	new_add_back(t_token **head, char *str, t_token_type type)
 	new = new_token(str, type);
 	add_back(head, new);
 }
+
+void	free_list(t_token *list)
+{
+	t_token	*tmp;
+
+	while (list)
+	{
+		tmp = list->next;
+		free(list->str);
+		free(list);
+		list = tmp;
+	}
+}
