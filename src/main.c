@@ -118,9 +118,14 @@ t_token *tokenize(char *line);
 
 int main(void)
 {
-	char *line = "ls -l | grep minishell";
+	char *line = "ls -l || grep minishell";
 	t_token *token;
 
 	token = tokenize(line);
 	return (0);
+}
+
+__attribute__((destructor))
+static void destructor() {
+    system("leaks -q minishell");
 }

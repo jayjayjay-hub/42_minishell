@@ -18,7 +18,7 @@
 typedef enum e_token_type
 {
 	WORD,
-	PIPE,
+	OP,
 	REDIRECT_IN,
 	REDIRECT_OUT,
 	REDIRECT_APPEND,
@@ -33,5 +33,8 @@ typedef struct s_token
 
 // main.c
 void	ft_error(void);
+
+// tokenizer.c
+t_token *tokenize(char *line);
 
 #endif
