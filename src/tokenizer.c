@@ -36,7 +36,7 @@ t_token *word(char *line)
 	word = strndup(start, line - start);
 	if (!word)
 		ft_error();
-	return (new_token_(word, WORD));
+	return (new_token(word, WORD));
 }
 
 t_token	*operator(char *line)
@@ -52,7 +52,7 @@ t_token	*operator(char *line)
 			op = strdup(operators[i]);
 			if (op == NULL)
 				ft_error();
-			return (new_token_(op, OP));
+			return (new_token(op, OP));
 		}
 		i++;
 	}

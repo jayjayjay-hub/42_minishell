@@ -37,7 +37,7 @@ void	add_back(t_token **list, t_token *new)
 	}
 }
 
-t_token	*new_token_(char *str, t_token_type type)
+t_token	*new_token(char *str, t_token_type type)
 {
 	t_token *token;
 

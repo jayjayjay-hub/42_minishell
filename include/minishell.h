@@ -37,7 +37,9 @@ void	ft_error(void);
 
 // tokenizer.c
 t_token *tokenize(char *line);
-t_token	*new_token_(char *str, t_token_type type);
+
+// list.c
+t_token	*new_token(char *str, t_token_type type);
 void	add_back(t_token **list, t_token *new);
 void	free_token(t_token *token);
 
