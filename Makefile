@@ -1,50 +1,79 @@
-
 NAME = minishell
 
+LIBFT_NAME = libft
+LIBFT_DIR = libft/
+
+INCLUDE_DIR = include/
+INCLUDE = -I $(INCLUDE_DIR)
+LIBFT_INCLUDE = -I $(LIBFT_DIR)$(INCLUDE_DIR)
+
+SRC_DIR = src/
+OBJ_DIR = .obj/
+
 CC = cc
-# FLAGS = -Wall -Wextra -Werror
-IFRAGS = -Iinclude -Iutils/gnl -Iutils/printf -Iutils/libft
-MFLAGS = -lreadline
+LDFRAGS = -lreadline
+# CFLAGS = -Wall -Wextra -Werror
+AR = ar
+ARFLAGS = rcs
+RM = rm -rf
+NORM = norminette
 
-SRCS = $(wildcard ./src/*.c \
-		./utils/libft/*.c \
-		./utils/printf/*.c \
-		./utils/gnl/*.c)
-OBJS = $(SRCS:.c=.o)
+# 新しいファイルはここに書いていって！
+SRC_FILES = main.c
+OJB_FILES = $(SRC_FILES:%.c=%.o)
 
-Y = "\033[33m"
-R = "\033[31m"
-G = "\033[32m"
-B = "\033[34m"
-X = "\033[0m"
-UP = "\033[A"
-CUT = "\033[K"
+SRCS = $(addprefix $(SRC_DIR), $(SRC_FILES))
+OBJS = $(addprefix $(OBJ_DIR), $(OJB_FILES))
 
-%.o : %.c
-	@echo $(Y)Compiling [$<]...$(X)
-	@$(CC) $(IFRAGS) $(FLAGS) -c -o $@ $<
+# color **********************************************
+Y 			= "\033[33m"
+R 			= "\033[31m"
+G 			= "\033[32m"
+B 			= "\033[34m"
+X 			= "\033[0m"
+UP 			= "\033[A"
+CUT 		= "\033[K"
+# *****************************************************
 
 all: $(NAME)
 
-$(NAME): $(OBJS)
-	@printf $(CUT)
-	@echo $(Y)Compiling [$(NAME)]...$(X)
-	@$(CC) $(OBJS) $(MFLAGS) -o $(NAME)
-	@echo $(G)Finished [$(NAME)]$(X)
-	@echo
+$(NAME): $(OBJ_DIR) $(OBJS)
+	@echo $(Y) "$(NAME) src files successfully compiled\n" $(X)
+	@echo $(B) "--> Into $(LIBFT_DIR)" $(X)
+	@$(MAKE) -C $(LIBFT_DIR)
+	@echo $(B) "<-- Out of $(LIBFT_DIR)\n" $(X)
+	@echo $(B) "$(NAME) creating" $(X)
+	@printf $(UP)$(CUT)
+	@$(CC) $(CFLAGS) $(LDFRAGS) $(OBJS) $(LIBFT_DIR)$(LIBFT_NAME) -o $(NAME)
+	@echo $(G) "!! $(NAME) created !!\n" $(X)
+
+$(OBJ_DIR):
+	@mkdir $(OBJ_DIR)
+
+$(OBJ_DIR)%.o: $(SRC_DIR)%.c
+	@echo $(Y) "Compiling $<" $(X)
+	@$(CC) $(CFLAGS) $(INCLUDE) $(LIBFT_INCLUDE) -c $< -o $@
+	@printf $(UP)$(CUT)
 
 clean:
-	@rm -rf $(OBJS)
-	@echo $(R)Removed [$(OBJS)]$(X)
+	@$(MAKE) -C $(LIBFT_DIR) clean
+	@$(RM) $(OBJ_DIR)
+	@echo $(R) "$(NAME) cleaned\n" $(X)
 
-fclean: clean
-	@rm -rf $(NAME)
-	@echo $(R)Removed [$(NAME)]$(X)
+fclean:
+	@$(MAKE) -C $(LIBFT_DIR) fclean
+	@$(RM) $(OBJ_DIR)
+	@$(RM) $(NAME)
+	@echo $(R) "$(NAME) fcleaned\n" $(X)
 
 re: fclean all
 
+rebonus: fclean bonus
+
 norm:
-	@norminette $(SRCS) | grep Error | wc -l
-	@norminette $(SRCS) | grep Error || true
-	
-.PHONY: all clean fclean re
+	@echo $(R) "<<< $(NAME) error count >>>" $(X)
+	@norminette $(SRC_DIR) $(INCLUDE_DIR) | grep Error | grep -v Error! | wc -l
+	@norminette $(SRC_DIR) $(INCLUDE_DIR) | grep Error || true
+	@$(MAKE) -C $(LIBFT_DIR) norm
+
+.PHONY: all clean fclean re norm
