@@ -142,7 +142,7 @@ int	main(int argc, char **argv, char **envp)
 // 	exit(WEXITSTATUS(status));
 // }
 
-__attribute__((destructor))
-static void destructor() {
-    system("leaks -q minishell");
-}
+// __attribute__((destructor))
+// static void destructor() {
+//     system("leaks -q minishell");
+// }
