@@ -63,7 +63,8 @@ STR_SRC		=	ft_strjoin.c\
 				ft_strdup.c\
 				ft_split.c\
 				ft_striteri.c\
-				put_message.c
+				put_message.c\
+				pass_space.c
 
 FD_DIR		= fd/
 FD_SRC		=	ft_putchar_fd.c\
@@ -91,6 +92,7 @@ LIBFT_SRC	+= $(addprefix $(MEM_DIR), $(MEM_SRC))
 LIBFT_SRC	+= $(addprefix $(STR_DIR), $(STR_SRC))
 LIBFT_SRC	+= $(addprefix $(FD_DIR), $(FD_SRC))
 LIBFT_SRC	+= $(addprefix $(LST_DIR), $(LST_SRC))
+LIBFT_SRC	+= $(addprefix $(ERROR_DIR), $(ERROR_SRC))
 
 GNL_DIR		= gnl/
 GNL_SRC		= get_next_line.c        get_next_line_utils.c
@@ -141,6 +143,7 @@ $(OBJ_DIR):
 	@mkdir $(OBJ_DIR)$(LIBFT_DIR)$(STR_DIR)
 	@mkdir $(OBJ_DIR)$(LIBFT_DIR)$(FD_DIR)
 	@mkdir $(OBJ_DIR)$(LIBFT_DIR)$(LST_DIR)
+	@mkdir $(OBJ_DIR)$(LIBFT_DIR)$(ERROR_DIR)
 	@mkdir $(OBJ_DIR)$(GNL_DIR)
 	@mkdir $(OBJ_DIR)$(FTPRINTF_DIR)
 

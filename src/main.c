@@ -88,6 +88,7 @@ void	run_cmd(char *line, char **envp)
 {
 	pid_t	pid;
 	int		status;
+	char	**cmd;
 
 	pid = fork();
 	if (pid == -1)
@@ -96,38 +97,46 @@ void	run_cmd(char *line, char **envp)
 		do_execve(line, envp);
 }
 
-int	main(int argc, char **argv, char **envp)
-{
-	char	*line;
-	int		status;
-
-	rl_outstream = stderr;
-	while (1)
-	{
-		line = readline("minishell$ ");
-		if (line == NULL || (!ft_strncmp(line, "exit", 4)))
-			break ;
-		if (*line)
-		{
-			add_history(line);
-			run_cmd(line, envp);
-			waitpid(-1, &status, 0);
-			free(line);
-		}
-	}
-	exit(status);
-}
-
-// t_token *tokenize(char *line);
-
-// int main(void)
+// int	main(int argc, char **argv, char **envp)
 // {
-// 	char *line = "ls -l || grep minishell";
-// 	t_token *token;
+// 	char	*line;
+// 	int		status;
 
-// 	token = tokenize(line);
-// 	return (0);
+// 	rl_outstream = stderr;
+// 	while (1)
+// 	{
+// 		line = readline("minishell$ ");
+// 		if (line == NULL || (!ft_strncmp(line, "exit", 4)))
+// 			break ;
+// 		if (*line)
+// 		{
+// 			add_history(line);
+// 			run_cmd(line, envp);
+// 			waitpid(-1, &status, 0);
+// 			free(line);
+// 		}
+// 	}
+// 	exit(status);
 // }
+
+int main(void)
+{
+	char *line = "ls -la | grep";
+	t_token *token;
+	t_token *token_head;
+
+	token = tokenize(line);
+	token_head = token;
+	// print token
+	while (token)
+	{
+		printf("str: %s, type: %d\n", token->str, token->type);
+		token = token->next;
+	}
+	// free token
+	free_token(token_head);
+	return (0);
+}
 
 __attribute__((destructor))
 static void destructor() {

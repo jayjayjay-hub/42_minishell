@@ -7,6 +7,7 @@
 # include <string.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <stdbool.h>
 
 # include "libft.h"
 # include "ft_printf.h"
@@ -19,9 +20,8 @@ typedef enum e_token_type
 {
 	WORD,
 	OP,
-	REDIRECT_IN,
-	REDIRECT_OUT,
-	REDIRECT_APPEND,
+	// ダブルシングルクォーテーションで囲まれた文字列はSTRとして扱って欲しい
+	STR,
 	MY_EOF,
 }	t_token_type;
 typedef struct s_token
@@ -36,5 +36,10 @@ void	ft_error(void);
 
 // tokenizer.c
 t_token *tokenize(char *line);
+
+// list.c
+t_token	*new_token(char *str, t_token_type type);
+void	add_back(t_token **list, t_token *new);
+void	free_token(t_token *token);
 
 #endif

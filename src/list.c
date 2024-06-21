@@ -20,51 +20,51 @@ typedef struct s_token
 }	t_token;
 */
 
-// add front
-void	add_front(t_token **list, t_token *new)
-{
-	if (!list || !new)
-		return ;
-	new->next = *list;
-	*list = new;
-}
-
-// add back
 void	add_back(t_token **list, t_token *new)
 {
+	t_token	*tmp;
+
 	if (!list || !new)
 		return ;
-	if (*list)
-		list_last(*list)->next = new;
-	else
+	if (*list == NULL)
 		*list = new;
-}
-
-t_token *list_last(t_token *list)
-{
-	if (!list)
-		return (NULL);
-	while (list->next)
-		list = list->next;
-	return (list);
+	else
+	{
+		tmp = *list;
+		while (tmp->next)
+			tmp = tmp->next;
+		tmp->next = new;
+	}
 }
 
 t_token	*new_token(char *str, t_token_type type)
 {
-	t_token	*ret;
+	t_token *token;
 
-	ret = (t_token *)malloc(sizeof(t_token));
-	if (!ret)
+	token = malloc(sizeof(t_token));
+	if (!token)
 		ft_error();
-	ret->str = str;
-	ret->type = type;
-	return (ret);
+	token->str = str;
+	if (!token->str)
+	{
+		perror("Failed to duplicate string");
+		free(token);
+		exit(EXIT_FAILURE);
+	}
+	token->type = type;
+	token->next = NULL;
+	return token;
 }
 
-void	new_add_back(t_token **head, char *str, t_token_type type)
+void	free_token(t_token *token)
 {
-	t_token	*new;
+	t_token *tmp;
 
-	new = new_token(str, type);
-	add_back(head, new);
+	while (token)
+	{
+		tmp = token;
+		token = token->next;
+		free(tmp->str);
+		free(tmp);
+	}
 }
