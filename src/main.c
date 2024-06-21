@@ -84,15 +84,17 @@ void	run_cmd(char *line, char **envp)
 {
 	pid_t	pid;
 	t_token	*token;
+	t_token	*free_tmp;
 	char	**cmd;
 	int		i = 0;
 
 	token = tokenize(line);
-	// pid = fork();
-	// if (pid == -1)
-	// 	ft_error();
-	// if (pid == 0)
-	// {
+	free_tmp = token;
+	pid = fork();
+	if (pid == -1)
+		ft_error();
+	if (pid == 0)
+	{
 		// 10のとこはリストの長さ
 		cmd = (char **)malloc(sizeof(char *) * 10);
 		while (token && token->type == WORD)
@@ -103,42 +105,42 @@ void	run_cmd(char *line, char **envp)
 			i++;
 		}
 		do_execve(cmd, envp);
-	// }
-	free_token(token);
+	}
+	free_token(free_tmp);
 }
 
-// int	main(int argc, char **argv, char **envp)
-// {
-// 	char	*line;
-// 	int		status;
-
-// 	rl_outstream = stderr;
-// 	while (1)
-// 	{
-// 		line = readline("minishell$ ");
-// 		if (line == NULL || (!ft_strncmp(line, "exit", 4)))
-// 			break ;
-// 		if (*line)
-// 		{
-// 			add_history(line);
-// 			run_cmd(line, envp);
-// 			waitpid(-1, &status, 0);
-// 			free(line);
-// 		}
-// 	}
-// 	exit(WEXITSTATUS(status));
-// }
-
-int main(int argc, char **argv, char **envp)
+int	main(int argc, char **argv, char **envp)
 {
-	int status = 0;
-	char *line = "nosuchcommand";
-	// char *line = "ls";
+	char	*line;
+	int		status;
 
-	run_cmd(line, envp);
-	// waitpid(-1, &status, 0);
+	rl_outstream = stderr;
+	while (1)
+	{
+		line = readline("minishell$ ");
+		if (line == NULL || (!ft_strncmp(line, "exit", 4)))
+			break ;
+		if (*line)
+		{
+			add_history(line);
+			run_cmd(line, envp);
+			waitpid(-1, &status, 0);
+			free(line);
+		}
+	}
 	exit(WEXITSTATUS(status));
 }
+
+// int main(int argc, char **argv, char **envp)
+// {
+// 	int status = 0;
+// 	char *line = "nosuchcommand";
+// 	// char *line = "ls";
+
+// 	run_cmd(line, envp);
+// 	// waitpid(-1, &status, 0);
+// 	exit(WEXITSTATUS(status));
+// }
 
 __attribute__((destructor))
 static void destructor() {
