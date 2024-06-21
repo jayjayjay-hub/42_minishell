@@ -45,7 +45,11 @@ char	*search_path(char *cmd, char **envp)
 		tmp_ret = ft_strjoin(paths[i], "/");
 		ret = ft_strjoin(tmp_ret, cmd);
 		if (access(ret, F_OK) == 0)
+		{
+			dp_free(paths);
+			free(tmp_ret);
 			return (ret);
+		}
 		free(tmp_ret);
 		free(ret);
 		i++;
@@ -142,7 +146,7 @@ int	main(int argc, char **argv, char **envp)
 // 	exit(WEXITSTATUS(status));
 // }
 
-// __attribute__((destructor))
-// static void destructor() {
-//     system("leaks -q minishell");
-// }
+__attribute__((destructor))
+static void destructor() {
+    system("leaks -q minishell");
+}
