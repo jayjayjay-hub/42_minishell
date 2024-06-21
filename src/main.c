@@ -37,7 +37,7 @@ char	*search_path(char *cmd, char **envp)
 	char	*ret;
 
 	i = 0;
-	while (ft_strncmp(*envp, "PATH", 4))
+	while (*envp && ft_strncmp(*envp, "PATH", 4))
 		envp++;
 	paths = ft_split(*envp + 5, ':');
 	while (paths[i])
@@ -75,6 +75,7 @@ void	do_execve(char **cmd, char **envp)
 	// 連続でtesterを実行するとexecveが失敗することがある
 	execve(path, cmd, envp);
 	perror("execve");
+	exit(1);
 }
 
 // 子プロセスを生成して子プロセス内でコマンドを実行する。親プロセスでは子プロセスの終了を待つ。
@@ -87,12 +88,12 @@ void	run_cmd(char *line, char **envp)
 	int		i = 0;
 
 	token = tokenize(line);
-	pid = fork();
-	if (pid == -1)
-		ft_error();
-	if (pid == 0)
-	{
-		// 1000のとこはリストの長さ
+	// pid = fork();
+	// if (pid == -1)
+	// 	ft_error();
+	// if (pid == 0)
+	// {
+		// 10のとこはリストの長さ
 		cmd = (char **)malloc(sizeof(char *) * 10);
 		while (token && token->type == WORD)
 		{
@@ -102,39 +103,42 @@ void	run_cmd(char *line, char **envp)
 			i++;
 		}
 		do_execve(cmd, envp);
-	}
+	// }
 	free_token(token);
 }
 
-int	main(int argc, char **argv, char **envp)
-{
-	char	*line;
-	int		status;
+// int	main(int argc, char **argv, char **envp)
+// {
+// 	char	*line;
+// 	int		status;
 
-	rl_outstream = stderr;
-	while (1)
-	{
-		line = readline("minishell$ ");
-		if (line == NULL || (!ft_strncmp(line, "exit", 4)))
-			break ;
-		if (*line)
-		{
-			add_history(line);
-			run_cmd(line, envp);
-			waitpid(-1, &status, 0);
-			free(line);
-		}
-	}
+// 	rl_outstream = stderr;
+// 	while (1)
+// 	{
+// 		line = readline("minishell$ ");
+// 		if (line == NULL || (!ft_strncmp(line, "exit", 4)))
+// 			break ;
+// 		if (*line)
+// 		{
+// 			add_history(line);
+// 			run_cmd(line, envp);
+// 			waitpid(-1, &status, 0);
+// 			free(line);
+// 		}
+// 	}
+// 	exit(WEXITSTATUS(status));
+// }
+
+int main(int argc, char **argv, char **envp)
+{
+	int status = 0;
+	char *line = "nosuchcommand";
+	// char *line = "ls";
+
+	run_cmd(line, envp);
+	// waitpid(-1, &status, 0);
 	exit(WEXITSTATUS(status));
 }
-
-// int main(int argc, char **argv, char **envp)
-// {
-// 	// char *line = "nosuchcommand";
-// 	char *line = "ls";
-// 	run_cmd(line, envp);
-// 	return (0);
-// }
 
 __attribute__((destructor))
 static void destructor() {
