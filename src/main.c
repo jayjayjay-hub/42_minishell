@@ -55,31 +55,26 @@ char	*search_path(char *cmd, char **envp)
 }
 
 // コマンドを実行する。コマンドが存在しない場合はエラーを出力する。
-void	do_execve(char *line, char **envp)
+void	do_execve(char **cmd, char **envp)
 {
-	char	**cmd;
 	char	*path;
 
-	// tolenizerはここでしている。改良するならここを変える。ex) cmd = tokenizer(line);
-	cmd = ft_split(line, ' ');
 	if (!cmd[0])
 		ft_error();
 	// /bin/ls や ./a.outを実行するため。
 	if (!ft_strncmp(cmd[0], "/", 1) || !ft_strncmp(cmd[0], "./", 2))
 	{
 		if (access(cmd[0], F_OK) == -1)
-			ft_error();
+			path = NULL;
 		path = cmd[0];
 	}
 	else
 		path = search_path(cmd[0], envp);
 	if (!path)
-	{
-		dp_free(cmd);
 		cmd_not_found(cmd[0]);
-	}
+	// 連続でtesterを実行するとexecveが失敗することがある
 	execve(path, cmd, envp);
-	ft_error();
+	perror("execve");
 }
 
 // 子プロセスを生成して子プロセス内でコマンドを実行する。親プロセスでは子プロセスの終了を待つ。
@@ -87,56 +82,59 @@ void	do_execve(char *line, char **envp)
 void	run_cmd(char *line, char **envp)
 {
 	pid_t	pid;
-	int		status;
+	t_token	*token;
 	char	**cmd;
+	int		i = 0;
 
+	token = tokenize(line);
 	pid = fork();
 	if (pid == -1)
 		ft_error();
 	if (pid == 0)
-		do_execve(line, envp);
-}
-
-// int	main(int argc, char **argv, char **envp)
-// {
-// 	char	*line;
-// 	int		status;
-
-// 	rl_outstream = stderr;
-// 	while (1)
-// 	{
-// 		line = readline("minishell$ ");
-// 		if (line == NULL || (!ft_strncmp(line, "exit", 4)))
-// 			break ;
-// 		if (*line)
-// 		{
-// 			add_history(line);
-// 			run_cmd(line, envp);
-// 			waitpid(-1, &status, 0);
-// 			free(line);
-// 		}
-// 	}
-// 	exit(status);
-// }
-
-int main(void)
-{
-	char *line = "ls -la | grep";
-	t_token *token;
-	t_token *token_head;
-
-	token = tokenize(line);
-	token_head = token;
-	// print token
-	while (token)
 	{
-		printf("str: %s, type: %d\n", token->str, token->type);
-		token = token->next;
+		// 1000のとこはリストの長さ
+		cmd = (char **)malloc(sizeof(char *) * 10);
+		while (token && token->type == WORD)
+		{
+			cmd[i] = (char *)malloc(sizeof(char) * ft_strlen(token->str));
+			cmd[i] = token->str;
+			token = token->next;
+			i++;
+		}
+		do_execve(cmd, envp);
 	}
-	// free token
-	free_token(token_head);
-	return (0);
+	free_token(token);
 }
+
+int	main(int argc, char **argv, char **envp)
+{
+	char	*line;
+	int		status;
+
+	rl_outstream = stderr;
+	while (1)
+	{
+		line = readline("minishell$ ");
+		if (line == NULL || (!ft_strncmp(line, "exit", 4)))
+			break ;
+		if (*line)
+		{
+			add_history(line);
+			run_cmd(line, envp);
+			waitpid(-1, &status, 0);
+			free(line);
+		}
+	}
+	exit(WEXITSTATUS(status));
+}
+
+// int main(int argc, char **argv, char **envp)
+// {
+// 	// char *line = "nosuchcommand";
+// 	char *line = "ls";
+// 	run_cmd(line, envp);
+// 	return (0);
+// }
 
 __attribute__((destructor))
 static void destructor() {
