@@ -39,7 +39,8 @@ t_token *tokenize(char *line);
 
 // list.c
 t_token	*new_token(char *str, t_token_type type);
-void	add_back(t_token **list, t_token *new);
-void	free_token(t_token *token);
+void		add_back(t_token **list, t_token *new);
+void		free_token(t_token *token);
+int			token_list_size(t_token *token);
 
 #endif
