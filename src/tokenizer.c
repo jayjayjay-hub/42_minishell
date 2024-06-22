@@ -34,24 +34,26 @@ t_token *word(char *line, int *quote)
 {
 	char	*tmp;
 	char	*word;
-	int	len;
+	int		len;
+	char	quote_char;
 
 	len = 0;
 	tmp = line;
 	word = ft_calloc(1, ft_strlen(line) + 1);
-	if (is_quote(*line))
+	while (*line && !is_metachar(*line) && !ft_isspace(*line))
 	{
-		*quote += 2;
-		line++;
-		while (*line && *line != tmp[0])
-			word[len++] = *line++;
-		if (*line != tmp[0])
-			error_handler("quote not closed", NULL, 1);
-		line++;
-	}
-	else
-	{
-		while (*line && !is_metachar(*line) && !ft_isspace(*line))
+		if (is_quote(*line))
+		{
+			quote_char = *line;
+			*quote += 2;
+			line++;
+			while (*line && *line != quote_char)
+				word[len++] = *line++;
+			if (*line != quote_char)
+				ft_error(NULL, NULL, "quote not closed", 1);
+			line++;
+		}
+		else
 			word[len++] = *line++;
 	}
 	return (new_token(word, WORD));
@@ -113,5 +115,6 @@ t_token *tokenize(char *line)
 		token_len = get_token(&token, line, type);
 		line += token_len;
 	}
+	// print_token(token);
 	return (token);
 }
