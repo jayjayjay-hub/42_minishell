@@ -6,7 +6,7 @@
 /*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/12 20:13:09 by jtakahas          #+#    #+#             */
-/*   Updated: 2024/06/19 15:24:19 by jtakahas         ###   ########.fr       */
+/*   Updated: 2024/06/22 12:06:29 by jtakahas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@
 # include <unistd.h>
 # include <stdint.h>
 # include <limits.h>
+# include <errno.h>
+# include <string.h>
 
 # include "ft_printf.h"
 
@@ -30,6 +32,12 @@ typedef struct s_list
 	void			*content;
 	struct s_list	*next;
 }	t_list;
+
+typedef struct s_malloc_list
+{
+	void					*ptr;
+	struct s_malloc_list	*next;
+}	t_malloc_list;
 
 // ctype
 int		ft_isalnum(int c);
@@ -68,6 +76,7 @@ int		ft_abs(int nbr);
 int		ft_atoi(const char *str);
 void	*ft_calloc(size_t count, size_t size);
 char	*ft_itoa(int n);
+void	*ft_malloc(size_t size, t_malloc_list **malloc_list);
 // str
 size_t	ft_strlcpy(char *dst, const char *src, size_t n);
 size_t	ft_strlcat(char *dst, const char *src, size_t dstsize);
