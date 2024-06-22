@@ -31,66 +31,86 @@ void	dp_free(char **arg)
 // コマンドが存在するパスを検索する。パスが見つかった場合はそのパスを返す。
 char	*search_path(char *cmd, char **envp)
 {
+	int		i;
 	char	**paths;
-	char	**tmp_free;
+	char	*tmp_ret;
 	char	*ret;
 
-	while (ft_strncmp(*envp, "PATH", 4))
+	i = 0;
+	while (*envp && ft_strncmp(*envp, "PATH", 4))
 		envp++;
 	paths = ft_split(*envp + 5, ':');
-	tmp_free = paths;
-	while (*paths)
+	while (paths[i])
 	{
-		*paths = ft_strjoin(*paths, "/");
-		*paths = ft_strjoin(*paths, cmd);
-		if (access(*paths, F_OK) == 0)
+		tmp_ret = ft_strjoin(paths[i], "/");
+		ret = ft_strjoin(tmp_ret, cmd);
+		if (access(ret, F_OK) == 0)
 		{
-			ret = ft_strdup(*paths);
-			dp_free(tmp_free);
+			dp_free(paths);
+			free(tmp_ret);
 			return (ret);
 		}
-		paths++;
+		free(tmp_ret);
+		free(ret);
+		i++;
 	}
-	cmd_not_found(cmd);
+	dp_free(paths);
 	return (NULL);
 }
 
 // コマンドを実行する。コマンドが存在しない場合はエラーを出力する。
-void	do_execve(char *line, char **envp)
+void	do_execve(char **cmd, char **envp)
 {
-	char	**cmd;
 	char	*path;
 
-	// tolenizerはここでしている。改良するならここを変える。ex) cmd = tokenizer(line);
-	cmd = ft_split(line, ' ');
 	if (!cmd[0])
 		ft_error();
 	// /bin/ls や ./a.outを実行するため。
 	if (!ft_strncmp(cmd[0], "/", 1) || !ft_strncmp(cmd[0], "./", 2))
 	{
 		if (access(cmd[0], F_OK) == -1)
-			ft_error();
+			path = NULL;
 		path = cmd[0];
 	}
 	else
 		path = search_path(cmd[0], envp);
+	if (!path)
+		cmd_not_found(cmd[0]);
+	// 連続でtesterを実行するとexecveが失敗することがある
 	execve(path, cmd, envp);
-	ft_error();
+	perror("execve");
+	exit(1);
 }
 
 // 子プロセスを生成して子プロセス内でコマンドを実行する。親プロセスでは子プロセスの終了を待つ。
-int	run_cmd(char *line, char **envp)
+// こっちでcmd = tokenizer(line)をして兄弟プロセスを作る予定。|や;で区切ってそれまでを二重配列にして入れる。
+void	run_cmd(char *line, char **envp)
 {
 	pid_t	pid;
-	int		status;
+	t_token	*token;
+	t_token	*free_tmp;
+	char	**cmd;
+	int		i = 0;
 
+	token = tokenize(line);
+	free_tmp = token;
 	pid = fork();
 	if (pid == -1)
 		ft_error();
 	if (pid == 0)
-		do_execve(line, envp);
-	waitpid(pid, &status, 0);
-	return (WEXITSTATUS(status));
+	{
+		// 10のとこはリストの長さ
+		cmd = (char **)malloc(sizeof(char *) * 10);
+		while (token && token->type == WORD)
+		{
+			cmd[i] = (char *)malloc(sizeof(char) * ft_strlen(token->str));
+			cmd[i] = token->str;
+			token = token->next;
+			i++;
+		}
+		do_execve(cmd, envp);
+	}
+	free_token(free_tmp);
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -107,9 +127,26 @@ int	main(int argc, char **argv, char **envp)
 		if (*line)
 		{
 			add_history(line);
-			status = run_cmd(line, envp);
+			run_cmd(line, envp);
+			waitpid(-1, &status, 0);
 			free(line);
 		}
 	}
-	exit(status);
+	exit(WEXITSTATUS(status));
+}
+
+// int main(int argc, char **argv, char **envp)
+// {
+// 	int status = 0;
+// 	char *line = "nosuchcommand";
+// 	// char *line = "ls";
+
+// 	run_cmd(line, envp);
+// 	// waitpid(-1, &status, 0);
+// 	exit(WEXITSTATUS(status));
+// }
+
+__attribute__((destructor))
+static void destructor() {
+    system("leaks -q minishell");
 }
