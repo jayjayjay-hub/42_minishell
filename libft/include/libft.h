@@ -6,7 +6,7 @@
 /*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/12 20:13:09 by jtakahas          #+#    #+#             */
-/*   Updated: 2024/06/22 12:06:29 by jtakahas         ###   ########.fr       */
+/*   Updated: 2024/06/22 14:02:56 by jtakahas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,6 @@ void	ft_striteri(char *s, void (*f)(unsigned int, char *));
 void	put_message(char *main_message, char *sub_message);
 char	*pass_space(char *str);
 // error
-void	error_handler(char *main_message, char *sub_message);
+void	error_handler(char *main_message, char *sub_message, int status);
 
 #endif

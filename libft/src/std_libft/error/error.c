@@ -6,19 +6,20 @@
 /*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 18:31:34 by jtakahas          #+#    #+#             */
-/*   Updated: 2024/06/22 11:56:13 by jtakahas         ###   ########.fr       */
+/*   Updated: 2024/06/22 14:00:16 by jtakahas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	error_handler(char *main_message, char *sub_message)
+void	error_handler(char *main_message, char *sub_message, int status)
 {
-	ft_printf(RED"Error:"ENDC);
-	if (main_message)
-		ft_printf(RED" %s"ENDC, main_message);
+	write(2, main_message, ft_strlen(main_message));
 	if (sub_message)
-		ft_printf(" (%s)", sub_message);
-	ft_printf("\n");
-	exit(1);
+	{
+		write(2, ": ", 2);
+		write(2, sub_message, ft_strlen(sub_message));
+	}
+	write(2, "\n", 1);
+	exit(status);
 }
