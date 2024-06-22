@@ -24,9 +24,11 @@ typedef enum e_token_type
 {
 	WORD,
 	OP,
-	// ダブルシングルクォーテーションで囲まれた文字列はSTRとして扱って欲しい
-	STR,
-	MY_EOF,
+	PIPE, // |
+	REDIRECT_IN, // <
+	REDIRECT_OUT, // >
+	REDIRECT_APPEND, // >>
+	REDIRECT_HERE_DOC, // <<
 }	t_token_type;
 typedef struct s_token
 {
