@@ -14,5 +14,5 @@ void	ft_error(char *cmd, char *target, char *main_message, int status)
 	}
 	write(2, main_message, ft_strlen(main_message));
 	write(2, "\n", 1);
-	exit(status);
+	exit(WEXITSTATUS(status));
 }
