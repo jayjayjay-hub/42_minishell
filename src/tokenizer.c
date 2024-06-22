@@ -18,7 +18,7 @@ int	is_word(const char *s)
 
 int	is_operator(const char *s)
 {
-	static char	*const operators[] = {"||", "&", "&&", "|"};
+	char	*const	operators[] = {"||", "&", "&&", "|", ">", ">>", "<"};
 	size_t				i = 0;
 
 	while (i < sizeof(operators) / sizeof(*operators))
@@ -61,7 +61,7 @@ t_token *word(char *line, int *quote)
 
 t_token	*operator(char *line)
 {
-	static char	*const	operators[] = {"||", "&", "&&", "|", ">", ">>", "<"};
+	char	*const	operators[] = {"||", "&", "&&", "|", ">", ">>", "<"};
 	size_t				i = 0;
 	char				*op;
 
