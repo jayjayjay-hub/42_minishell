@@ -127,6 +127,7 @@ int	main(int argc, char **argv, char **envp)
 	char	*line;
 	int		status;
 
+	register_signal();
 	rl_outstream = stderr;
 	while (1)
 	{
