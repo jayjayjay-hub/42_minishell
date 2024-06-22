@@ -113,17 +113,27 @@ void	run_cmd(char *line, char **envp)
 	free_token(free_tmp);
 }
 
+// eofが来た場合の処理
+void	handle_eof(int status, char *line)
+{
+	write(2, "exit\n", 5);
+	if (line)
+		free(line);
+	exit(WEXITSTATUS(status));
+}
+
 int	main(int argc, char **argv, char **envp)
 {
 	char	*line;
 	int		status;
 
+	register_signal();
 	rl_outstream = stderr;
 	while (1)
 	{
 		line = readline("minishell$ ");
 		if (line == NULL || (!ft_strncmp(line, "exit", 4)))
-			break ;
+			handle_eof(status, line);
 		if (*line)
 		{
 			add_history(line);

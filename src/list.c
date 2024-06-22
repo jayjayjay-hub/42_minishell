@@ -56,6 +56,21 @@ t_token	*new_token(char *str, t_token_type type)
 	return token;
 }
 
+int	token_list_size(t_token *token)
+{
+	long long		size;
+
+	size = 0;
+	while (token)
+	{
+		if (size == INT_MAX)
+			return (-1);
+		size++;
+		token = token->next;
+	}
+	return size;
+}
+
 void	free_token(t_token *token)
 {
 	t_token *tmp;
