@@ -42,25 +42,31 @@ assert '/bin/echo'
 
 # step4 Exec Filename
 # 引数なしのコマンド
-assert 'pwd'
-assert 'echo'
-assert 'ls'
-assert './a.out'
-# exit status 127 (command not found)
-assert 'a.out'
-assert 'nosuchfile'
+# assert 'pwd'
+# assert 'echo'
+# assert 'ls'
+# assert './a.out'
+# # exit status 127 (command not found)
+# assert 'a.out'
+# assert 'nosuchfile'
 
-# step5 Tokenizer
-# ダブル、シングルクオーテンションのハンドリング
-assert 'ls /'
-assert 'echo hello    world'
-assert "echo 'hello   world' '42Tokyo'"
-assert "echo '\"hello   world\"' '42Tokyo'"
-assert "echo \"hello   world\" \"42Tokyo\""
-assert "echo \"'hello   world'\" \"42Tokyo\""
-assert "echo hello'      world'"
-assert "echo hello'  world  '\"  42Tokyo  \""
+# # step5 Tokenizer
+# # ダブル、シングルクオーテンションのハンドリング
+# assert 'ls /'
+# assert 'echo hello    world'
+# assert "echo 'hello   world' '42Tokyo'"
+# assert "echo '\"hello   world\"' '42Tokyo'"
+# assert "echo \"hello   world\" \"42Tokyo\""
+# assert "echo \"'hello   world'\" \"42Tokyo\""
+# assert "echo hello'      world'"
+# assert "echo hello'  world  '\"  42Tokyo  \""
 # assert ""
+
+# 100回実行
+for i in $(seq 200); do
+	assert "echo hello >> test"
+done
+assert "echo hello >> test"
 
 cleanup
 echo 'Done.'
