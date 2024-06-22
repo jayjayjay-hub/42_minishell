@@ -46,7 +46,7 @@ t_token	*new_token(char *str, t_token_type type)
 		ft_error("malloc", "token", strerror(errno), EXIT_FAILURE);
 	if (type != WORD)
 	{
-		token->str = ft_strdup(str);
+		token->str = strdup(str);
 		if (!token->str)
 			ft_error("ft_strdup", "token->str", strerror(errno), EXIT_FAILURE);
 	}
