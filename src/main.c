@@ -80,8 +80,9 @@ void	run_cmd(char *line, char **envp)
 		ft_error(NULL, NULL, "fork failed", 1);
 	if (pid == 0)
 	{
-		// 10のとこはリストの長さ
-		cmd = (char **)malloc(sizeof(char *) * 10); // ここをtoken_list_sizeに変更する
+		cmd = (char **)malloc(sizeof(char *) * token_list_size(token));
+		if (!cmd)
+			ft_error("malloc", "cmd", strerror(errno), 1);
 		while (token && token->type == WORD)
 		{
 			cmd[i] = (char *)malloc(sizeof(char) * ft_strlen(token->str));

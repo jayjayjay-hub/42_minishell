@@ -102,6 +102,8 @@ t_token *tokenize(char *line)
 	while (*line)
 	{
 		line = pass_space(line);
+		if (!*line)
+			break ;
 		if (is_operator(line))
 			type = OP;
 		else if (is_word(line))
