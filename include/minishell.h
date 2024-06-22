@@ -55,4 +55,7 @@ void	signal_handler(int signum);
 // error.c
 void	ft_error(char *cmd, char *target, char *main_message, int status);
 
+// redirect.c
+void	redirect(t_token **token);
+
 #endif

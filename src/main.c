@@ -75,23 +75,35 @@ void	run_cmd(char *line, char **envp)
 
 	token = tokenize(line);
 	free_tmp = token;
+	// 親プロセスで兄弟プロセスを作る予定while(pipe数){pipe();fork()}
 	pid = fork();
 	if (pid == -1)
 		ft_error(NULL, NULL, "fork failed", 1);
+	// こっから下はchild関数にしてまとめるつもり
 	if (pid == 0)
 	{
 		cmd = (char **)malloc(sizeof(char *) * token_list_size(token));
 		if (!cmd)
 			ft_error("malloc", "cmd", strerror(errno), 1);
-		while (token && token->type == WORD)
+		while (token)
 		{
-			cmd[i] = (char *)malloc(sizeof(char) * ft_strlen(token->str));
-			cmd[i] = token->str;
-			token = token->next;
-			i++;
+			while (token && token->type == WORD)
+			{	
+				cmd[i] = (char *)malloc(sizeof(char) * ft_strlen(token->str));
+				cmd[i] = token->str;
+				token = token->next;
+				i++;
+			}
+			if (token && ((token->type == REDIRECT_IN) || (token->type == REDIRECT_OUT) || (token->type == REDIRECT_APPEND) || (token->type == REDIRECT_HERE_DOC)))
+			{
+				redirect(&token);
+				token = token->next;
+			}
 		}
 		do_execve(cmd, envp);
+		// ここで標準出力入力を戻す必要あり
 	}
+	// ここまでchild関数
 	free_token(free_tmp);
 }
 
@@ -132,11 +144,11 @@ int	main(int argc, char **argv, char **envp)
 // int main(int argc, char **argv, char **envp)
 // {
 // 	int status = 0;
-// 	char *line = "nosuchcommand";
-// 	// char *line = "ls";
+// 	// char *line = "nosuchcommand";
+// 	char *line = "echo hello | test";
 
 // 	run_cmd(line, envp);
-// 	// waitpid(-1, &status, 0);
+	// waitpid(-1, &status, 0);
 // 	exit(WEXITSTATUS(status));
 // }
 

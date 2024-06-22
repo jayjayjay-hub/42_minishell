@@ -18,7 +18,7 @@ int	is_word(const char *s)
 
 int	is_operator(const char *s)
 {
-	static char	*const operators[] = {"||", "&", "&&", "|"};
+	static char	*const operators[] = {"||", "&", "&&", "|", ">>"};
 	size_t				i = 0;
 
 	while (i < sizeof(operators) / sizeof(*operators))
@@ -70,7 +70,7 @@ t_token	*operator(char *line)
 			op = strdup(operators[i]);
 			if (op == NULL)
 				ft_error("strdup", NULL, strerror(errno), EXIT_FAILURE);
-			return (new_token(op, OP));
+			return (new_token(op, REDIRECT_HERE_DOC));
 		}
 		i++;
 	}
@@ -87,7 +87,7 @@ int	get_token(t_token **token, char *line, t_token_type type)
 	quote = 0;
 	if (type == WORD)
 		new_token = word(line, &quote);
-	else if (type == OP)
+	else if (type == REDIRECT_HERE_DOC)
 		new_token = operator(line);
 	add_back(token, new_token);
 	return (ft_strlen(new_token->str) + quote);
@@ -105,7 +105,7 @@ t_token *tokenize(char *line)
 		if (!*line)
 			break ;
 		if (is_operator(line))
-			type = OP;
+			type = REDIRECT_HERE_DOC;
 		else if (is_word(line))
 			type = WORD;
 		else
