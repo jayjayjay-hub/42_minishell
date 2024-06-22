@@ -18,7 +18,7 @@ int	is_word(const char *s)
 
 int	is_operator(const char *s)
 {
-	char	*const	operators[] = {"||", "&", "&&", "|", ">", ">>", "<"};
+	char	*const	operators[] = {"|", ">", ">>", "<", "<<"};
 	size_t				i = 0;
 
 	while (i < sizeof(operators) / sizeof(*operators))
