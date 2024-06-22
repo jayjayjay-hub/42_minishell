@@ -44,13 +44,14 @@ t_token	*new_token(char *str, t_token_type type)
 	token = malloc(sizeof(t_token));
 	if (!token)
 		ft_error("malloc", "token", strerror(errno), EXIT_FAILURE);
-	token->str = str;
-	if (!token->str)
+	if (type != WORD)
 	{
-		perror("Failed to duplicate string");
-		free(token);
-		exit(EXIT_FAILURE);
+		token->str = ft_strdup(str);
+		if (!token->str)
+			ft_error("ft_strdup", "token->str", strerror(errno), EXIT_FAILURE);
 	}
+	else
+		token->str = str;
 	token->type = type;
 	token->next = NULL;
 	return token;
@@ -75,11 +76,24 @@ void	free_token(t_token *token)
 {
 	t_token *tmp;
 
-	while (token)
+	tmp = token;
+	while (tmp->next)
 	{
-		tmp = token;
-		token = token->next;
 		free(tmp->str);
 		free(tmp);
+		tmp = tmp->next;
+	}
+}
+
+// debug用
+void	print_token(t_token *token)
+{
+	t_token *tmp;
+
+	tmp = token;
+	while (tmp)
+	{
+		printf("str: %s, type: %d\n", tmp->str, tmp->type);
+		tmp = tmp->next;
 	}
 }
