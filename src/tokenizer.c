@@ -46,7 +46,7 @@ t_token *word(char *line, int *quote)
 		while (*line && *line != tmp[0])
 			word[len++] = *line++;
 		if (*line != tmp[0])
-			error_handler("quote not closed", NULL);
+			error_handler("quote not closed", NULL, 1);
 		line++;
 	}
 	else
@@ -69,12 +69,12 @@ t_token	*operator(char *line)
 		{
 			op = strdup(operators[i]);
 			if (op == NULL)
-				ft_error();
+				ft_error("strdup", NULL, strerror(errno), EXIT_FAILURE);
 			return (new_token(op, OP));
 		}
 		i++;
 	}
-	ft_error();
+	ft_error(NULL, NULL, "invalid operator", 1);
 	return (NULL);
 }
 
@@ -107,7 +107,7 @@ t_token *tokenize(char *line)
 		else if (is_word(line))
 			type = WORD;
 		else
-			ft_error();
+			ft_error(NULL, NULL, "invalid token", 1);
 		token_len = get_token(&token, line, type);
 		line += token_len;
 	}

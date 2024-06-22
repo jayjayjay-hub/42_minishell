@@ -1,22 +1,5 @@
 #include "minishell.h"
 
-// エラーを出力してプログラムを終了する。
-void	ft_error(void)
-{
-	write(2, "Error\n", 6);
-	exit(1);
-}
-
-// コマンドが見つからなかった場合のエラーを出力してプログラムを終了する。
-void	cmd_not_found(char *cmd)
-{
-	write(2, "minishell: ", 11);
-	if (cmd)
-		write(2, cmd, ft_strlen(cmd));
-	write(2, ": command not found\n", 20);
-	exit(CMD_NOT_FOUND);
-}
-
 // 二次元配列を解放する。
 void	dp_free(char **arg)
 {
@@ -63,8 +46,6 @@ void	do_execve(char **cmd, char **envp)
 {
 	char	*path;
 
-	if (!cmd[0])
-		ft_error();
 	// /bin/ls や ./a.outを実行するため。
 	if (!ft_strncmp(cmd[0], "/", 1) || !ft_strncmp(cmd[0], "./", 2))
 	{
@@ -75,7 +56,7 @@ void	do_execve(char **cmd, char **envp)
 	else
 		path = search_path(cmd[0], envp);
 	if (!path)
-		cmd_not_found(cmd[0]);
+		ft_error("minishell", cmd[0], "command not found", CMD_NOT_FOUND);
 	// 連続でtesterを実行するとexecveが失敗することがある
 	execve(path, cmd, envp);
 	perror("execve");
@@ -96,11 +77,11 @@ void	run_cmd(char *line, char **envp)
 	free_tmp = token;
 	pid = fork();
 	if (pid == -1)
-		ft_error();
+		ft_error(NULL, NULL, "fork failed", 1);
 	if (pid == 0)
 	{
 		// 10のとこはリストの長さ
-		cmd = (char **)malloc(sizeof(char *) * 10);
+		cmd = (char **)malloc(sizeof(char *) * 10); // ここをtoken_list_sizeに変更する
 		while (token && token->type == WORD)
 		{
 			cmd[i] = (char *)malloc(sizeof(char) * ft_strlen(token->str));
@@ -127,6 +108,8 @@ int	main(int argc, char **argv, char **envp)
 	char	*line;
 	int		status;
 
+	status = 0;
+	errno = 0; // エラー番号をリセット
 	register_signal();
 	rl_outstream = stderr;
 	while (1)
@@ -156,7 +139,7 @@ int	main(int argc, char **argv, char **envp)
 // 	exit(WEXITSTATUS(status));
 // }
 
-__attribute__((destructor))
-static void destructor() {
-    system("leaks -q minishell");
-}
+// __attribute__((destructor))
+// static void destructor() {
+//     system("leaks -q minishell");
+// }
