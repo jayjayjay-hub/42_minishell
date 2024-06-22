@@ -36,7 +36,6 @@ typedef struct s_token
 }	t_token;
 
 // main.c
-void	ft_error(void);
 
 // tokenizer.c
 t_token *tokenize(char *line);
@@ -50,5 +49,8 @@ int			token_list_size(t_token *token);
 // signal.c
 void	register_signal(void);
 void	signal_handler(int signum);
+
+// error.c
+void	ft_error(char *cmd, char *target, char *main_message, int status);
 
 #endif

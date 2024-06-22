@@ -43,7 +43,7 @@ t_token	*new_token(char *str, t_token_type type)
 
 	token = malloc(sizeof(t_token));
 	if (!token)
-		ft_error();
+		ft_error("malloc", "token", strerror(errno), EXIT_FAILURE);
 	token->str = str;
 	if (!token->str)
 	{

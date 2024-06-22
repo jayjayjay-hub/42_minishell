@@ -18,7 +18,7 @@ RM = rm -rf
 NORM = norminette
 
 # 新しいファイルはここに書いていって！
-SRC_FILES = main.c list.c tokenizer.c signal.c
+SRC_FILES = main.c list.c tokenizer.c signal.c error.c
 OJB_FILES = $(SRC_FILES:%.c=%.o)
 
 SRCS = $(addprefix $(SRC_DIR), $(SRC_FILES))
