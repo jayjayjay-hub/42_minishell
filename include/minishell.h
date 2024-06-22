@@ -20,15 +20,22 @@
 // signal
 typedef struct sigaction	t_sig;
 
+// define token type str
+# define TYPE_NUM 5
+# define PIPE_STR "|"
+# define REDIRECT_IN_STR "<"
+# define REDIRECT_OUT_STR ">"
+# define REDIRECT_HERE_DOC_STR "<<"
+# define REDIRECT_APPEND_STR ">>"
+
 typedef enum e_token_type
 {
 	WORD,
-	OP,
 	PIPE, // |
 	REDIRECT_IN, // <
 	REDIRECT_OUT, // >
-	REDIRECT_APPEND, // >>
 	REDIRECT_HERE_DOC, // <<
+	REDIRECT_APPEND, // >>
 }	t_token_type;
 typedef struct s_token
 {
@@ -47,6 +54,7 @@ t_token	*new_token(char *str, t_token_type type);
 void		add_back(t_token **list, t_token *new);
 void		free_token(t_token *token);
 int			token_list_size(t_token *token);
+void		print_token(t_token *token);
 
 // signal.c
 void	register_signal(void);

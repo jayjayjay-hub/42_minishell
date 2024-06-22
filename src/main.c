@@ -74,6 +74,7 @@ void	run_cmd(char *line, char **envp)
 
 	token = tokenize(line);
 	free_tmp = token;
+	// printf("token_list_size: %d\n", token_list_size(token));
 	pid = fork();
 	if (pid == -1)
 		ft_error(NULL, NULL, "fork failed", 1);
@@ -134,7 +135,7 @@ int	main(int argc, char **argv, char **envp)
 // int main(int argc, char **argv, char **envp)
 // {
 // 	int status = 0;
-// 	char *line = "nosuchcommand";
+// 	char *line = "k << l";
 // 	// char *line = "ls";
 
 // 	run_cmd(line, envp);
