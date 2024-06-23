@@ -48,6 +48,12 @@ typedef struct s_token
 	struct s_token	*next;
 }	t_token;
 
+typedef struct s_ats
+{
+	t_token			*token;
+	struct s_ats	*next;
+}	t_ats;
+
 // main.c
 
 // tokenizer.c
@@ -69,5 +75,15 @@ void	ft_error(char *cmd, char *target, char *main_message, int status);
 
 // redirect.c
 void	redirect(t_token **token);
+
+// parser.c
+t_ats	*parser(t_token *token);
+
+// ats_list.c
+void	add_back_ats(t_ats **list, t_ats *new);
+void	free_ats(t_ats *ats);
+int		ats_list_size(t_ats *ats);
+void	print_ats(t_ats *ats);
+t_ats	*new_ats(t_token *token);
 
 #endif
