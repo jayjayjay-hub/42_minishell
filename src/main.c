@@ -68,10 +68,12 @@ void	run_cmd(char *line, char **envp)
 	pid_t	pid;
 	t_token	*token;
 	t_token	*free_tmp;
+	t_ats	*ats;
 	char	**cmd;
 	int		i = 0;
 
 	token = tokenize(line);
+	ats = parser(token);
 	free_tmp = token;
 	// 親プロセスで兄弟プロセスを作る予定while(pipe数){pipe();fork()}
 	pid = fork();
@@ -147,10 +149,14 @@ int	main(int argc, char **argv, char **envp)
 // int main(int argc, char **argv, char **envp)
 // {
 // 	int status = 0;
+// 	t_token *token;
+// 	t_ats *ats;
 // 	// char *line = "nosuchcommand";
-// 	char *line = "ls > test";
-// 	run_cmd(line, envp);
-// 	waitpid(-1, &status, 0);
+// 	char *line = "ls > test te | test ";
+// 	// run_cmd(line, envp);
+// 	token = tokenize(line);
+// 	ats = parser(token);
+// 	print_ats(ats);
 // 	exit(WEXITSTATUS(status));
 // }
 
