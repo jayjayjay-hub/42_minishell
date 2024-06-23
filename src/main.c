@@ -74,6 +74,7 @@ void	run_cmd(char *line, char **envp)
 
 	token = tokenize(line);
 	ats = parser(token);
+	print_ats(ats); //debug用
 	free_tmp = token;
 	// 親プロセスで兄弟プロセスを作る予定while(pipe数){pipe();fork()}
 	pid = fork();
