@@ -67,9 +67,6 @@ for i in $(seq 200); do
 	assert "echo hello >> test"
 done
 
-# delete test file
-assert 'rm test'
-
 # normal echo test * 100
 for i in $(seq 100); do
 	assert "echo hello"
