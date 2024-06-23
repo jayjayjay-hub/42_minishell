@@ -22,7 +22,8 @@ SRC_FILES = main.c token_list.c\
 			tokenizer.c signal.c\
 			error.c redirect.c\
 			apple.c parser.c\
-			ats_list.c
+			ats_list.c cd.c\
+
 OJB_FILES = $(SRC_FILES:%.c=%.o)
 
 SRCS = $(addprefix $(SRC_DIR), $(SRC_FILES))

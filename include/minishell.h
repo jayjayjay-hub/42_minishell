@@ -86,4 +86,7 @@ int		ats_list_size(t_ats *ats);
 void	print_ats(t_ats *ats);
 t_ats	*new_ats(t_token *token);
 
+// cd.c
+void	cd(char **cmd);
+
 #endif
