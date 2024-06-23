@@ -18,7 +18,7 @@ RM = rm -rf
 NORM = norminette
 
 # 新しいファイルはここに書いていって！
-SRC_FILES = main.c list.c tokenizer.c signal.c error.c redirect.c
+SRC_FILES = main.c list.c tokenizer.c signal.c error.c redirect.c apple.c
 OJB_FILES = $(SRC_FILES:%.c=%.o)
 
 SRCS = $(addprefix $(SRC_DIR), $(SRC_FILES))
@@ -43,7 +43,7 @@ $(NAME): $(OBJ_DIR) $(OBJS)
 	@echo $(B) "<-- Out of $(LIBFT_DIR)\n" $(X)
 	@echo $(B) "$(NAME) creating" $(X)
 	@printf $(UP)$(CUT)
-	@$(CC) $(CFLAGS) $(LDFRAGS) $(OBJS) $(LIBFT_DIR)$(LIBFT_NAME) -o $(NAME)
+	@$(CC) $(CFLAGS) $(OBJS) $(LDFRAGS) $(LIBFT_DIR)$(LIBFT_NAME) -o $(NAME)
 	@echo $(G) "!! $(NAME) created !!\n" $(X)
 
 $(OBJ_DIR):

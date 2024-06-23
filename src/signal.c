@@ -6,8 +6,9 @@ void	signal_handler(int signal)
 	{
 		write(1, "\n", 1);
 		rl_on_new_line();
-		// rl_replace_line("", 0);
-		// rl_redisplay();
+		// 校舎Macだと動かないけど、俺のUbuntuだと動いた
+		rl_replace_line("", 0);
+		rl_redisplay();
 	}
 	else if (signal == SIGQUIT)
 	{

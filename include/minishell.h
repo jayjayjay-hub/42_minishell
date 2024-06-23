@@ -10,6 +10,18 @@
 # include <stdbool.h>
 # include <signal.h>
 
+# ifdef __linux__
+// 俺のUbuntu環境だと必要でした
+#  include <sys/wait.h>
+#  define S_IREAD S_IRUSR
+#  define S_IWRITE S_IWUSR
+# endif
+
+# ifdef __APPLE__
+	void	rl_replace_line(const char *, int);
+	void	rl_on_new_line(void);
+#endif
+
 # include "libft.h"
 # include "ft_printf.h"
 # include "get_next_line.h"
