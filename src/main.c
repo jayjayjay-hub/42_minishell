@@ -54,8 +54,8 @@ int	main(int argc, char **argv, char **envp)
 		{
 			add_history(line);
 			i = run_cmd(line, envp);
-			while (i--)
-				waitpid(-1, &status, 0);
+			// while (i--)
+			// 	waitpid(-1, &status, 0);
 			free(line);
 		}
 	}
@@ -70,10 +70,14 @@ int	main(int argc, char **argv, char **envp)
 // 	int i;
 
 // 	// char *line = "nosuchcommand";
-// 	char *line = "cat | cat | cat";
+// 	char *line = "ls | ls | ajklsf";
 // 	i = run_cmd(line, envp);
 // 	while (i--)
+// 	{
+// 		printf("i= %d\n", i);
 // 		waitpid(-1, &status, 0);
+// 		printf("status= %d\n", status);
+// 	}
 // 	exit(WEXITSTATUS(status));
 // }
 

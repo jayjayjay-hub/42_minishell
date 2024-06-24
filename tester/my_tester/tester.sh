@@ -64,6 +64,13 @@ assert "echo hello'  world  '\"  42Tokyo  \""
 # step6 Redirection
 assert "echo hello >test"
 assert "echo hello >f1>f2>f3>test"
+
+# step7 Pipe
+assert "ls | abc" # waitpidによりabcが先に終了するため、statusがlsによるものになる
+assert "abc | ls"
+assert "ls | cat"
+assert "ls -al | cat -en"
+assert "cat Makefile | grep -n all"
 assert " "
 
 # ファイルへの書き込み200回
