@@ -17,10 +17,10 @@
 #  define S_IWRITE S_IWUSR
 # endif
 
-# ifdef __APPLE__
-	void	rl_replace_line(const char *, int);
-	void	rl_on_new_line(void);
-#endif
+// # ifdef __APPLE__
+// 	void	rl_replace_line(const char *, int);
+// 	void	rl_on_new_line(void);
+// #endif
 
 # include "libft.h"
 # include "ft_printf.h"
@@ -88,5 +88,8 @@ t_ats	*new_ats(t_token *token);
 
 // cd.c
 void	cd(char **cmd);
+
+// child.c
+void	child(t_token *token, char **envp);
 
 #endif
