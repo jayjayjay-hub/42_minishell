@@ -64,7 +64,7 @@ assert "echo hello'  world  '\"  42Tokyo  \""
 # step6 Redirection
 assert "echo hello >test"
 assert "echo hello >f1>f2>f3>test"
-assert ""
+assert " "
 
 # ファイルへの書き込み200回
 # for i in $(seq 200); do

@@ -23,7 +23,7 @@ SRC_FILES = main.c token_list.c\
 			error.c redirect.c\
 			apple.c parser.c\
 			ats_list.c cd.c\
-			child.c
+			child.c pipe.c\
 
 OJB_FILES = $(SRC_FILES:%.c=%.o)
 

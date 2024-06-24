@@ -1,25 +1,5 @@
 #include "minishell.h"
 
-// 子プロセスを生成して子プロセス内でコマンドを実行する。親プロセスでは子プロセスの終了を待つ。
-// こっちでcmd = tokenizer(line)をして兄弟プロセスを作る予定。|や;で区切ってそれまでを二重配列にして入れる。
-void	run_cmd(char *line, char **envp)
-{
-	t_ats	*ats;
-	t_token	*token;
-	t_ats	*tmp_ats;
-
-	token = tokenize(line);
-	ats = parser(token);
-	tmp_ats = ats;
-	// 親プロセスで兄弟プロセスを作る予定while(pipe数){pipe();fork()}
-	while (ats)
-	{
-		child(ats->token, envp);
-		ats = ats->next;
-	}
-	free_ats(tmp_ats);
-}
-
 // eofが来た場合の処理
 void	handle_eof(int status, char *line)
 {
@@ -29,10 +9,37 @@ void	handle_eof(int status, char *line)
 	exit(WEXITSTATUS(status));
 }
 
+// 子プロセスを生成して子プロセス内でコマンドを実行する。親プロセスでは子プロセスの終了を待つ。
+// こっちでcmd = tokenizer(line)をして兄弟プロセスを作る予定。|や;で区切ってそれまでを二重配列にして入れる。
+int	run_cmd(char *line, char **envp)
+{
+	t_ats	*ats;
+	t_token	*token;
+	t_ats	*tmp_ats;
+	int		ret = 0;
+	int		*fd_pipe;
+
+	token = tokenize(line);
+	ats = parser(token);
+	tmp_ats = ats;
+	// 親プロセスで兄弟プロセスを作る予定while(pipe数){pipe();fork()}
+	if (ats)
+		fd_pipe = create_pipe(ats);
+	while (ats)
+	{
+		child(ats->token, envp, fd_pipe, ret);
+		ats = ats->next;
+		ret++;
+	}
+	free_ats(tmp_ats);
+	return (ret);
+}
+
 int	main(int argc, char **argv, char **envp)
 {
 	char	*line;
 	int		status;
+	int		i;
 
 	status = 0;
 	errno = 0; // エラー番号をリセット
@@ -46,8 +53,9 @@ int	main(int argc, char **argv, char **envp)
 		if (*line)
 		{
 			add_history(line);
-			run_cmd(line, envp);
-			waitpid(-1, &status, 0);
+			i = run_cmd(line, envp);
+			while (i--)
+				waitpid(-1, &status, 0);
 			free(line);
 		}
 	}
@@ -59,9 +67,13 @@ int	main(int argc, char **argv, char **envp)
 // 	int status = 0;
 // 	t_token *token;
 // 	t_ats *ats;
+// 	int i;
+
 // 	// char *line = "nosuchcommand";
-// 	char *line = "ls > test";
-// 	run_cmd(line, envp);
+// 	char *line = "cat | cat | cat";
+// 	i = run_cmd(line, envp);
+// 	while (i--)
+// 		waitpid(-1, &status, 0);
 // 	exit(WEXITSTATUS(status));
 // }
 

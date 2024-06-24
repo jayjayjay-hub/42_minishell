@@ -62,7 +62,15 @@ void	do_execve(char **cmd, char **envp)
 		ft_error(NULL, NULL, "execve failed", EXIT_FAILURE);
 }
 
-void	child(t_token *token, char **envp)
+static void	sub_dup2(int first, int second)
+{
+	if (first != 0)
+		dup2(first, STDIN_FILENO);
+	if (second != 0)
+		dup2(second, STDOUT_FILENO);
+}
+
+void	child(t_token *token, char **envp, int *fd_pipe, int pipe_i)
 {
 	pid_t	pid;
 	char	**cmd;
@@ -74,6 +82,12 @@ void	child(t_token *token, char **envp)
 		ft_error(NULL, NULL, "fork failed", 1);
 	if (pid == 0)
 	{
+		// start pipe redirection
+		// printf("pipe_i: %d\n", pipe_i);
+		if (fd_pipe)
+			sub_dup2(fd_pipe[2 * pipe_i - 2], fd_pipe[2 * pipe_i + 1]);
+			// sub_dup2(fd_pipe[0], fd_pipe[1]);
+		// end pipe redirection
 		cmd = (char **)malloc(sizeof(char *) * token_list_size(token) + 1);
 		if (!cmd)
 			ft_error("malloc", "cmd", strerror(errno), 1);

@@ -93,6 +93,9 @@ t_ats	*new_ats(t_token *token);
 void	cd(char **cmd);
 
 // child.c
-void	child(t_token *token, char **envp);
+void	child(t_token *token, char **envp, int *fd_pipe, int pipe_i);
+
+// pipe.c
+int *create_pipe(t_ats *ats);
 
 #endif
