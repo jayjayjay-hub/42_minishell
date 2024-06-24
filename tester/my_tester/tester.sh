@@ -50,8 +50,8 @@ assert './a.out'
 assert 'a.out'
 assert 'nosuchfile'
 
-# step5 Tokenizer
-# ダブル、シングルクオーテンションのハンドリング
+# # step5 Tokenizer
+# # ダブル、シングルクオーテンションのハンドリング
 assert 'ls /'
 assert 'echo hello    world'
 assert "echo 'hello   world' '42Tokyo'"
@@ -60,7 +60,17 @@ assert "echo \"hello   world\" \"42Tokyo\""
 assert "echo \"'hello   world'\" \"42Tokyo\""
 assert "echo hello'      world'"
 assert "echo hello'  world  '\"  42Tokyo  \""
-# assert ""
+assert ""
+
+# ファイルへの書き込み200回
+for i in $(seq 200); do
+	assert "echo hello >> test"
+done
+
+# normal echo test * 100
+for i in $(seq 100); do
+	assert "echo hello"
+done
 
 cleanup
 echo 'Done.'

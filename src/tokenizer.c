@@ -64,15 +64,15 @@ t_token *word(char *line, int *quote)
 t_token	*operator(char *line, t_token_type type)
 {
 	if (type == PIPE)
-		return (new_token("|", PIPE));
+		return (new_token("|\0", PIPE));
 	else if (type == REDIRECT_HERE_DOC)
-		return (new_token("<<", REDIRECT_HERE_DOC));
+		return (new_token("<<\0", REDIRECT_HERE_DOC));
 	else if (type == REDIRECT_APPEND)
-		return (new_token(">>", REDIRECT_APPEND));
+		return (new_token(">>\0", REDIRECT_APPEND));
 	else if (type == REDIRECT_IN)
-		return (new_token("<", REDIRECT_IN));
+		return (new_token("<\0", REDIRECT_IN));
 	else if (type == REDIRECT_OUT)
-		return (new_token(">", REDIRECT_OUT));
+		return (new_token(">\0", REDIRECT_OUT));
 	else
 		return (NULL);
 }

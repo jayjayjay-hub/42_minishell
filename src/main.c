@@ -68,10 +68,13 @@ void	run_cmd(char *line, char **envp)
 	pid_t	pid;
 	t_token	*token;
 	t_token	*free_tmp;
+	t_ats	*ats;
 	char	**cmd;
 	int		i = 0;
 
 	token = tokenize(line);
+	// ats = parser(token);
+	// print_ats(ats); //debug用
 	free_tmp = token;
 	// 親プロセスで兄弟プロセスを作る予定while(pipe数){pipe();fork()}
 	pid = fork();
@@ -83,14 +86,17 @@ void	run_cmd(char *line, char **envp)
 		cmd = (char **)malloc(sizeof(char *) * token_list_size(token) + 1);
 		if (!cmd)
 			ft_error("malloc", "cmd", strerror(errno), 1);
+		cmd[token_list_size(token)] = NULL;
 		while (token)
 		{
 			while (token && token->type == WORD)
-			{	
-				cmd[i] = (char *)malloc(sizeof(char) * ft_strlen(token->str) + 1);
-				if (!cmd[i])
-					ft_error("malloc", cmd[i], strerror(errno), 1);
-				cmd[i] = token->str;
+			{
+				// cmd[i] = (char *)malloc(sizeof(char) * ft_strlen(token->str));
+				cmd[i] = calloc(1, ft_strlen(token->str) + 1);
+				// if (!cmd[i])
+				// 	ft_error("malloc", cmd[i], strerror(errno), 1);
+				// cmd[i] = token->str;
+				strncpy(cmd[i], token->str, ft_strlen(token->str));
 				token = token->next;
 				i++;
 			}
@@ -144,10 +150,14 @@ int	main(int argc, char **argv, char **envp)
 // int main(int argc, char **argv, char **envp)
 // {
 // 	int status = 0;
+// 	t_token *token;
+// 	t_ats *ats;
 // 	// char *line = "nosuchcommand";
-// 	char *line = "ls > test";
-// 	run_cmd(line, envp);
-// 	waitpid(-1, &status, 0);
+// 	char *line = "ls > test te | test ";
+// 	// run_cmd(line, envp);
+// 	token = tokenize(line);
+// 	ats = parser(token);
+// 	print_ats(ats);
 // 	exit(WEXITSTATUS(status));
 // }
 
