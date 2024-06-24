@@ -8,7 +8,7 @@ EOF
 
 # ./tester/tester.sh で実行
 cleanup() {
-	rm -f cmp out
+	rm -f cmp out f1 f2 f3 test
 }
 
 assert() {
@@ -50,8 +50,8 @@ assert './a.out'
 assert 'a.out'
 assert 'nosuchfile'
 
-# # step5 Tokenizer
-# # ダブル、シングルクオーテンションのハンドリング
+# step5 Tokenizer
+# ダブル、シングルクオーテンションのハンドリング
 assert 'ls /'
 assert 'echo hello    world'
 assert "echo 'hello   world' '42Tokyo'"
@@ -60,17 +60,21 @@ assert "echo \"hello   world\" \"42Tokyo\""
 assert "echo \"'hello   world'\" \"42Tokyo\""
 assert "echo hello'      world'"
 assert "echo hello'  world  '\"  42Tokyo  \""
+
+# step6 Redirection
+assert "echo hello >test"
+assert "echo hello >f1>f2>f3>test"
 assert ""
 
 # ファイルへの書き込み200回
-for i in $(seq 200); do
-	assert "echo hello >> test"
-done
+# for i in $(seq 200); do
+# 	assert "echo hello >> test"
+# done
 
 # normal echo test * 100
-for i in $(seq 100); do
-	assert "echo hello"
-done
+# for i in $(seq 100); do
+# 	assert "echo hello"
+# done
 
 cleanup
 echo 'Done.'

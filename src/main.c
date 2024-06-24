@@ -7,20 +7,16 @@ void	run_cmd(char *line, char **envp)
 	t_ats	*ats;
 	t_token	*token;
 	t_ats	*tmp_ats;
-	t_token	*tmp_token;
 
 	token = tokenize(line);
-	tmp_token = token;
 	ats = parser(token);
 	tmp_ats = ats;
-	// print_ats(ats); //debug用
 	// 親プロセスで兄弟プロセスを作る予定while(pipe数){pipe();fork()}
 	while (ats)
 	{
 		child(ats->token, envp);
 		ats = ats->next;
 	}
-	// free_token(tmp_token);
 	free_ats(tmp_ats);
 }
 
@@ -33,43 +29,43 @@ void	handle_eof(int status, char *line)
 	exit(WEXITSTATUS(status));
 }
 
-// int	main(int argc, char **argv, char **envp)
-// {
-// 	char	*line;
-// 	int		status;
-
-// 	status = 0;
-// 	errno = 0; // エラー番号をリセット
-// 	register_signal();
-// 	rl_outstream = stderr;
-// 	while (1)
-// 	{
-// 		line = readline("minishell$ ");
-// 		if (line == NULL || (!ft_strncmp(line, "exit", 4)))
-// 			handle_eof(status, line);
-// 		if (*line)
-// 		{
-// 			add_history(line);
-// 			run_cmd(line, envp);
-// 			waitpid(-1, &status, 0);
-// 			free(line);
-// 		}
-// 	}
-// 	exit(WEXITSTATUS(status));
-// }
-
-int main(int argc, char **argv, char **envp)
+int	main(int argc, char **argv, char **envp)
 {
-	int status = 0;
-	t_token *token;
-	t_ats *ats;
-	// char *line = "nosuchcommand";
-	char *line = "ls > test";
-	run_cmd(line, envp);
+	char	*line;
+	int		status;
+
+	status = 0;
+	errno = 0; // エラー番号をリセット
+	register_signal();
+	rl_outstream = stderr;
+	while (1)
+	{
+		line = readline("minishell$ ");
+		if (line == NULL || (!ft_strncmp(line, "exit", 4)))
+			handle_eof(status, line);
+		if (*line)
+		{
+			add_history(line);
+			run_cmd(line, envp);
+			waitpid(-1, &status, 0);
+			free(line);
+		}
+	}
 	exit(WEXITSTATUS(status));
 }
 
-__attribute__((destructor))
-static void destructor() {
-    system("leaks -q minishell");
-}
+// int main(int argc, char **argv, char **envp)
+// {
+// 	int status = 0;
+// 	t_token *token;
+// 	t_ats *ats;
+// 	// char *line = "nosuchcommand";
+// 	char *line = "ls > test";
+// 	run_cmd(line, envp);
+// 	exit(WEXITSTATUS(status));
+// }
+
+// __attribute__((destructor))
+// static void destructor() {
+//     system("leaks -q minishell");
+// }

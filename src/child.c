@@ -82,11 +82,7 @@ void	child(t_token *token, char **envp)
 		{
 			while (token && token->type == WORD)
 			{
-				// cmd[i] = (char *)malloc(sizeof(char) * ft_strlen(token->str));
 				cmd[i] = calloc(1, ft_strlen(token->str) + 1);
-				// if (!cmd[i])
-				// 	ft_error("malloc", cmd[i], strerror(errno), 1);
-				// cmd[i] = token->str;
 				strncpy(cmd[i], token->str, ft_strlen(token->str));
 				token = token->next;
 				i++;
@@ -98,6 +94,11 @@ void	child(t_token *token, char **envp)
 			}
 		}
 		do_execve(cmd, envp);
-		// ここで標準出力入力を戻す必要あり
+		// ここで標準出力入力を戻す必要ありclose(fd)も
 	}
 }
+
+				// cmd[i] = (char *)malloc(sizeof(char) * ft_strlen(token->str));
+				// if (!cmd[i])
+				// 	ft_error("malloc", cmd[i], strerror(errno), 1);
+				// cmd[i] = token->str;

@@ -29,6 +29,9 @@
 // exit status
 # define CMD_NOT_FOUND	127
 
+// here_doc
+# define HEREDOC "/tmp/.heredoc_tmp"
+
 // signal
 typedef struct sigaction	t_sig;
 

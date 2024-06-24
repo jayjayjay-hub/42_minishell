@@ -36,24 +36,30 @@ void	redirect_append(t_token **token)
 
 void	redirect_here_doc(t_token **token)
 {
+	int		tmp_fd;
 	int		fd;
 	char	*line;
 
 	*token = (*token)->next;
-	fd = open("here_doc", O_WRONLY | O_CREAT | O_TRUNC, S_IREAD | S_IWRITE);
-	if (fd == -1)
+	tmp_fd = open(HEREDOC, O_WRONLY | O_CREAT | O_TRUNC, S_IREAD | S_IWRITE);
+	if (tmp_fd == -1)
 		ft_error("minishell", "here_doc", "No such file or directory", 1);
 	while (1)
 	{
 		line = readline("> ");
-		if (!line || ft_strncmp(line, (*token)->str, ft_strlen(line)) == 0)
+		if (!line || *line == '\n' || (ft_strlen(line) == ft_strlen((*token)->str) && !ft_strncmp(line, (*token)->str, ft_strlen(line))))
 		{
 			free(line);
+			if (*line == '\n')
+				continue ;
 			break ;
 		}
-		ft_putendl_fd(line, fd);
+		ft_putendl_fd(line, tmp_fd);
 		free(line);
 	}
+	fd = open(HEREDOC, O_RDONLY);
+	dup2(fd, STDIN_FILENO);
+	unlink(HEREDOC);
 }
 
 void	redirect(t_token **token)
