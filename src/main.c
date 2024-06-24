@@ -55,7 +55,7 @@ int	main(int argc, char **argv, char **envp)
 			add_history(line);
 			i = run_cmd(line, envp);
 			// while (i--)
-			// 	waitpid(-1, &status, 0);
+				waitpid(-1, &status, 0);
 			free(line);
 		}
 	}
