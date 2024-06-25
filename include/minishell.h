@@ -57,6 +57,12 @@ typedef struct s_ats
 	struct s_ats	*next;
 }	t_ats;
 
+typedef struct pipe_fd
+{
+	int	*fd;
+	int	pipe_size;
+}	t_pipe_fd;
+
 // main.c
 
 // tokenizer.c
@@ -93,9 +99,10 @@ t_ats	*new_ats(t_token *token);
 void	cd(char **cmd);
 
 // child.c
-void	child(t_token *token, char **envp, int *fd_pipe, int pipe_i);
+void	child(t_token *token, char **envp, t_pipe_fd *fd_pipe, int pipe_i);
 
 // pipe.c
-int *create_pipe(t_ats *ats);
+t_pipe_fd *create_pipe(t_ats *ats);
+void	close_pipe(t_pipe_fd *fd_pipe);
 
 #endif

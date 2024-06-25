@@ -9,6 +9,13 @@ void	handle_eof(int status, char *line)
 	exit(WEXITSTATUS(status));
 }
 
+void	struct_init(t_ats **ats, t_token **token, t_pipe_fd **fd_pipe)
+{
+	*ats = NULL;
+	*token = NULL;
+	*fd_pipe = NULL;
+}
+
 // 子プロセスを生成して子プロセス内でコマンドを実行する。親プロセスでは子プロセスの終了を待つ。
 // こっちでcmd = tokenizer(line)をして兄弟プロセスを作る予定。|や;で区切ってそれまでを二重配列にして入れる。
 int	run_cmd(char *line, char **envp)
@@ -16,23 +23,24 @@ int	run_cmd(char *line, char **envp)
 	t_ats	*ats;
 	t_token	*token;
 	t_ats	*tmp_ats;
-	int		ret = 0;
-	int		*fd_pipe;
+	t_pipe_fd	*fd_pipe;
+	int		pipe_i = 0;
 
+	struct_init(&ats, &token, &fd_pipe);
 	token = tokenize(line);
 	ats = parser(token);
 	tmp_ats = ats;
-	// 親プロセスで兄弟プロセスを作る予定while(pipe数){pipe();fork()}
 	if (ats)
 		fd_pipe = create_pipe(ats);
 	while (ats)
 	{
-		child(ats->token, envp, fd_pipe, ret);
+		child(ats->token, envp, fd_pipe, pipe_i);
 		ats = ats->next;
-		ret++;
+		pipe_i++;
 	}
+	close_pipe(fd_pipe);
 	free_ats(tmp_ats);
-	return (ret);
+	return (pipe_i);
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -40,6 +48,7 @@ int	main(int argc, char **argv, char **envp)
 	char	*line;
 	int		status;
 	int		i;
+	int ret = 0;
 
 	status = 0;
 	errno = 0; // エラー番号をリセット
@@ -54,8 +63,13 @@ int	main(int argc, char **argv, char **envp)
 		{
 			add_history(line);
 			i = run_cmd(line, envp);
-			// while (i--)
-				waitpid(-1, &status, 0);
+			while (i--)
+			{
+			// 	write(2, "wait\n", 5);
+				ret = waitpid(-1, &status, 0);
+			// 	write(2, "wait end\n", 9);
+				// printf("ret= %d\n", ret);
+			}
 			free(line);
 		}
 	}
@@ -70,13 +84,13 @@ int	main(int argc, char **argv, char **envp)
 // 	int i;
 
 // 	// char *line = "nosuchcommand";
-// 	char *line = "ls | ls | ajklsf";
+// 	char *line = "ls | cat";
 // 	i = run_cmd(line, envp);
 // 	while (i--)
 // 	{
-// 		printf("i= %d\n", i);
+// 		write(2, "wait\n", 5);
 // 		waitpid(-1, &status, 0);
-// 		printf("status= %d\n", status);
+// 		write(2, "wait end\n", 9);
 // 	}
 // 	exit(WEXITSTATUS(status));
 // }

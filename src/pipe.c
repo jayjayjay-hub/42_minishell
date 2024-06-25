@@ -1,27 +1,40 @@
 
 #include "minishell.h"
 
-int *create_pipe(t_ats *ats)
+t_pipe_fd *create_pipe(t_ats *ats)
 {
-	int		*fd;
+	t_pipe_fd	*fd;
 	t_ats	*tmp_ats;
 	int		i = 0;
 
 	tmp_ats = ats;
-	fd = malloc(sizeof(int) * 100); // 100は(atsの数-1)*2
+	fd = (t_pipe_fd *)malloc(sizeof(t_pipe_fd));
 	if (!fd)
 		ft_error("minishell", NULL, "malloc failed", 1);
-	while (tmp_ats->next)
+	fd->fd = (int *)malloc(sizeof(int) * 100); // 100は(atsの数-1)*2
+	if (!fd->fd)
+		ft_error("minishell", NULL, "malloc failed", 1);
+	while (tmp_ats && tmp_ats->next)
 	{
-		if (pipe(fd + 2 * i) == -1)
+		if (pipe(fd->fd + 2 * i) == -1)
 			ft_error("minishell", NULL, "pipe failed", 1);
 		tmp_ats = tmp_ats->next;
 		i++;
 	}
-	if (i == 0)
-	{
-		free(fd);
-		return (NULL);
-	}
+	fd->pipe_size = i;
+	// printf("pipein= %d, pipeout= %d, pipiesize=%d\n", fd->fd[0], fd->fd[1], fd->pipe_size);
 	return (fd);
+}
+
+void	close_pipe(t_pipe_fd *fd_pipe)
+{
+	int		i;
+
+	i = 0;
+	while (fd_pipe && i < fd_pipe->pipe_size)
+	{
+		close(fd_pipe->fd[i]);
+		i++;
+	}
+	free(fd_pipe);
 }

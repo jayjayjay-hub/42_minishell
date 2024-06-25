@@ -64,13 +64,14 @@ void	do_execve(char **cmd, char **envp)
 
 static void	sub_dup2(int first, int second)
 {
+	// printf("first= %d, second= %d\n", first, second);
 	if (first != 0)
 		dup2(first, STDIN_FILENO);
 	if (second != 0)
 		dup2(second, STDOUT_FILENO);
 }
 
-void	child(t_token *token, char **envp, int *fd_pipe, int pipe_i)
+void	child(t_token *token, char **envp, t_pipe_fd *fd_pipe, int pipe_i)
 {
 	pid_t	pid;
 	char	**cmd;
@@ -78,12 +79,14 @@ void	child(t_token *token, char **envp, int *fd_pipe, int pipe_i)
 
 	i = 0;
 	pid = fork();
+	// printf("pid= %d\n", pid);
 	if (pid == -1)
 		ft_error(NULL, NULL, "fork failed", 1);
 	if (pid == 0)
 	{
-		if (fd_pipe)
-			sub_dup2(fd_pipe[2 * pipe_i - 2], fd_pipe[2 * pipe_i + 1]);
+		if (fd_pipe->pipe_size != 0)
+			sub_dup2(fd_pipe->fd[2 * pipe_i - 2], fd_pipe->fd[2 * pipe_i + 1]);
+		close_pipe(fd_pipe);
 		cmd = (char **)malloc(sizeof(char *) * token_list_size(token) + 1);
 		if (!cmd)
 			ft_error("malloc", "cmd", strerror(errno), 1);
@@ -104,7 +107,7 @@ void	child(t_token *token, char **envp, int *fd_pipe, int pipe_i)
 			}
 		}
 		do_execve(cmd, envp);
-		// ここで標準出力入力を戻す必要ありclose(fd)も
+		// ここで標準出力入力を戻す必要あり
 	}
 }
 
