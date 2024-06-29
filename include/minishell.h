@@ -17,10 +17,10 @@
 #  define S_IWRITE S_IWUSR
 # endif
 
-# ifdef __APPLE__
-	void	rl_replace_line(const char *, int);
-	void	rl_on_new_line(void);
-#endif
+// # ifdef __APPLE__
+// 	void	rl_replace_line(const char *, int);
+// 	void	rl_on_new_line(void);
+// #endif
 
 # include "libft.h"
 # include "ft_printf.h"
@@ -28,6 +28,9 @@
 
 // exit status
 # define CMD_NOT_FOUND	127
+
+// here_doc
+# define HEREDOC "/tmp/.heredoc_tmp"
 
 // signal
 typedef struct sigaction	t_sig;
@@ -53,6 +56,12 @@ typedef struct s_ats
 	t_token			*token;
 	struct s_ats	*next;
 }	t_ats;
+
+typedef struct pipe_fd
+{
+	int	*fd;
+	int	pipe_size;
+}	t_pipe_fd;
 
 // main.c
 
@@ -88,5 +97,12 @@ t_ats	*new_ats(t_token *token);
 
 // cd.c
 void	cd(char **cmd);
+
+// child.c
+void	child(t_token *token, char **envp, t_pipe_fd *fd_pipe, int pipe_i);
+
+// pipe.c
+t_pipe_fd *create_pipe(t_ats *ats);
+void	close_pipe(t_pipe_fd *fd_pipe);
 
 #endif

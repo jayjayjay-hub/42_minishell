@@ -1,76 +1,114 @@
 #!/bin/bash
 
-# ./a.outを作成
-cat <<EOF | gcc -xc -o a.out -
+failed=0
+error_num=0
+cases=0
+test_file="./tester/my_tester/test_cmd.txt"
+error_file="./tester/my_tester/test_cmd_error.txt"
+
+# ./.outを作成
+cat <<EOF | gcc -xc -o .out -
 #include <stdio.h>
-int main() { printf("hello from a.out\n"); }
+int main() { printf("hello from .out\n"); }
 EOF
 
-# ./tester/tester.sh で実行
 cleanup() {
-	rm -f cmp out
+    rm -f cmp* out* f1 f2 f3 test
+}
+
+del_error_cmd_file() {
+	rm -f $error_file
 }
 
 assert() {
-	# テストケースの表示
-	printf '%-36s:' "\"$1\""
+	error_num=0
+    # テストケースの実行
+    echo -n -e "$1" | bash >cmp 2>&1
+    expected=$?
+    echo -n -e "$1" | ./minishell >out 2>&1
+    actual=$?
 
+    # minishellのプロンプト行とexitコマンド行を除外
+    grep -v '^minishell\$ ' cmp > cmp_filtered
+    grep -v '^minishell\$ ' out > out_filtered
+    grep -v '^exit$' cmp_filtered > cmp_filtered_final
+    grep -v '^exit$' out_filtered > out_filtered_final
+
+	# exit status と 出力結果の比較がどっちもOKの場合"."を表示
+	if [ "$actual" = "$expected" ] && diff cmp_filtered_final out_filtered_final >/dev/null; then
+		printf "\033[32m.\033[0m"
+	else
+		printf "\033[31mF\033[0m"
+		failed=1
+		error_num=1
+	fi
+}
+
+failer() {
+	echo "*****************************************************************"
 	# テストケースの実行
-	# bash -c "$1" >cmp 2>&-
-	echo -n -e "$1" | bash >cmp 2>&-
+	echo -n -e "$1" | bash >cmp 2>&1
 	expected=$?
-	echo -n -e "$1" | ../../minishell >out 2>&-
+	echo -n -e "$1" | ./minishell >out 2>&1
 	actual=$?
 
-	# 出力結果の比較
-	diff cmp out >/dev/null && echo -n -e "  diff \033[32mOK\033[0m" || echo -n -e "  diff \033[31mKO\033[0m"
+	# minishellのプロンプト行とexitコマンド行を除外
+	grep -v '^minishell\$ ' cmp > cmp_filtered
+	grep -v '^minishell\$ ' out > out_filtered
+	grep -v '^exit$' cmp_filtered > cmp_filtered_final
+	grep -v '^exit$' out_filtered > out_filtered_final
+	# テストケースの表示(command: "testcase" と表示, 色は青)
+	echo -n "command: "
+	echo -e "'\033[34m$1\033[0m'"
+	echo
 
 	# exit status の比較
-	if [ "$actual" = "$expected" ]; then
-		echo -n -e "  status \033[32mOK\033[0m"
-	else
-		echo -n -e "  status \033[31mKO\033[0m, expected $expected but got $actual"
+	if [ "$actual" != "$expected" ]; then
+		printf "<< status KO, expected \033[31m$expected\033[0m but got \033[31m$actual\033[0m >>"
+		echo
+		echo
 	fi
+	if ! diff cmp_filtered_final out_filtered_final >/dev/null; then
+		printf "<< diff KO >>"
+		echo
+		diff cmp_filtered_final out_filtered_final
+		# それぞれの出力結果をexpect/cases_expectとout/cases_outのナンバーのファイルに保存
+		cases=$((cases+1))
+	fi
+	echo
 	echo
 }
 
-# step3 Exec Path
-# 絶対パスのコマンド
-assert '/bin/pwd'
-assert '/bin/ls'
-assert '/bin/echo'
+cleanup
+del_error_cmd_file
 
-# step4 Exec Filename
-# 引数なしのコマンド
-assert 'pwd'
-assert 'echo'
-assert 'ls'
-assert './a.out'
-# exit status 127 (command not found)
-assert 'a.out'
-assert 'nosuchfile'
+# test.txt からテストケースを読み込んで実行する
+while IFS= read -r testcase; do
+    # '#' から始まるコメント行を無視
+    if [[ "$testcase" =~ ^\s*# ]]; then
+        continue
+    fi
 
-# # step5 Tokenizer
-# # ダブル、シングルクオーテンションのハンドリング
-assert 'ls /'
-assert 'echo hello    world'
-assert "echo 'hello   world' '42Tokyo'"
-assert "echo '\"hello   world\"' '42Tokyo'"
-assert "echo \"hello   world\" \"42Tokyo\""
-assert "echo \"'hello   world'\" \"42Tokyo\""
-assert "echo hello'      world'"
-assert "echo hello'  world  '\"  42Tokyo  \""
-assert ""
+    assert "$testcase"
+	if [ $error_num -eq 1 ]; then
+		echo "$testcase" >> $error_file
+	fi
+done < $test_file
 
-# ファイルへの書き込み200回
-for i in $(seq 200); do
-	assert "echo hello >> test"
-done
-
-# normal echo test * 100
-for i in $(seq 100); do
-	assert "echo hello"
-done
+# failed=1の場合, エラーケースの表示
+if [ $failed -eq 1 ]; then
+	echo
+	echo
+	# エラーケースの表示(色は赤)
+	# エラーLogはcases_expectとcases_outのナンバーのファイルに保存ということを表示
+	mkdir expect out
+	echo "cases_expect* and cases_out* are saved the error cases."
+	echo -e "\033[31mFailed test cases\033[0m"
+	echo
+	while IFS= read -r testcase; do
+		failer "$testcase"
+	done < $error_file
+fi
 
 cleanup
 echo 'Done.'

@@ -21,8 +21,9 @@ NORM = norminette
 SRC_FILES = main.c token_list.c\
 			tokenizer.c signal.c\
 			error.c redirect.c\
-			apple.c parser.c\
+			parser.c\
 			ats_list.c cd.c\
+			child.c pipe.c\
 
 OJB_FILES = $(SRC_FILES:%.c=%.o)
 
@@ -71,6 +72,10 @@ fclean:
 	@echo $(R) "$(NAME) fcleaned\n" $(X)
 
 re: fclean all
+
+test: all
+	@echo $(Y) "<<< $(NAME) test >>>" $(X)
+	@./tester/my_tester/tester.sh
 
 rebonus: fclean bonus
 
