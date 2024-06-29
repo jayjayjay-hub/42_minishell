@@ -73,7 +73,7 @@ fclean:
 
 re: fclean all
 
-test:
+test: all
 	@echo $(Y) "<<< $(NAME) test >>>" $(X)
 	@./tester/my_tester/tester.sh
 
