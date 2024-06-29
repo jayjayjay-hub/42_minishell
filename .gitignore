@@ -1,0 +1,11 @@
+!.git
+
+.obj
+
+libft/.obj
+
+libft/libft
+
+*.out
+
+minishell
