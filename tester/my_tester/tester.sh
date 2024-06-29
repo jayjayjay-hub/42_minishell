@@ -1,10 +1,10 @@
 #!/bin/bash
 
 failed=0
-error_num=0
 cases=1
 test_file="./tester/my_tester/test_cmd.txt"
 error_cmd="./error/all_error_cmd.txt"
+diff_cmd="./error/diff.txt"
 
 # ./.outを作成
 cat <<EOF | gcc -xc -o .out -
@@ -21,7 +21,6 @@ del_error_cmd_file() {
 }
 
 assert() {
-	error_num=0
     # テストケースの実行
     echo -n -e "$1" | bash >cmp 2>&1
     expected=$?
@@ -40,7 +39,7 @@ assert() {
 	else
 		printf "\033[31mF\033[0m"
 		failed=1
-		error_num=1
+		echo "$1" >> $error_cmd
 	fi
 }
 
@@ -73,6 +72,7 @@ failer() {
 		echo -e "\n" >> $error_file
 	fi
 	if ! diff cmp_filtered_final out_filtered_final >/dev/null; then
+		echo "$1" >> $diff_cmd
 		echo "・diff KO"
 		echo "diff KO" >> $error_file
 		diff cmp_filtered_final out_filtered_final >> $error_file
@@ -100,9 +100,6 @@ while IFS= read -r testcase; do
     fi
 
     assert "$testcase"
-	if [ $error_num -eq 1 ]; then
-		echo "$testcase" >> $error_cmd
-	fi
 done < $test_file
 
 # failed=1の場合, エラーケースの表示

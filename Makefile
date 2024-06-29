@@ -80,6 +80,12 @@ test: all
 	@echo $(Y) "<<< $(NAME) test >>>" $(X)
 	@./tester/my_tester/tester.sh
 
+diff: all
+	@echo $(Y) "<<< $(NAME) diff >>>" $(X)
+	@./tester/my_tester/diff.sh
+
+all_test: all test diff
+
 rebonus: fclean bonus
 
 norm:
