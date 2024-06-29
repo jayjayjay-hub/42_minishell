@@ -10,6 +10,8 @@ LIBFT_INCLUDE = -I $(LIBFT_DIR)$(INCLUDE_DIR)
 SRC_DIR = src/
 OBJ_DIR = .obj/
 
+ERROR_DIR = error/
+
 CC = cc
 LDFRAGS = -lreadline
 # CFLAGS = -Wall -Wextra -Werror
@@ -63,6 +65,7 @@ $(OBJ_DIR)%.o: $(SRC_DIR)%.c
 clean:
 	@$(MAKE) -C $(LIBFT_DIR) clean
 	@$(RM) $(OBJ_DIR)
+	@$(RM) $(ERROR_DIR)
 	@echo $(R) "$(NAME) cleaned\n" $(X)
 
 fclean:
@@ -76,6 +79,12 @@ re: fclean all
 test: all
 	@echo $(Y) "<<< $(NAME) test >>>" $(X)
 	@./tester/my_tester/tester.sh
+
+diff: all
+	@echo $(Y) "<<< $(NAME) diff >>>" $(X)
+	@./tester/my_tester/diff.sh
+
+all_test: all test diff
 
 rebonus: fclean bonus
 

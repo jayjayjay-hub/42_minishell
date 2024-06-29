@@ -48,11 +48,11 @@ void	do_execve(char **cmd, char **envp)
 	char	*path;
 
 	// /bin/ls や ./a.outを実行するため。
+	path = NULL;
 	if (!ft_strncmp(cmd[0], "/", 1) || !ft_strncmp(cmd[0], "./", 2))
 	{
-		if (access(cmd[0], F_OK) == -1)
-			path = NULL;
-		path = cmd[0];
+		if (access(cmd[0], F_OK) != -1)
+			path = cmd[0];
 	}
 	else
 		path = search_path(cmd[0], envp);
