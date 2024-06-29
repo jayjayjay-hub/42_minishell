@@ -1,0 +1,37 @@
+# step3 Exec Path
+# 絶対パスのコマンド
+/bin/pwd
+/bin/ls
+/bin/echo
+
+# step4 Exec Filename
+# 引数なしのコマンド
+pwd
+echo
+ls
+./.out
+.out
+nosuchfile
+
+# step5 Tokenizer
+# ダブル、シングルクオーテンションのハンドリング
+ls /
+echo hello    world
+echo 'hello   world' '42Tokyo'
+echo '"hello   world"' '42Tokyo'
+echo "hello   world" \"42Tokyo\"
+echo "'hello   world'\" \"42Tokyo\"
+echo hello'      world'
+echo hello'  world  '\"  42Tokyo  \"
+
+# step6 Redirection
+echo hello >test
+echo hello >f1>f2>f3>test
+
+# step7 Pipe
+ls | abc
+abc | ls
+ls | cat
+ls -al | cat -en
+cat Makefile | grep -n all
+ 
