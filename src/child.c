@@ -64,7 +64,6 @@ void	do_execve(char **cmd, char **envp)
 
 static void	sub_dup2(int first, int second)
 {
-	// printf("first= %d, second= %d\n", first, second);
 	if (first != 0)
 		dup2(first, STDIN_FILENO);
 	if (second != 0)
@@ -79,13 +78,19 @@ void	child(t_token *token, char **envp, t_pipe_fd *fd_pipe, int pipe_i)
 
 	i = 0;
 	pid = fork();
-	// printf("pid= %d\n", pid);
 	if (pid == -1)
 		ft_error(NULL, NULL, "fork failed", 1);
 	if (pid == 0)
 	{
 		if (fd_pipe->pipe_size != 0)
-			sub_dup2(fd_pipe->fd[2 * pipe_i - 2], fd_pipe->fd[2 * pipe_i + 1]);
+		{
+			if (pipe_i == 0)
+				sub_dup2(0, fd_pipe->fd[1]);
+			else if (pipe_i == fd_pipe->pipe_size)
+				sub_dup2(fd_pipe->fd[2 * pipe_i - 2], 0);
+			else
+				sub_dup2(fd_pipe->fd[2 * pipe_i - 2], fd_pipe->fd[2 * pipe_i + 1]);
+		}
 		close_pipe(fd_pipe);
 		cmd = (char **)malloc(sizeof(char *) * token_list_size(token) + 1);
 		if (!cmd)

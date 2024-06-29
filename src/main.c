@@ -64,12 +64,7 @@ int	main(int argc, char **argv, char **envp)
 			add_history(line);
 			i = run_cmd(line, envp);
 			while (i--)
-			{
-			// 	write(2, "wait\n", 5);
 				ret = waitpid(-1, &status, 0);
-			// 	write(2, "wait end\n", 9);
-				// printf("ret= %d\n", ret);
-			}
 			free(line);
 		}
 	}

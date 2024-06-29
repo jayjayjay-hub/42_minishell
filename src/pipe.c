@@ -22,7 +22,6 @@ t_pipe_fd *create_pipe(t_ats *ats)
 		i++;
 	}
 	fd->pipe_size = i;
-	// printf("pipein= %d, pipeout= %d, pipiesize=%d\n", fd->fd[0], fd->fd[1], fd->pipe_size);
 	return (fd);
 }
 
@@ -31,10 +30,13 @@ void	close_pipe(t_pipe_fd *fd_pipe)
 	int		i;
 
 	i = 0;
-	while (fd_pipe && i < fd_pipe->pipe_size)
+	if (!fd_pipe || fd_pipe->pipe_size == 0)
+		return ;
+	fd_pipe->pipe_size *= 2;
+	while (i <= fd_pipe->pipe_size)
 	{
-		close(fd_pipe->fd[i]);
+		if (fd_pipe->fd[i] != 0 && fd_pipe->fd[i] != 1)
+			close(fd_pipe->fd[i]);
 		i++;
 	}
-	free(fd_pipe);
 }
