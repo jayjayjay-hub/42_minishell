@@ -34,5 +34,5 @@ abc | ls
 ls | cat
 ls -al | cat -en
 cat Makefile | grep -n all
-sleep 1 | sleep 3 | sleep 2 | cat | cat -e | cat -n | echo hello
+# sleep 1 | sleep 3 | sleep 2 | cat | cat -e | cat -n | echo hello
  
