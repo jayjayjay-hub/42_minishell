@@ -34,6 +34,7 @@ int	run_cmd(char *line, char **envp)
 		fd_pipe = create_pipe(ats);
 	while (ats)
 	{
+		// child関数に入る前にリダイレクションインとヒアドックを判定する必要がある。
 		child(ats->token, envp, fd_pipe, pipe_i);
 		ats = ats->next;
 		pipe_i++;
