@@ -76,7 +76,7 @@ int	word_len(char *line)
 	return (len);
 }
 
-char *get_word(char *line, int *bachslash)
+char *get_word(char *line, int *bachslash_quote)
 {
 	char	*word;
 	int		len;
@@ -90,7 +90,7 @@ char *get_word(char *line, int *bachslash)
 		{
 			if (*(line + 1) && is_backslash_quote(line))
 			{
-				*bachslash += 1;
+				*bachslash_quote += 1;
 				word[len++] = line[1];
 				line += 2;
 			}
@@ -98,14 +98,15 @@ char *get_word(char *line, int *bachslash)
 		if (*line && is_quote(*line))
 		{
 			quote_char = *line;
-			word[len++] = *line++;
+			*bachslash_quote += 2;
+			line++;
 			while (*line && *line != quote_char)
 			{
 				if (is_backslash(*line))
 				{
 					if (*(line + 1) && is_backslash_quote(line))
 					{
-						*bachslash += 1;
+						*bachslash_quote += 1;
 						word[len++] = line[1];
 						line += 2;
 					}
@@ -115,7 +116,7 @@ char *get_word(char *line, int *bachslash)
 			}
 			if (*line != quote_char)
 				ft_error(NULL, NULL, "quote not closed", 1);
-			word[len++] = *line++;
+			line++;
 		}
 		else
 			word[len++] = *line++;
