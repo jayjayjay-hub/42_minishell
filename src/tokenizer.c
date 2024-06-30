@@ -18,8 +18,9 @@ bool	is_backslash(char c)
 
 bool	is_backslash_quote(char *line)
 {
-	if (strcmp(line, "\\\"") == 0 || strcmp(line, "\\'") == 0 || strcmp(line, "\\\\") == 0)
+	if (strncmp(line, "\\\"", 2) == 0 || strncmp(line, "\\'", 2) == 0 || strncmp(line, "\\\\", 2) == 0)
 		return (true);
+	return (false);
 }
 
 t_token_type	check_type(char *line)
@@ -51,6 +52,11 @@ int	word_len(char *line)
 	len = 0;
 	while (*line && !is_metachar(*line) && !ft_isspace(*line))
 	{
+		if (is_backslash(*line))
+		{
+			if (*(line + 1) && is_backslash_quote(line))
+				line += 2;
+		}
 		if (is_quote(*line))
 		{
 			quote_char = *line;
@@ -70,7 +76,7 @@ int	word_len(char *line)
 	return (len);
 }
 
-char *get_word(char *line)
+char *get_word(char *line, int *bachslash)
 {
 	char	*word;
 	int		len;
@@ -80,12 +86,33 @@ char *get_word(char *line)
 	word = ft_calloc(1, word_len(line) + 1);
 	while (*line && !is_metachar(*line) && !ft_isspace(*line))
 	{
-		if (is_quote(*line))
+		if (is_backslash(*line))
+		{
+			if (*(line + 1) && is_backslash_quote(line))
+			{
+				*bachslash += 1;
+				word[len++] = line[1];
+				line += 2;
+			}
+		}
+		if (*line && is_quote(*line))
 		{
 			quote_char = *line;
 			word[len++] = *line++;
 			while (*line && *line != quote_char)
-				word[len++] = *line++;
+			{
+				if (is_backslash(*line))
+				{
+					if (*(line + 1) && is_backslash_quote(line))
+					{
+						*bachslash += 1;
+						word[len++] = line[1];
+						line += 2;
+					}
+				}
+				else
+					word[len++] = *line++;
+			}
 			if (*line != quote_char)
 				ft_error(NULL, NULL, "quote not closed", 1);
 			word[len++] = *line++;
@@ -115,14 +142,16 @@ int	add_token(t_token **token, char *line, t_token_type type)
 	t_token		*new;
 	char 		*token_str;
 	char 		*rest;
+	int			bachslash;
 
+	bachslash = 0;
 	if (type == WORD)
-		token_str = get_word(line);
+		token_str = get_word(line, &bachslash);
 	else
 		token_str = get_operator(line, type);
 	new = new_token(token_str, type);
 	add_back(token, new);
-	return (strlen(token_str));
+	return (strlen(token_str) + bachslash);
 }
 
 t_token *tokenize(char *line)
