@@ -43,6 +43,8 @@ typedef enum e_token_type
 	REDIRECT_OUT, // >
 	REDIRECT_HERE_DOC, // <<
 	REDIRECT_APPEND, // >>
+	BRACKET_LEFT, // (
+	BRACKET_RIGHT, // )
 }	t_token_type;
 typedef struct s_token
 {
@@ -50,6 +52,13 @@ typedef struct s_token
 	t_token_type	type;
 	struct s_token	*next;
 }	t_token;
+
+typedef struct s_parse_tree
+{
+	t_token			*token;
+	struct s_parse_tree	*left;
+	struct s_parse_tree	*right;
+}	t_parse_tree;
 
 typedef struct s_ats
 {
@@ -104,5 +113,10 @@ void	child(t_token *token, char **envp, t_pipe_fd *fd_pipe, int pipe_i);
 // pipe.c
 t_pipe_fd *create_pipe(t_ats *ats);
 void	close_pipe(t_pipe_fd *fd_pipe);
+
+// parse_tree_list.c
+t_parse_tree *new_parse_tree(t_token *token, int token_count, bool is_parse);
+void add_back_parse_tree(t_parse_tree **list, t_parse_tree *new);
+void			free_parse_tree(t_parse_tree *parse_tree);
 
 #endif
