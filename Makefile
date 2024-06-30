@@ -26,6 +26,7 @@ SRC_FILES = main.c token_list.c\
 			parser.c parse_tree_list.c\
 			ats_list.c cd.c\
 			child.c pipe.c\
+			expansion.c
 
 OJB_FILES = $(SRC_FILES:%.c=%.o)
 
