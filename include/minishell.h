@@ -76,6 +76,7 @@ typedef struct pipe_fd
 
 // tokenizer.c
 t_token *tokenize(char *line);
+int		is_quote(char c);
 
 // list.c
 t_token	*new_token(char *str, t_token_type type);
@@ -118,5 +119,8 @@ void	close_pipe(t_pipe_fd *fd_pipe);
 t_parse_tree *new_parse_tree(t_token *token, int token_count, bool is_parse);
 void add_back_parse_tree(t_parse_tree **list, t_parse_tree *new);
 void			free_parse_tree(t_parse_tree *parse_tree);
+
+// expansion.c
+void remove_quote(t_token *token);
 
 #endif
