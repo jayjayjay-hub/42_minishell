@@ -46,4 +46,3 @@ done < $diff_cmd
 echo
 
 cleanup
-echo 'Done.'

@@ -133,4 +133,3 @@ else
 fi
 
 cleanup
-echo 'Done.'
