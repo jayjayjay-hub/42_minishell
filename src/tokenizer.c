@@ -11,6 +11,17 @@ int	is_quote(char c)
 	return (c && ft_strchr("'\"", c));
 }
 
+bool	is_backslash(char c)
+{
+	return (c == '\\');
+}
+
+bool	is_backslash_quote(char *line)
+{
+	if (strcmp(line, "\\\"") == 0 || strcmp(line, "\\'") == 0 || strcmp(line, "\\\\") == 0)
+		return (true);
+}
+
 t_token_type	check_type(char *line)
 {
 	// t_token_type	type;
