@@ -130,6 +130,6 @@ t_token *tokenize(char *line)
 		token_len = add_token(&token, line, type); // トークンを取得
 		line += token_len; // トークンの長さ分だけlineを進める
 	}
-	print_token(token);
+	// print_token(token);
 	return (token);
 }

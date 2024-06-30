@@ -18,10 +18,8 @@ t_ats	*parser(t_token *token)
 {
 	t_ats	*ats;
 	t_ats	*new;
-	int		pipe_count;
 
 	ats = NULL;
-	pipe_count = get_pipe_count(token);
 	while (token)
 	{
 		if (token && token->type == PIPE)
