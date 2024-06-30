@@ -3,7 +3,7 @@
 
 int is_metachar(char c)
 {
-	return (c && ft_strchr("&|<>", c));
+	return (c && ft_strchr("&|<>()", c));
 }
 
 int	is_quote(char c)
@@ -24,6 +24,10 @@ t_token_type	check_type(char *line)
 		return (REDIRECT_IN);
 	else if (strncmp(line, ">", 1) == 0)
 		return (REDIRECT_OUT);
+	else if (strncmp(line, "(", 1) == 0)
+		return (BRACKET_LEFT);
+	else if (strncmp(line, ")", 1) == 0)
+		return (BRACKET_RIGHT);
 	else
 		return (WORD);
 }
@@ -126,5 +130,6 @@ t_token *tokenize(char *line)
 		token_len = add_token(&token, line, type); // トークンを取得
 		line += token_len; // トークンの長さ分だけlineを進める
 	}
+	print_token(token);
 	return (token);
 }
