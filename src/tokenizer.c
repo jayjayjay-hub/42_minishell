@@ -95,7 +95,7 @@ char *get_word(char *line, int *bachslash_quote)
 				line += 2;
 			}
 		}
-		if (*line && is_quote(*line))
+		else if (*line && is_quote(*line))
 		{
 			quote_char = *line;
 			*bachslash_quote += 2;
