@@ -3,7 +3,7 @@
 
 int is_metachar(char c)
 {
-	return (c && ft_strchr("()<>", c));
+	return (c && ft_strchr("&|<>()", c));
 }
 
 int	is_quote(char c)
@@ -11,45 +11,109 @@ int	is_quote(char c)
 	return (c && ft_strchr("'\"", c));
 }
 
-int	is_word(const char *s)
+bool	is_backslash(char c)
 {
-	return (*s && !is_metachar(*s));
+	return (c == '\\');
+}
+
+bool	is_backslash_quote(char *line)
+{
+	if (strncmp(line, "\\\"", 2) == 0 || strncmp(line, "\\'", 2) == 0 || strncmp(line, "\\\\", 2) == 0)
+		return (true);
+	return (false);
 }
 
 t_token_type	check_type(char *line)
 {
 	// t_token_type	type;
-	if (ft_strncmp(line, "|", 1) == 0)
+	if (strncmp(line, "|", 1) == 0)
 		return (PIPE);
-	else if (ft_strncmp(line, "<<", 2) == 0)
+	else if (strncmp(line, "<<", 2) == 0)
 		return (REDIRECT_HERE_DOC);
-	else if (ft_strncmp(line, ">>", 2) == 0)
+	else if (strncmp(line, ">>", 2) == 0)
 		return (REDIRECT_APPEND);
-	else if (ft_strncmp(line, "<", 1) == 0)
+	else if (strncmp(line, "<", 1) == 0)
 		return (REDIRECT_IN);
-	else if (ft_strncmp(line, ">", 1) == 0)
+	else if (strncmp(line, ">", 1) == 0)
 		return (REDIRECT_OUT);
+	else if (strncmp(line, "(", 1) == 0)
+		return (BRACKET_LEFT);
+	else if (strncmp(line, ")", 1) == 0)
+		return (BRACKET_RIGHT);
 	else
 		return (WORD);
 }
 
-t_token *word(char *line, int *quote)
+int	word_len(char *line)
+{
+	int		len;
+	char	quote_char;
+
+	len = 0;
+	while (*line && !is_metachar(*line) && !ft_isspace(*line))
+	{
+		if (is_backslash(*line))
+		{
+			if (*(line + 1) && is_backslash_quote(line))
+				line += 2;
+		}
+		if (is_quote(*line))
+		{
+			quote_char = *line;
+			line++;
+			while (*line && *line != quote_char)
+			{
+				len++;
+				line++;
+			}
+			if (*line != quote_char)
+				ft_error(NULL, NULL, "quote not closed", 1);
+		}
+		else
+			len++;
+		line++;
+	}
+	return (len);
+}
+
+char *get_word(char *line, int *bachslash_quote)
 {
 	char	*word;
 	int		len;
 	char	quote_char;
 
 	len = 0;
-	word = ft_calloc(1, ft_strlen(line) + 1);
+	word = ft_calloc(1, word_len(line) + 1);
 	while (*line && !is_metachar(*line) && !ft_isspace(*line))
 	{
-		if (is_quote(*line))
+		if (is_backslash(*line))
+		{
+			if (*(line + 1) && is_backslash_quote(line))
+			{
+				*bachslash_quote += 1;
+				word[len++] = line[1];
+				line += 2;
+			}
+		}
+		else if (*line && is_quote(*line))
 		{
 			quote_char = *line;
-			*quote += 2;
+			*bachslash_quote += 2;
 			line++;
 			while (*line && *line != quote_char)
-				word[len++] = *line++;
+			{
+				if (is_backslash(*line))
+				{
+					if (*(line + 1) && is_backslash_quote(line))
+					{
+						*bachslash_quote += 1;
+						word[len++] = line[1];
+						line += 2;
+					}
+				}
+				else
+					word[len++] = *line++;
+			}
 			if (*line != quote_char)
 				ft_error(NULL, NULL, "quote not closed", 1);
 			line++;
@@ -58,55 +122,54 @@ t_token *word(char *line, int *quote)
 			word[len++] = *line++;
 	}
 	word[len] = '\0';
-	return (new_token(word, WORD));
+	return (word);
 }
 
-t_token	*operator(char *line, t_token_type type)
+char	*get_operator(char *line, t_token_type type)
 {
-	if (type == PIPE)
-		return (new_token("|\0", PIPE));
-	else if (type == REDIRECT_HERE_DOC)
-		return (new_token("<<\0", REDIRECT_HERE_DOC));
-	else if (type == REDIRECT_APPEND)
-		return (new_token(">>\0", REDIRECT_APPEND));
-	else if (type == REDIRECT_IN)
-		return (new_token("<\0", REDIRECT_IN));
-	else if (type == REDIRECT_OUT)
-		return (new_token(">\0", REDIRECT_OUT));
-	else
-		return (NULL);
+	char	*operator;
+	int		len;
+
+	len = 1;
+	if (type == REDIRECT_HERE_DOC || type == REDIRECT_APPEND)
+		len = 2;
+	operator = ft_calloc(1, len + 1);
+	ft_strlcpy(operator, line, len + 1);
+	return (operator);
 }
 
-int	get_token(t_token **token, char *line, t_token_type type)
+int	add_token(t_token **token, char *line, t_token_type type)
 {
-	t_token	*new_token;
-	char		*rest;
-	int			quote_count;
+	t_token		*new;
+	char 		*token_str;
+	char 		*rest;
+	int			bachslash;
 
-	quote_count = 0;
+	bachslash = 0;
 	if (type == WORD)
-		new_token = word(line, &quote_count);
+		token_str = get_word(line, &bachslash);
 	else
-		new_token = operator(line, type);
-	add_back(token, new_token);
-	return (ft_strlen(new_token->str) + quote_count);
+		token_str = get_operator(line, type);
+	new = new_token(token_str, type);
+	add_back(token, new);
+	return (strlen(token_str) + bachslash);
 }
 
 t_token *tokenize(char *line)
 {
-	t_token *token;
-	int			token_len;
+	t_token			*token;
 	t_token_type	type;
+	int				token_len;
 
 	token = NULL;
 	while (*line)
 	{
-		line = pass_space(line);
-		if (!*line)
+		line = pass_space(line); // スペースを飛ばす
+		if (!*line) // 空白行だったら終了
 			break ;
-		type = check_type(line);
-		token_len = get_token(&token, line, type);
-		line += token_len;
+		type = check_type(line); // トークンの種類をチェック
+		token_len = add_token(&token, line, type); // トークンを取得
+		line += token_len; // トークンの長さ分だけlineを進める
 	}
 	// print_token(token);
 	return (token);

@@ -19,3 +19,7 @@ out/
 tester/my_tester/test_cmd_error.txt
 
 error/
+
+*pdf
+
+.vscode

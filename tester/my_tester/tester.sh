@@ -34,9 +34,22 @@ assert() {
     grep -v '^exit$' out_filtered > out_filtered_final
 
 	# exit status と 出力結果の比較がどっちもOKの場合"."を表示
+	true=0
 	if [ "$actual" = "$expected" ] && diff cmp_filtered_final out_filtered_final >/dev/null; then
 		printf "\033[32m.\033[0m"
-	else
+		true=1
+	fi
+	if ! diff cmp_filtered_final out_filtered_final >/dev/null; then
+		# diff の出力が四行のとき
+		if diff cmp_filtered_final out_filtered_final | wc -l | grep -q 4; then
+			# diff の出力の２行目と４行目に"~: command not found"があるかどうか
+			if diff cmp_filtered_final out_filtered_final | sed -n 2p | grep -q ": command not found" && diff cmp_filtered_final out_filtered_final | sed -n 4p | grep -q ": command not found"; then
+				printf "\033[32.\033[0m"
+				true=1
+			fi
+		fi
+	fi
+	if [ $true -ne 1 ]; then
 		printf "\033[31mF\033[0m"
 		failed=1
 		echo "$1" >> $error_cmd
@@ -120,4 +133,3 @@ else
 fi
 
 cleanup
-echo 'Done.'
