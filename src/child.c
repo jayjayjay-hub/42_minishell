@@ -105,7 +105,7 @@ void	child(t_token *token, char **envp, t_pipe_fd *fd_pipe, int pipe_i)
 				token = token->next;
 				i++;
 			}
-			if (token && ((token->type == REDIRECT_OUT) || (token->type == REDIRECT_APPEND)))
+			if (token && (token->type >= 2 && token->type <= 5))
 			{
 				redirect(&token);
 				token = token->next;

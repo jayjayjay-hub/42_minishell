@@ -96,6 +96,7 @@ void	ft_error(char *cmd, char *target, char *main_message, int status);
 void	redirect(t_token **token);
 
 // parser.c
+int	get_pipe_count(t_token *token);
 t_ats	*parser(t_token *token);
 
 // ats_list.c

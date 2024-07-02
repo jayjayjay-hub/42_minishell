@@ -30,11 +30,11 @@ int	run_cmd(char *line, char **envp)
 	token = tokenize(line);
 	ats = parser(token);
 	tmp_ats = ats;
+	// print_ats(ats);
 	if (ats)
 		fd_pipe = create_pipe(ats);
 	while (ats)
 	{
-		// child関数に入る前にリダイレクションインとヒアドックを判定する必要がある。
 		child(ats->token, envp, fd_pipe, pipe_i);
 		ats = ats->next;
 		pipe_i++;
@@ -69,7 +69,8 @@ int	main(int argc, char **argv, char **envp)
 			free(line);
 		}
 	}
-	exit(WEXITSTATUS(status));
+	// exit(WEXITSTATUS(status));
+	return (0);
 }
 
 // int main(int argc, char **argv, char **envp)
