@@ -32,5 +32,6 @@ t_ats	*parser(t_token *token)
 			token = token->next;
 	}
 	// debug
+	// print_ats(ats);
 	return (ats);
 }

@@ -117,3 +117,8 @@ pid_t	child(t_token *token, char **envp, t_pipe_fd *fd_pipe, int pipe_i)
 	}
 	return (pid);
 }
+
+// cmd[i] = calloc(1, ft_strlen(token->str) + 1);
+// if (!cmd[i])
+// 	ft_error("malloc", "cmd", "malloc failed", 1);
+// strncpy(cmd[i], token->str, ft_strlen(token->str));
