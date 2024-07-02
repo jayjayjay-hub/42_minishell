@@ -43,4 +43,4 @@ ls | cat -en | ls -a | cat -e | cat -n
 
 #mix Pipe
 ls -l > test | cat < Makefile | grep -n all >> test
-< Makefile cat -en | cat | cat > f | cat -en | grep 1 >f >> test
+< Makefile cat -en | cat | cat > f1 | cat -en | grep 1 >f1 >> test

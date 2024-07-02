@@ -74,6 +74,13 @@ typedef struct pipe_fd
 	int	pipe_size;
 }	t_pipe_fd;
 
+typedef struct pid_info
+{
+	pid_t	pid[1024]; //いずれパイプの長さでmallocする必要あり
+	int		pipe_i;
+}	t_pid_info;
+
+
 // main.c
 
 // tokenizer.c

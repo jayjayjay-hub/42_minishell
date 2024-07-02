@@ -9,24 +9,26 @@ void	handle_eof(int status, char *line)
 	exit(WEXITSTATUS(status));
 }
 
-void	struct_init(t_ats **ats, t_token **token, t_pipe_fd **fd_pipe)
+void	struct_init(t_ats **ats, t_token **token, t_pipe_fd **fd_pipe, t_pid_info *pid_info)
 {
 	*ats = NULL;
 	*token = NULL;
 	*fd_pipe = NULL;
+	pid_info->pipe_i = 0;
+	pid_info = NULL;
 }
 
 // 子プロセスを生成して子プロセス内でコマンドを実行する。親プロセスでは子プロセスの終了を待つ。
 // こっちでcmd = tokenizer(line)をして兄弟プロセスを作る予定。|や;で区切ってそれまでを二重配列にして入れる。
-int	run_cmd(char *line, char **envp)
+t_pid_info	run_cmd(char *line, char **envp)
 {
 	t_ats	*ats;
 	t_ats	*tmp_ats;
 	t_token	*token;
 	t_pipe_fd	*fd_pipe;
-	int		pipe_i = 0;
+	t_pid_info pid_info;
 
-	struct_init(&ats, &token, &fd_pipe);
+	struct_init(&ats, &token, &fd_pipe, &pid_info);
 	token = tokenize(line);
 	ats = parser(token);
 	tmp_ats = ats;
@@ -34,22 +36,24 @@ int	run_cmd(char *line, char **envp)
 		fd_pipe = create_pipe(ats);
 	while (ats)
 	{
-		child(ats->token, envp, fd_pipe, pipe_i);
+		pid_info.pid[pid_info.pipe_i] = child(ats->token, envp, fd_pipe, pid_info.pipe_i);
 		ats = ats->next;
-		pipe_i++;
+		pid_info.pipe_i++;
 	}
 	close_pipe(fd_pipe);
 	free_ats(tmp_ats);
-	return (pipe_i);
+	return (pid_info);
 }
 
 int	main(int argc, char **argv, char **envp)
 {
 	char	*line;
 	int		status;
+	t_pid_info	pid_info;
 	int		i;
 
 	status = 0;
+	i = 0;
 	errno = 0; // エラー番号をリセット
 	register_signal();
 	rl_outstream = stderr;
@@ -61,26 +65,27 @@ int	main(int argc, char **argv, char **envp)
 		if (*line)
 		{
 			add_history(line);
-			i = run_cmd(line, envp);
-			while (i--)
-				waitpid(-1, &status, 0);
+			pid_info = run_cmd(line, envp);
+			while (pid_info.pipe_i--)
+				waitpid(pid_info.pid[i++], &status, 0);
 			free(line);
 		}
 	}
-	return (0);
+	return (WEXITSTATUS(status));
 }
 
 // int main(int argc, char **argv, char **envp)
 // {
 // 	int status = 0;
 
-// 	char *line = "ls -| t";
+// 	char *line = "ca | ls";
 // 	t_ats	*ats;
 // 	t_ats	*tmp_ats;
 // 	t_token	*token;
 // 	t_pipe_fd	*fd_pipe;
 // 	int		pipe_i = 0;
-// 	pid_t	pid = 0;
+// 	pid_t		pid[100];
+// 	int		i = 0;
 
 // 	struct_init(&ats, &token, &fd_pipe);
 // 	token = tokenize(line);
@@ -90,14 +95,20 @@ int	main(int argc, char **argv, char **envp)
 // 		fd_pipe = create_pipe(ats);
 // 	while (ats)
 // 	{
-// 		pid = child(ats->token, envp, fd_pipe, pipe_i);
+// 		pid[pipe_i] = child(ats->token, envp, fd_pipe, pipe_i);
 // 		ats = ats->next;
 // 		pipe_i++;
 // 	}
 // 	close_pipe(fd_pipe);
+// 	printf("pipe_i = %d\n", pid[0]);
+// 	printf("pipe_i = %d\n", pid[1]);
 // 	while (pipe_i--)
-// 		wait(&status);
-// 	exit(WEXITSTATUS(status));
+// 	{
+// 		printf("pid = %d\n", pid[i]);
+// 		waitpid(pid[i], &status, 0);
+// 		i++;
+// 	}
+// 	return(WEXITSTATUS(status));
 // }
 
 // __attribute__((destructor))
