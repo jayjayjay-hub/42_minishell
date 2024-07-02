@@ -42,5 +42,5 @@ ls | cat -en | ls -a | cat -e | cat -n
 # sleep 1 | sleep 2 | cat | cat -e | cat -n | echo hello
 
 #mix Pipe
-ls -l > test | cat < Makefile | grep -n all >> test
+ls -l | cat < Makefile | grep -n all >> test
 < Makefile cat -en | cat | cat > f1 | cat -en | grep 1 >f1 >> test

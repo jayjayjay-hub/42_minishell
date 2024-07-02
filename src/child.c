@@ -12,6 +12,14 @@ void	dp_free(char **arg)
 	free(arg);
 }
 
+static void	sub_dup2(int first, int second)
+{
+	if (first != 0)
+		dup2(first, STDIN_FILENO);
+	if (second != 0)
+		dup2(second, STDOUT_FILENO);
+}
+
 // コマンドが存在するパスを検索する。パスが見つかった場合はそのパスを返す。
 char	*search_path(char *cmd, char **envp)
 {
@@ -62,61 +70,50 @@ void	do_execve(char **cmd, char **envp)
 		ft_error(NULL, NULL, "execve failed", EXIT_FAILURE);
 }
 
-static void	sub_dup2(int first, int second)
+char	**get_cmd(t_token *token)
 {
-	if (first != 0)
-		dup2(first, STDIN_FILENO);
-	if (second != 0)
-		dup2(second, STDOUT_FILENO);
+	int			i;
+	char	**cmd;
+
+	i = 0;
+	cmd = (char **)malloc(sizeof(char *) * token_list_size(token) + 1);
+	if (!cmd)
+		ft_error("malloc", "cmd", "malloc failed", 1);
+	cmd[token_list_size(token)] = NULL;
+	while (token)
+	{
+		while (token && token->type == WORD)
+		{
+			cmd[i] = ft_strdup(token->str);
+			if (!cmd[i])
+				ft_error("malloc", "cmd", "malloc failed", 1);
+			token = token->next;
+			i++;
+		}
+		if (token && (token->type >= 2 && token->type <= 5))
+		{
+			redirect(&token);
+			token = token->next;
+		}
+	}
+	return (cmd);
 }
 
 pid_t	child(t_token *token, char **envp, t_pipe_fd *fd_pipe, int pipe_i)
 {
 	pid_t	pid;
 	char	**cmd;
-	int		i;
 
-	i = 0;
 	pid = fork();
 	if (pid == -1)
 		ft_error(NULL, NULL, "fork failed", 1);
 	if (pid == 0)
 	{
 		if (fd_pipe->pipe_size != 0)
-		{
-			if (pipe_i == 0)
-				sub_dup2(0, fd_pipe->fd[1]);
-			else if (pipe_i == fd_pipe->pipe_size)
-				sub_dup2(fd_pipe->fd[2 * pipe_i - 2], 0);
-			else
-				sub_dup2(fd_pipe->fd[2 * pipe_i - 2], fd_pipe->fd[2 * pipe_i + 1]);
-		}
+			sub_dup2(fd_pipe->fd[2 * pipe_i - 2], fd_pipe->fd[2 * pipe_i + 1]);
 		close_pipe(fd_pipe);
-		cmd = (char **)malloc(sizeof(char *) * token_list_size(token) + 1);
-		if (!cmd)
-			ft_error("malloc", "cmd", strerror(errno), 1);
-		cmd[token_list_size(token)] = NULL;
-		while (token)
-		{
-			while (token && token->type == WORD)
-			{
-				cmd[i] = calloc(1, ft_strlen(token->str) + 1);
-				strncpy(cmd[i], token->str, ft_strlen(token->str));
-				token = token->next;
-				i++;
-			}
-			if (token && (token->type >= 2 && token->type <= 5))
-			{
-				redirect(&token);
-				token = token->next;
-			}
-		}
+		cmd = get_cmd(token);
 		do_execve(cmd, envp);
 	}
 	return (pid);
 }
-
-				// cmd[i] = (char *)malloc(sizeof(char) * ft_strlen(token->str));
-				// if (!cmd[i])
-				// 	ft_error("malloc", cmd[i], strerror(errno), 1);
-				// cmd[i] = token->str;
