@@ -10,6 +10,7 @@ void	redirect_in(t_token **token)
 	if (fd == -1)
 		ft_error("minishell", (*token)->str, "No such file or directory", 1);
 	dup2(fd, STDIN_FILENO);
+	close(fd);
 }
 
 void	redirect_out(t_token **token)
@@ -17,10 +18,19 @@ void	redirect_out(t_token **token)
 	int	fd;
 
 	*token = (*token)->next;
+	// overwirte check start
+	fd = open((*token)->str, O_RDONLY);
+	if (fd != -1)
+	{
+		close(fd);
+		ft_error("minishell", (*token)->str, "cannot overwrite existing file", 1);
+	}
+	// overwirte check end
 	fd = open((*token)->str, O_WRONLY | O_CREAT | O_TRUNC, S_IREAD | S_IWRITE);
 	if (fd == -1)
 		ft_error("minishell", (*token)->str, "No such file or directory", 1);
 	dup2(fd, STDOUT_FILENO);
+	close(fd);
 }
 
 void	redirect_append(t_token **token)
@@ -32,6 +42,7 @@ void	redirect_append(t_token **token)
 	if (fd == -1)
 		ft_error("minishell", (*token)->str, "No such file or directory", 1);
 	dup2(fd, STDOUT_FILENO);
+	close(fd);
 }
 
 void	redirect_here_doc(t_token **token)
@@ -59,6 +70,7 @@ void	redirect_here_doc(t_token **token)
 	}
 	fd = open(HEREDOC, O_RDONLY);
 	dup2(fd, STDIN_FILENO);
+	close(fd);
 	unlink(HEREDOC);
 }
 

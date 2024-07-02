@@ -29,10 +29,18 @@ echo hello >test
 echo hello >f1>f2>f3>test
 
 # step7 Pipe
+# single Pipe
 ls | abc
 abc | ls
 ls | cat
-ls -al | cat -en
+ls -a | cat -en
 cat Makefile | grep -n all
-#sleep 1 | sleep 3 | sleep 2 | cat | cat -e | cat -n | echo hello
 ls -|a
+
+# multi Pipe
+ls | cat -en | ls -a | cat -e | cat -n
+# sleep 1 | sleep 2 | cat | cat -e | cat -n | echo hello
+
+#mix Pipe
+ls -l > test | cat < Makefile | grep -n all >> test
+< Makefile cat -en | cat | cat > f | cat -en | grep 1 >f >> test

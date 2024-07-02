@@ -70,7 +70,7 @@ static void	sub_dup2(int first, int second)
 		dup2(second, STDOUT_FILENO);
 }
 
-void	child(t_token *token, char **envp, t_pipe_fd *fd_pipe, int pipe_i)
+pid_t	child(t_token *token, char **envp, t_pipe_fd *fd_pipe, int pipe_i)
 {
 	pid_t	pid;
 	char	**cmd;
@@ -112,8 +112,8 @@ void	child(t_token *token, char **envp, t_pipe_fd *fd_pipe, int pipe_i)
 			}
 		}
 		do_execve(cmd, envp);
-		// ここで標準出力入力を戻す必要あり
 	}
+	return (pid);
 }
 
 				// cmd[i] = (char *)malloc(sizeof(char) * ft_strlen(token->str));

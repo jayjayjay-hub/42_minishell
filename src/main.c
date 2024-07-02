@@ -21,8 +21,8 @@ void	struct_init(t_ats **ats, t_token **token, t_pipe_fd **fd_pipe)
 int	run_cmd(char *line, char **envp)
 {
 	t_ats	*ats;
-	t_token	*token;
 	t_ats	*tmp_ats;
+	t_token	*token;
 	t_pipe_fd	*fd_pipe;
 	int		pipe_i = 0;
 
@@ -30,7 +30,6 @@ int	run_cmd(char *line, char **envp)
 	token = tokenize(line);
 	ats = parser(token);
 	tmp_ats = ats;
-	// print_ats(ats);
 	if (ats)
 		fd_pipe = create_pipe(ats);
 	while (ats)
@@ -49,7 +48,6 @@ int	main(int argc, char **argv, char **envp)
 	char	*line;
 	int		status;
 	int		i;
-	int ret = 0;
 
 	status = 0;
 	errno = 0; // エラー番号をリセット
@@ -65,30 +63,40 @@ int	main(int argc, char **argv, char **envp)
 			add_history(line);
 			i = run_cmd(line, envp);
 			while (i--)
-				ret = waitpid(-1, &status, 0);
+				waitpid(-1, &status, 0);
 			free(line);
 		}
 	}
-	// exit(WEXITSTATUS(status));
 	return (0);
 }
 
 // int main(int argc, char **argv, char **envp)
 // {
 // 	int status = 0;
-// 	t_token *token;
-// 	t_ats *ats;
-// 	int i;
 
-// 	// char *line = "nosuchcommand";
-// 	char *line = "ls | cat";
-// 	i = run_cmd(line, envp);
-// 	while (i--)
+// 	char *line = "ls -| t";
+// 	t_ats	*ats;
+// 	t_ats	*tmp_ats;
+// 	t_token	*token;
+// 	t_pipe_fd	*fd_pipe;
+// 	int		pipe_i = 0;
+// 	pid_t	pid = 0;
+
+// 	struct_init(&ats, &token, &fd_pipe);
+// 	token = tokenize(line);
+// 	ats = parser(token);
+// 	tmp_ats = ats;
+// 	if (ats)
+// 		fd_pipe = create_pipe(ats);
+// 	while (ats)
 // 	{
-// 		write(2, "wait\n", 5);
-// 		waitpid(-1, &status, 0);
-// 		write(2, "wait end\n", 9);
+// 		pid = child(ats->token, envp, fd_pipe, pipe_i);
+// 		ats = ats->next;
+// 		pipe_i++;
 // 	}
+// 	close_pipe(fd_pipe);
+// 	while (pipe_i--)
+// 		wait(&status);
 // 	exit(WEXITSTATUS(status));
 // }
 

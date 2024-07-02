@@ -7,6 +7,8 @@
 # include <string.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <sys/types.h>
+# include <sys/stat.h>
 # include <stdbool.h>
 # include <signal.h>
 
@@ -110,7 +112,7 @@ t_ats	*new_ats(t_token *token);
 void	cd(char **cmd);
 
 // child.c
-void	child(t_token *token, char **envp, t_pipe_fd *fd_pipe, int pipe_i);
+pid_t	child(t_token *token, char **envp, t_pipe_fd *fd_pipe, int pipe_i);
 
 // pipe.c
 t_pipe_fd *create_pipe(t_ats *ats);
