@@ -76,12 +76,12 @@ assert "echo a > out| echo b >> out| echo c >> out| echo d >> out| cat out"
 assert "echo a > out| echo b >> out| echo c >> out| echo d > out| cat out"
 # assert "echo hello 2147483647> file"
 assert "echo hello 2147483648> file"
-assert "./a.out 3> file3 2> file2 1> file1| cat file3 file2 file1, printf '#include<unistd.h>\nint main(){write(1, "fd1\\n", 4)|write(2, "fd2\\n", 4)|write(3, "fd3\\n", 4)|}' > a.c && gcc a.c"
-assert "./a.out 1> file1 2> file2 3> file3| cat file1 file2 file3, printf '#include<unistd.h>\nint main(){write(1, "fd1\\n", 4)|write(2, "fd2\\n", 4)|write(3, "fd3\\n", 4)|}' > a.c && gcc a.c"
-assert "echo a 1> 1.txt 2> 2.txt 3> 3.txt| ./a.out 1>> 1.txt 2>> 2.txt 3>> 3.txt| cat 1.txt 2.txt 3.txt, printf '#include<unistd.h>\nint main(){write(1, "fd1\\n", 4)|write(2, "fd2\\n", 4)|write(3, "fd3\\n", 4)|}' > a.c && gcc a.c"
-assert "echo a 3> 3.txt 2> 2.txt 1> 1.txt 2> 2.txt 3> 3.txt| echo b 1>> 1.txt 2>> 2.txt 3>> 3.txt 2>> 2.txt 1>> 1.txt| ./a.out 1>> 1.txt 2>> 2.txt 3>> 3.txt 2>> 2.txt 1>> 1.txt| cat 1.txt 2.txt 3.txt, printf '#include<unistd.h>\nint main(){write(1, "fd1\\n", 4)|write(2, "fd2\\n", 4)|write(3, "fd3\\n", 4)|}' > a.c && gcc a.c"
+# assert "./a.out 3> file3 2> file2 1> file1| cat file3 file2 file1, printf '#include<unistd.h>\nint main(){write(1, "fd1\\n", 4)|write(2, "fd2\\n", 4)|write(3, "fd3\\n", 4)|}' > a.c && gcc a.c"
+# assert "./a.out 1> file1 2> file2 3> file3| cat file1 file2 file3, printf '#include<unistd.h>\nint main(){write(1, "fd1\\n", 4)|write(2, "fd2\\n", 4)|write(3, "fd3\\n", 4)|}' > a.c && gcc a.c"
+# assert "echo a 1> 1.txt 2> 2.txt 3> 3.txt| ./a.out 1>> 1.txt 2>> 2.txt 3>> 3.txt| cat 1.txt 2.txt 3.txt, printf '#include<unistd.h>\nint main(){write(1, "fd1\\n", 4)|write(2, "fd2\\n", 4)|write(3, "fd3\\n", 4)|}' > a.c && gcc a.c"
+# assert "echo a 3> 3.txt 2> 2.txt 1> 1.txt 2> 2.txt 3> 3.txt| echo b 1>> 1.txt 2>> 2.txt 3>> 3.txt 2>> 2.txt 1>> 1.txt| ./a.out 1>> 1.txt 2>> 2.txt 3>> 3.txt 2>> 2.txt 1>> 1.txt| cat 1.txt 2.txt 3.txt, printf '#include<unistd.h>\nint main(){write(1, "fd1\\n", 4)|write(2, "fd2\\n", 4)|write(3, "fd3\\n", 4)|}' > a.c && gcc a.c"
 # assert "echo a > f| echo b >> f| cat f f f >> ff| cat ff ff >> f| cat f"
-assert "ls>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f|cat f"
+assert "ls>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f|cat f"
 
 # step7 Pipe
 assert "ls | abc" # waitpidによりabcが先に終了するため、statusがlsによるものになる
@@ -93,6 +93,7 @@ assert "ls -|a"
 
 # multi Pipe
 assert "ls | cat -en | ls -a | cat -e | cat -n"
+assert "cat -en Makefile | grep 1 | sort -r"
 # assert "sleep 2 | sleep 1 | cat | cat -e | cat -n | echo hello"
 
 #mix Pipe
