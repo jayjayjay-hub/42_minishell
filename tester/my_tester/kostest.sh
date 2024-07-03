@@ -8,7 +8,7 @@ EOF
 
 # ./tester/tester.sh で実行
 cleanup() {
-	rm -f cmp out f* test er* out* *.txt *.c
+	rm -f cmp out f* test er* out* *.c
 }
 
 assert() {

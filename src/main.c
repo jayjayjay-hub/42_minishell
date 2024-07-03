@@ -60,7 +60,7 @@ int	main(int argc, char **argv, char **envp)
 	while (1)
 	{
 		line = readline("minishell$ ");
-		if (line == NULL || (!ft_strncmp(line, "exit", 4)))
+		if (line == NULL || (!ft_strncmp(line, "exit", 4) && ft_strlen(line) == 4))
 			handle_eof(status, line);
 		if (*line)
 		{
@@ -90,7 +90,4 @@ int	main(int argc, char **argv, char **envp)
 // 	return(WEXITSTATUS(status));
 // }
 
-// __attribute__((destructor))
-// static void destructor() {
-//     system("leaks -q minishell");
-// }
+// valgrind --leak-check=full -s ./minishell

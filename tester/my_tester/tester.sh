@@ -13,7 +13,7 @@ int main() { printf("hello from .out\n"); }
 EOF
 
 cleanup() {
-    rm -f cmp* out* f1 f2 f3 test .out
+    rm -f cmp* out* f* err*.txt test .out
 }
 
 del_error_cmd_file() {
