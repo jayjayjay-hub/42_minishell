@@ -22,10 +22,7 @@ void	redirect_out(t_token **token)
 	// overwirte check start
 	fd = open((*token)->str, O_RDONLY);
 	if (fd != -1)
-	{
-		close(fd);
 		ft_error("minishell", (*token)->str, "cannot overwrite existing file", 1);
-	}
 	// overwirte check end
 	fd = open((*token)->str, O_WRONLY | O_CREAT | O_TRUNC, S_IREAD | S_IWRITE);
 	if (fd == -1)

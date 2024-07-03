@@ -76,7 +76,7 @@ typedef struct pipe_fd
 
 typedef struct pid_info
 {
-	pid_t	pid[1024]; //いずれパイプの長さでmallocする必要あり
+	pid_t	pid[1024]; //いずれパイプの長さでマロックする必要あり
 	int		pipe_i;
 }	t_pid_info;
 

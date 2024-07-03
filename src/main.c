@@ -77,35 +77,14 @@ int	main(int argc, char **argv, char **envp)
 // int main(int argc, char **argv, char **envp)
 // {
 // 	int status = 0;
+// 	t_pid_info pid_info;
+// 	int i = 0;
+// 	char *line = "echo a > out| echo b >> out| echo c >> out| echo d > out| cat out";
 
-// 	char *line = "ca | ls";
-// 	t_ats	*ats;
-// 	t_ats	*tmp_ats;
-// 	t_token	*token;
-// 	t_pipe_fd	*fd_pipe;
-// 	int		pipe_i = 0;
-// 	pid_t		pid[100];
-// 	int		i = 0;
-
-// 	struct_init(&ats, &token, &fd_pipe);
-// 	token = tokenize(line);
-// 	ats = parser(token);
-// 	tmp_ats = ats;
-// 	if (ats)
-// 		fd_pipe = create_pipe(ats);
-// 	while (ats)
+// 	pid_info = run_cmd(line, envp);
+// 	while (pid_info.pipe_i--)
 // 	{
-// 		pid[pipe_i] = child(ats->token, envp, fd_pipe, pipe_i);
-// 		ats = ats->next;
-// 		pipe_i++;
-// 	}
-// 	close_pipe(fd_pipe);
-// 	printf("pipe_i = %d\n", pid[0]);
-// 	printf("pipe_i = %d\n", pid[1]);
-// 	while (pipe_i--)
-// 	{
-// 		printf("pid = %d\n", pid[i]);
-// 		waitpid(pid[i], &status, 0);
+// 		waitpid(pid_info.pid[i], &status, 0);
 // 		i++;
 // 	}
 // 	return(WEXITSTATUS(status));
