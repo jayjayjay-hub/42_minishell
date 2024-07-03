@@ -90,11 +90,7 @@ char	**get_cmd(t_token *token)
 			token = token->next;
 			i++;
 		}
-		if (token && (token->type >= 2 && token->type <= 5))
-		{
-			redirect(&token);
-			token = token->next;
-		}
+		redirect(&token);
 	}
 	return (cmd);
 }

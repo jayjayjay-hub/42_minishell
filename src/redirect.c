@@ -11,6 +11,7 @@ void	redirect_in(t_token **token)
 		ft_error("minishell", (*token)->str, "No such file or directory", 1);
 	dup2(fd, STDIN_FILENO);
 	close(fd);
+	*token = (*token)->next;
 }
 
 void	redirect_out(t_token **token)
@@ -31,6 +32,7 @@ void	redirect_out(t_token **token)
 		ft_error("minishell", (*token)->str, "No such file or directory", 1);
 	dup2(fd, STDOUT_FILENO);
 	close(fd);
+	*token = (*token)->next;
 }
 
 void	redirect_append(t_token **token)
@@ -43,6 +45,7 @@ void	redirect_append(t_token **token)
 		ft_error("minishell", (*token)->str, "No such file or directory", 1);
 	dup2(fd, STDOUT_FILENO);
 	close(fd);
+	*token = (*token)->next;
 }
 
 void	redirect_here_doc(t_token **token)
@@ -72,10 +75,13 @@ void	redirect_here_doc(t_token **token)
 	dup2(fd, STDIN_FILENO);
 	close(fd);
 	unlink(HEREDOC);
+	*token = (*token)->next;
 }
 
 void	redirect(t_token **token)
 {
+	if (!*token)
+		return ;
 	if ((*token)->type == REDIRECT_IN)
 		redirect_in(token);
 	else if ((*token)->type == REDIRECT_OUT)
