@@ -61,16 +61,13 @@ void	do_execve(char **cmd, char **envp)
 	{
 		if (access(cmd[0], F_OK) != -1)
 			path = cmd[0];
+		else
+			ft_error("minishell", cmd[0], "No such file or directory", CMD_NOT_FOUND);
 	}
 	else
 		path = search_path(cmd[0], envp);
 	if (!path)
-	{
-		if (!ft_strncmp(cmd[0], "./", 2))
-			ft_error("minishell", cmd[0], "No such file or directory", CMD_NOT_FOUND);
-		else
-			ft_error("minishell", cmd[0], "command not found", CMD_NOT_FOUND);
-	}
+		ft_error("minishell", cmd[0], "command not found", CMD_NOT_FOUND);
 	if (execve(path, cmd, envp) == -1)
 		ft_error(NULL, NULL, "execve failed", EXIT_FAILURE);
 }
