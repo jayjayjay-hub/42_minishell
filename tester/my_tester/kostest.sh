@@ -48,6 +48,7 @@ assert 'ls'
 assert './a.out'
 # exit status 127 (command not found)
 assert 'a.out'
+assert './.out'
 assert 'nosuchfile'
 
 # step5 Tokenizer

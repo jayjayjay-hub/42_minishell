@@ -65,7 +65,12 @@ void	do_execve(char **cmd, char **envp)
 	else
 		path = search_path(cmd[0], envp);
 	if (!path)
-		ft_error("minishell", cmd[0], "command not found", CMD_NOT_FOUND);
+	{
+		if (!ft_strncmp(cmd[0], "./", 2))
+			ft_error("minishell", cmd[0], "No such file or directory", CMD_NOT_FOUND);
+		else
+			ft_error("minishell", cmd[0], "command not found", CMD_NOT_FOUND);
+	}
 	if (execve(path, cmd, envp) == -1)
 		ft_error(NULL, NULL, "execve failed", EXIT_FAILURE);
 }
