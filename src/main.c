@@ -20,13 +20,15 @@ void	struct_init(t_ats **ats, t_token **token, t_pipe_fd **fd_pipe, t_pid_info *
 
 // 子プロセスを生成して子プロセス内でコマンドを実行する。親プロセスでは子プロセスの終了を待つ。
 // こっちでcmd = tokenizer(line)をして兄弟プロセスを作る予定。|や;で区切ってそれまでを二重配列にして入れる。
-t_pid_info	run_cmd(char *line, char **envp)
+int	run_cmd(char *line, char **envp)
 {
 	t_ats	*ats;
 	t_ats	*tmp_ats;
 	t_token	*token;
 	t_pipe_fd	*fd_pipe;
 	t_pid_info pid_info;
+	int i = 0;
+	int status = 0;
 
 	struct_init(&ats, &token, &fd_pipe, &pid_info);
 	token = tokenize(line);
@@ -41,8 +43,13 @@ t_pid_info	run_cmd(char *line, char **envp)
 		pid_info.pipe_i++;
 	}
 	close_pipe(fd_pipe);
+	while (pid_info.pipe_i--)
+	{
+		// printf("wpid = %d\n", pid_info.pid[i]);
+		waitpid(pid_info.pid[i++], &status, 0);
+	}
 	free_ats(tmp_ats);
-	return (pid_info);
+	return (status);
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -53,7 +60,6 @@ int	main(int argc, char **argv, char **envp)
 	int		i;
 
 	status = 0;
-	i = 0;
 	errno = 0; // エラー番号をリセット
 	register_signal();
 	rl_outstream = stderr;
@@ -64,10 +70,14 @@ int	main(int argc, char **argv, char **envp)
 			handle_eof(status, line);
 		if (*line)
 		{
+			i = 0;
 			add_history(line);
-			pid_info = run_cmd(line, envp);
-			while (pid_info.pipe_i--)
-				waitpid(pid_info.pid[i++], &status, 0);
+			status = run_cmd(line, envp);
+			// while (pid_info.pipe_i--)
+			// {
+			// 	printf("wpid = %d\n", pid_info.pid[i]);
+			// 	waitpid(pid_info.pid[i++], &status, 0);
+			// }
 			free(line);
 		}
 	}

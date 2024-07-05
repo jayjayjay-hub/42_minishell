@@ -133,6 +133,8 @@ pid_t	child(t_token *token, char **envp, t_pipe_fd *fd_pipe, int pipe_i)
 		cmd = get_cmd(token);
 		do_execve(cmd, envp);
 	}
+	// else
+	// 	printf("pid= %d cmd= %s\n", pid, token->str);
 	return (pid);
 }
 

@@ -32,7 +32,7 @@ ls no_such_file > out1.txt > out2.txt > out3.txt 2> err1.txt 2> err2.txt 2> err3
 ls > out1.txt > out2.txt > out3.txt 2> err1.txt 2> err2.txt 2> err3.txt| cat out1.txt out2.txt out3.txt err1.txt err2.txt err3.txt
 echo hello 2147483647> file
 echo hello 2147483648> file
-echo a > f| echo b >> f| cat f f f >> ff| cat ff ff >> f| cat f #もしcannnot overwirteなら楽
+# 不適切なtestな気がする echo a > f| echo b >> f| cat f f f >> ff| cat ff ff >> f| cat f
 ls>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f|cat f
 
 # step7 Pipe
