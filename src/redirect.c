@@ -79,6 +79,7 @@ void	redirect(t_token **token)
 {
 	if (!*token)
 		return ;
+	syntax_check(*token);
 	if ((*token)->type == REDIRECT_IN)
 		redirect_in(token);
 	else if ((*token)->type == REDIRECT_OUT)

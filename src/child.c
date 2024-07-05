@@ -97,6 +97,25 @@ char	**get_cmd(t_token *token)
 	return (cmd);
 }
 
+void	syntax_check(t_token *token)
+{
+	if (token->type >= 1 && token->type <= 5)
+	{
+		if (!token->next)
+		{
+			write(2, "minishell: syntax error near unexpected token `newline'\n", 57);
+			exit (2);
+		}
+		else if (token->next->type != WORD)
+		{
+			write(2, "minishell: syntax error near unexpected token `", 47);
+			write(2, token->str, ft_strlen(token->str));
+			write(2, "'\n", 2);
+			exit (2);
+		}
+	}
+}
+
 pid_t	child(t_token *token, char **envp, t_pipe_fd *fd_pipe, int pipe_i)
 {
 	pid_t	pid;
@@ -107,6 +126,7 @@ pid_t	child(t_token *token, char **envp, t_pipe_fd *fd_pipe, int pipe_i)
 		ft_error(NULL, NULL, "fork failed", 1);
 	if (pid == 0)
 	{
+		syntax_check(token);
 		if (fd_pipe->pipe_size != 0)
 			sub_dup2(fd_pipe->fd[2 * pipe_i - 2], fd_pipe->fd[2 * pipe_i + 1]);
 		close_pipe(fd_pipe);

@@ -120,6 +120,7 @@ void	cd(char **cmd);
 
 // child.c
 pid_t	child(t_token *token, char **envp, t_pipe_fd *fd_pipe, int pipe_i);
+void	syntax_check(t_token *token);
 
 // pipe.c
 t_pipe_fd *create_pipe(t_ats *ats);
