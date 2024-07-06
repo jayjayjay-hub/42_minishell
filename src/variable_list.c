@@ -7,20 +7,21 @@ typedef struct s_variable
 	char			*value;
 	struct s_variable	*next;
 }	t_variable;
+
+// global variable
+t_variable	*variable;
 */
 
-void	variable_list_add_back(t_variable **lst, t_variable *new)
+void	variable_list_add_back(t_variable *new)
 {
 	t_variable	*tmp;
 
-	if (!lst || !new)
-		return ;
-	if (!*lst)
+	if (!variable)
 	{
-		*lst = new;
+		variable = new;
 		return ;
 	}
-	tmp = *lst;
+	tmp = variable;
 	while (tmp->next)
 		tmp = tmp->next;
 	tmp->next = new;
@@ -39,25 +40,42 @@ t_variable	*variable_list_new(char *key, char *value)
 	return (new);
 }
 
-void	variable_list_free(t_variable *lst)
+void	variable_list_free(void)
 {
 	t_variable	*tmp;
 
-	while (lst)
+	while (variable)
 	{
-		tmp = lst->next;
-		free(lst->key);
-		free(lst->value);
-		free(lst);
-		lst = tmp;
+		tmp = variable->next;
+		free(variable->key);
+		free(variable->value);
+		free(variable);
+		variable = tmp;
 	}
 }
 
-void	variable_list_print(t_variable *lst)
+char	*get_variable_value(char *key)
 {
-	while (lst)
+	t_variable	*tmp;
+
+	tmp = variable;
+	while (tmp)
 	{
-		printf("key: %s, value: %s\n", lst->key, lst->value);
-		lst = lst->next;
+		if (!strcmp(tmp->key, key))
+			return (tmp->value);
+		tmp = tmp->next;
+	}
+	return (NULL);
+}
+
+void	variable_list_print(void)
+{
+	t_variable	*tmp;
+
+	tmp = variable;
+	while (tmp)
+	{
+		printf("key = %s, value = %s\n", tmp->key, tmp->value);
+		tmp = tmp->next;
 	}
 }

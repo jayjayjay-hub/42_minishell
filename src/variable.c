@@ -7,7 +7,7 @@ bool	is_alnum_under(char c)
 	return (false);
 }
 
-void	add_variable(t_variable **valiable, char *str)
+void	add_variable(char *str)
 {
 	t_variable	*new;
 	char		*key;
@@ -26,5 +26,5 @@ void	add_variable(t_variable **valiable, char *str)
 	key = ft_substr(str, 0, key_len);
 	value = ft_strdup(tmp + 1);
 	new = variable_list_new(key, value);
-	variable_list_add_back(valiable, new);
+	variable_list_add_back(new);
 }

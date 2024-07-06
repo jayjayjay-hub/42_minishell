@@ -32,7 +32,7 @@ int	run_cmd(char *line, char **envp)
 
 	struct_init(&ats, &token, &fd_pipe, &pid_info);
 	token = tokenize(line, &status);
-	// token = expansion(token, variable);
+	expantion(token);
 	ats = parser(token);
 	tmp_ats = ats;
 	if (ats)
@@ -41,8 +41,8 @@ int	run_cmd(char *line, char **envp)
 	{
 		if (token_list_size(ats->token) == 1)
 		{
-			add_variable(&variable, ats->token->str);
-			// variable_list_print(variable);
+			add_variable(ats->token->str);
+			// variable_list_print();
 			ats = ats->next;
 			continue;
 		}
@@ -60,6 +60,7 @@ int	run_cmd(char *line, char **envp)
 	return (status);
 }
 
+t_variable *variable = NULL;
 int	main(int argc, char **argv, char **envp)
 {
 	char	*line;
