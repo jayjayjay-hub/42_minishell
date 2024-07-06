@@ -25,6 +25,7 @@ int	run_cmd(char *line, char **envp)
 	t_ats	*ats;
 	t_ats	*tmp_ats;
 	t_token	*token;
+	t_variable	*variable = NULL;
 	t_pipe_fd	*fd_pipe;
 	t_pid_info pid_info;
 	int i = 0;
@@ -32,6 +33,7 @@ int	run_cmd(char *line, char **envp)
 
 	struct_init(&ats, &token, &fd_pipe, &pid_info);
 	token = tokenize(line, &status);
+	// token = expansion(token, variable);
 	ats = parser(token);
 	tmp_ats = ats;
 	if (ats)
