@@ -73,6 +73,7 @@ fclean:
 	@$(MAKE) -C $(LIBFT_DIR) fclean
 	@$(RM) $(OBJ_DIR)
 	@$(RM) $(NAME)
+	@$(RM) $(ERROR_DIR)
 	@echo $(R) "$(NAME) fcleaned\n" $(X)
 
 re: fclean all

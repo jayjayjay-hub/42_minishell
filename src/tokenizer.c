@@ -3,7 +3,7 @@
 
 int is_metachar(char c)
 {
-	return (c && ft_strchr("&|<>()", c));
+	return (c && strchr("|&;,()<>", c)); // https://runebook.dev/ja/docs/bash/definitions
 }
 
 int	is_quote(char c)
