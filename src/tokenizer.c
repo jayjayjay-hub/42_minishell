@@ -56,7 +56,18 @@ int	get_word_len(char *line)
 				len++;
 			if (!line[len])
 			{
-				printf("quote errorrrr\n");
+				printf("single quote error\n");
+				return (-1);
+			}
+		}
+		else if (is_double_quote(line[len]))
+		{
+			len++;
+			while (line[len] && !is_double_quote(line[len]))
+				len++;
+			if (!line[len])
+			{
+				printf("doble quote error\n");
 				return (-1);
 			}
 		}
@@ -82,6 +93,23 @@ bool	single_quote(char **line, char **word, int *word_len)
 	return (true);
 }
 
+bool	double_quote(char **line, char **word, int *word_len)
+{
+	(*word)[*word_len] = **line;
+	(*word_len)++;
+	(*line)++;
+	while (**line && !is_double_quote(**line))
+	{
+		(*word)[*word_len] = **line;
+		(*word_len)++;
+		(*line)++;
+	}
+	(*word)[*word_len] = **line;
+	(*word_len)++;
+	(*line)++;
+	return (true);
+}
+
 char *get_word(char *line)
 {
 	char	*word;
@@ -94,8 +122,10 @@ char *get_word(char *line)
 	word_len = 0;
 	while (*line && !is_metachar(*line))
 	{
-		if (is_quote(*line))
+		if (is_single_quote(*line))
 			single_quote(&line, &word, &word_len);
+		else if (is_double_quote(*line))
+			double_quote(&line, &word, &word_len);
 		else
 			word[word_len++] = *line++;
 	}
