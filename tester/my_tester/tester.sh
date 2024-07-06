@@ -38,8 +38,7 @@ assert() {
 	if [ "$actual" = "$expected" ] && diff cmp_filtered_final out_filtered_final >/dev/null; then
 		printf "\033[32m.\033[0m"
 		true=1
-	fi
-	if ! diff cmp_filtered_final out_filtered_final >/dev/null; then
+	elif ! diff cmp_filtered_final out_filtered_final >/dev/null; then
 		# diff の出力が四行のとき
 		if diff cmp_filtered_final out_filtered_final | wc -l | grep -q 4; then
 			# diff の出力の２行目と４行目に"~: command not found"があるかどうか
@@ -49,6 +48,7 @@ assert() {
 			fi
 		fi
 	fi
+
 	if [ $true -ne 1 ]; then
 		printf "\033[31mF\033[0m"
 		failed=1
