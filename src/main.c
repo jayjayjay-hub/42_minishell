@@ -25,7 +25,6 @@ int	run_cmd(char *line, char **envp)
 	t_ats	*ats;
 	t_ats	*tmp_ats;
 	t_token	*token;
-	t_variable	*variable = NULL;
 	t_pipe_fd	*fd_pipe;
 	t_pid_info pid_info;
 	int i = 0;
@@ -40,6 +39,13 @@ int	run_cmd(char *line, char **envp)
 		fd_pipe = create_pipe(ats);
 	while (ats)
 	{
+		if (token_list_size(ats->token) == 1)
+		{
+			add_variable(&variable, ats->token->str);
+			// variable_list_print(variable);
+			ats = ats->next;
+			continue;
+		}
 		pid_info.pid[pid_info.pipe_i] = child(ats->token, envp, fd_pipe, pid_info.pipe_i);
 		ats = ats->next;
 		pid_info.pipe_i++;

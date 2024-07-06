@@ -48,12 +48,28 @@ typedef enum e_token_type
 	BRACKET_LEFT, // (
 	BRACKET_RIGHT, // )
 }	t_token_type;
+
+typedef enum e_variable_type
+{
+	STRING,
+	ARRAY,
+}	t_variable_type;
+
 typedef struct s_token
 {
 	char			*str;
 	t_token_type	type;
 	struct s_token	*next;
 }	t_token;
+
+typedef struct s_variable
+{
+	char			*key;
+	char			*value;
+	struct s_variable	*next;
+}	t_variable;
+
+t_variable	*variable;
 
 typedef struct s_parse_tree
 {
@@ -86,6 +102,10 @@ typedef struct pid_info
 // tokenizer.c
 t_token *tokenize(char *line, int *status);
 int		is_quote(char c);
+int		is_metachar(char c);
+int		is_single_quote(char c);
+int		is_double_quote(char c);
+
 
 // list.c
 t_token	*new_token(char *str, t_token_type type);
@@ -133,5 +153,15 @@ void			free_parse_tree(t_parse_tree *parse_tree);
 
 // expansion.c
 void remove_quote(t_token *token);
+
+// variable.c
+bool	is_alnum_under(char c);
+void	add_variable(t_variable **valiable, char *str);
+
+// variable_list.c
+t_variable	*variable_list_new(char *key, char *value);
+void		variable_list_add_back(t_variable **list, t_variable *new);
+void		variable_list_print(t_variable *lst);
+void		variable_list_free(t_variable *variable);
 
 #endif
