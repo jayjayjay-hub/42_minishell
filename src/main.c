@@ -33,6 +33,7 @@ int	run_cmd(char *line, char **envp)
 	struct_init(&ats, &token, &fd_pipe, &pid_info);
 	token = tokenize(line, &status);
 	expantion(token);
+	// print_token(token);
 	ats = parser(token);
 	tmp_ats = ats;
 	if (ats)

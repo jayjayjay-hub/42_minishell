@@ -88,18 +88,15 @@ void	remove_double_quote(char *str)
 
 void	expantion(t_token *token)
 {
-	t_token	*tmp;
-
-	tmp = token;
 	if (!token)
 		return ;
-	while (tmp)
+	while (token)
 	{
-		if (tmp->type == WORD)
+		if (token->type == WORD)
 		{
-			remove_single_quote(tmp->str);
-			remove_double_quote(tmp->str);
+			remove_single_quote(token->str);
+			remove_double_quote(token->str);
 		}
-		tmp = tmp->next;
+		token = token->next;
 	}
 }
