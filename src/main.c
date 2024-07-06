@@ -31,7 +31,7 @@ int	run_cmd(char *line, char **envp)
 	int status = 0;
 
 	struct_init(&ats, &token, &fd_pipe, &pid_info);
-	token = tokenize(line);
+	token = tokenize(line, &status);
 	ats = parser(token);
 	tmp_ats = ats;
 	if (ats)
@@ -78,6 +78,7 @@ int	main(int argc, char **argv, char **envp)
 			// 	printf("wpid = %d\n", pid_info.pid[i]);
 			// 	waitpid(pid_info.pid[i++], &status, 0);
 			// }
+			// printf("status = %d\n", WEXITSTATUS(status));
 			free(line);
 		}
 	}

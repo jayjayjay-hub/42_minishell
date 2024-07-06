@@ -84,7 +84,7 @@ typedef struct pid_info
 // main.c
 
 // tokenizer.c
-t_token *tokenize(char *line);
+t_token *tokenize(char *line, int *status);
 int		is_quote(char c);
 
 // list.c
