@@ -177,6 +177,8 @@ t_token *tokenize(char *line, int *status)
 		line = pass_space(line); // スペースを飛ばす
 		if (!*line)
 			break ;
+		if (*line == '#') // コメント行は無視
+			break ;
 		type = check_type(line); // トークンの種類をチェック
 		token_len = add_token(&token, line, type); // トークンを取得
 		if (!token_len)
