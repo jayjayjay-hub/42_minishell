@@ -156,7 +156,9 @@ void expantion(t_token *token);
 
 // variable.c
 bool	is_alnum_under(char c);
-void add_variable(char *str);
+bool is_al_under(char c);
+bool add_variable(char *str);
+char *expantion_variable(char *str);
 
 // variable_list.c
 void variable_list_print(void);
@@ -164,5 +166,6 @@ void variable_list_add_back(t_variable *new);
 t_variable	*variable_list_new(char *key, char *value);
 void variable_list_free(void);
 char	*get_variable_value(char *key);
+char *get_variable_key(char *str);
 
 #endif

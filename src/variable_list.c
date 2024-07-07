@@ -54,11 +54,28 @@ void	variable_list_free(void)
 	}
 }
 
+char	*get_variable_key(char *str)
+{
+	int		i;
+	char	*key;
+
+	i = 0;
+	if (!is_al_under(str[i]))
+		return (NULL);
+	i++;
+	while (str[i] && is_alnum_under(str[i]))
+		i++;
+	key = ft_substr(str, 0, i);
+	return (key);
+}
+
 char	*get_variable_value(char *key)
 {
 	t_variable	*tmp;
 
 	tmp = variable;
+	if (!key)
+		return (NULL);
 	while (tmp)
 	{
 		if (!strcmp(tmp->key, key))

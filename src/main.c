@@ -42,10 +42,12 @@ int	run_cmd(char *line, char **envp)
 	{
 		if (token_list_size(ats->token) == 1)
 		{
-			add_variable(ats->token->str);
-			// variable_list_print();
-			ats = ats->next;
-			continue;
+			if (add_variable(ats->token->str))
+			{
+				// variable_list_print();
+				ats = ats->next;
+				continue;
+			}
 		}
 		pid_info.pid[pid_info.pipe_i] = child(ats->token, envp, fd_pipe, pid_info.pipe_i);
 		ats = ats->next;
