@@ -55,4 +55,4 @@ ls -l | cat < Makefile | grep -n all >> test
 
 #変数のテスト
 #変数登録かつ出力
-test=123 | abc=1dk | echo $test $abc $123
+#test=123 | abc=1dk | echo $test $abc $123
