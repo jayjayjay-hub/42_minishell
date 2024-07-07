@@ -79,7 +79,7 @@ char	*get_variable_value(char *key)
 	while (tmp)
 	{
 		if (!strcmp(tmp->key, key))
-			return (tmp->value);
+			return (strdup(tmp->value));
 		tmp = tmp->next;
 	}
 	return (NULL);
