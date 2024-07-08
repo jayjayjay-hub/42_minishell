@@ -87,7 +87,6 @@ void	free_token(t_token *token)
 	}
 }
 
-// debug用
 void	print_token(t_token *token)
 {
 	t_token *tmp;
