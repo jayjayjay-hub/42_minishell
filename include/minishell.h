@@ -101,11 +101,6 @@ typedef struct pid_info
 
 // tokenizer.c
 t_token *tokenize(char *line, int *status);
-int		is_quote(char c);
-int		is_metachar(char c);
-int		is_single_quote(char c);
-int		is_double_quote(char c);
-
 
 // list.c
 t_token	*new_token(char *str, t_token_type type);
@@ -167,5 +162,12 @@ t_variable	*variable_list_new(char *key, char *value);
 void variable_list_free(void);
 char	*get_variable_value(char *key);
 char *get_variable_key(char *str);
+
+// utils.c
+int		is_quote(char c);
+int		is_metachar(char c);
+int		is_single_quote(char c);
+int		is_double_quote(char c);
+
 
 #endif

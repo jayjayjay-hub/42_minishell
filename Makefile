@@ -27,7 +27,8 @@ SRC_FILES = main.c token_list.c\
 			ats_list.c cd.c\
 			child.c pipe.c\
 			variable_list.c variable.c\
-			expansion.c
+			expansion.c\
+			utils.c
 
 OJB_FILES = $(SRC_FILES:%.c=%.o)
 
