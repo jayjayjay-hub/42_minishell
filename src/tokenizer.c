@@ -59,6 +59,11 @@ char	*get_word(char *line)
 	if (word_len == -1)
 		return (NULL);
 	word = ft_substr(line, 0, word_len);
+	if (!word)
+	{
+		printf("minishell: malloc failed\n");
+		return (NULL);
+	}
 	return (word);
 }
 
@@ -71,6 +76,11 @@ char	*get_operator(char *line, t_token_type type)
 	if (type == REDIRECT_HERE_DOC || type == REDIRECT_APPEND)
 		len = 2;
 	operator = ft_substr(line, 0, len);
+	if (!operator)
+	{
+		printf("minishell: malloc failed\n");
+		return (NULL);
+	}
 	return (operator);
 }
 
