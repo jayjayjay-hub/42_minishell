@@ -82,7 +82,7 @@ void	do_execve(char **cmd, char **envp)
 		ft_error(NULL, NULL, "execve failed", EXIT_FAILURE);
 }
 
-char	**get_cmd(t_token *token, int fd)
+char	**get_cmd(t_token *token)
 {
 	int			i;
 	char	**cmd;
@@ -102,7 +102,7 @@ char	**get_cmd(t_token *token, int fd)
 			token = token->next;
 			i++;
 		}
-		redirect(&token, fd);
+		redirect(&token);
 	}
 	return (cmd);
 }
@@ -133,7 +133,7 @@ void	syntax_check(t_token *token)
 	}
 }
 
-pid_t	child(t_token *token, char **envp, t_pipe_fd *fd_pipe, int pipe_i, int fd)
+pid_t	child(t_token *token, char **envp, t_pipe_fd *fd_pipe, int pipe_i)
 {
 	pid_t	pid;
 	char	**cmd;
@@ -147,7 +147,7 @@ pid_t	child(t_token *token, char **envp, t_pipe_fd *fd_pipe, int pipe_i, int fd)
 		if (fd_pipe->pipe_size != 0)
 			sub_dup2(fd_pipe->fd[2 * pipe_i - 2], fd_pipe->fd[2 * pipe_i + 1]);
 		close_pipe(fd_pipe);
-		cmd = get_cmd(token, fd);
+		cmd = get_cmd(token);
 		do_execve(cmd, envp);
 	}
 	// else

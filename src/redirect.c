@@ -90,21 +90,22 @@
 // 		redirect_here_doc(token);
 // }
 
-void	redirect(t_token **token, int fd)
+void	redirect(t_token **token)
 {
 	if (!*token)
 		return ;
 	if ((*token)->type >= REDIRECT_IN && (*token)->type <= REDIRECT_APPEND)
 	{
+		printf("token.fd = %d\n", (*token)->fd);
 		if ((*token)->type == REDIRECT_IN)
-			dup2(fd, STDIN_FILENO);
+			dup2((*token)->fd, STDIN_FILENO);
 		else if ((*token)->type == REDIRECT_OUT)
-			dup2(fd, STDOUT_FILENO);
+			dup2((*token)->fd, STDOUT_FILENO);
 		else if ((*token)->type == REDIRECT_APPEND)
-			dup2(fd, STDOUT_FILENO);
+			dup2((*token)->fd, STDOUT_FILENO);
 		else if ((*token)->type == REDIRECT_HERE_DOC)
-			dup2(fd, STDIN_FILENO);
-		close(fd);
+			dup2((*token)->fd, STDIN_FILENO);
+		close((*token)->fd);
 		*token = (*token)->next;
 		*token = (*token)->next;
 	}

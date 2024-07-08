@@ -29,19 +29,18 @@ int	run_cmd(char *line, char **envp)
 	t_pid_info pid_info;
 	int i = 0;
 	int status = 0;
-	int fd = 0;
-	t_token *tmp;
+	t_token **tmp;
 
 	struct_init(&ats, &token, &fd_pipe, &pid_info);
 	token = tokenize(line, &status);
-	tmp = token;
+	*tmp = token;
 	expantion(token);
 	// print_token(tmp);
-	while (tmp && fd == 0)
+	while ((*tmp))
 	{
-		fd = redirect_open(tmp);
-		// printf("fd = %d\n", fd);
-		tmp = tmp->next;
+		(*tmp)->fd = redirect_open((*tmp));
+		printf("fd = %d\n", (*tmp)->fd);
+		(*tmp) = (*tmp)->next;
 	}
 	ats = parser(token);
 	tmp_ats = ats;
@@ -58,7 +57,7 @@ int	run_cmd(char *line, char **envp)
 				continue;
 			}
 		}
-		pid_info.pid[pid_info.pipe_i] = child(ats->token, envp, fd_pipe, pid_info.pipe_i, fd);
+		pid_info.pid[pid_info.pipe_i] = child(ats->token, envp, fd_pipe, pid_info.pipe_i);
 		ats = ats->next;
 		pid_info.pipe_i++;
 	}

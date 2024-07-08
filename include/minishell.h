@@ -59,6 +59,7 @@ typedef struct s_token
 {
 	char			*str;
 	t_token_type	type;
+	int 			fd;
 	struct s_token	*next;
 }	t_token;
 
@@ -117,8 +118,7 @@ void	signal_handler(int signum);
 void	ft_error(char *cmd, char *target, char *main_message, int status);
 
 // redirect.c
-// void	redirect_in(t_token **token);
-void	redirect(t_token **token, int fd);
+void	redirect(t_token **token);
 int	redirect_open(t_token *token);
 
 // parser.c
@@ -136,7 +136,7 @@ t_ats	*new_ats(t_token *token);
 void	cd(char **cmd);
 
 // child.c
-pid_t	child(t_token *token, char **envp, t_pipe_fd *fd_pipe, int pipe_i, int fd);
+pid_t	child(t_token *token, char **envp, t_pipe_fd *fd_pipe, int pipe_i);
 void	syntax_check(t_token *token);
 
 // pipe.c
