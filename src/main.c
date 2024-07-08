@@ -9,11 +9,13 @@ void	handle_eof(int status, char *line)
 	exit(WEXITSTATUS(status));
 }
 
-void	struct_init(t_ats **ats, t_token **token, t_pipe_fd **fd_pipe)
+void	struct_init(t_ats **ats, t_token **token, t_pipe_fd **fd_pipe, t_pid_info *pid_info)
 {
 	*ats = NULL;
 	*token = NULL;
 	*fd_pipe = NULL;
+	pid_info->pipe_i = 0;
+	pid_info = NULL;
 }
 
 // 子プロセスを生成して子プロセス内でコマンドを実行する。親プロセスでは子プロセスの終了を待つ。
@@ -21,35 +23,53 @@ void	struct_init(t_ats **ats, t_token **token, t_pipe_fd **fd_pipe)
 int	run_cmd(char *line, char **envp)
 {
 	t_ats	*ats;
-	t_token	*token;
 	t_ats	*tmp_ats;
+	t_token	*token;
 	t_pipe_fd	*fd_pipe;
-	int		pipe_i = 0;
+	t_pid_info pid_info;
+	int i = 0;
+	int status = 0;
 
-	struct_init(&ats, &token, &fd_pipe);
-	token = tokenize(line);
+	struct_init(&ats, &token, &fd_pipe, &pid_info);
+	token = tokenize(line, &status);
+	expantion(token);
+	// print_token(token);
 	ats = parser(token);
 	tmp_ats = ats;
 	if (ats)
 		fd_pipe = create_pipe(ats);
 	while (ats)
 	{
-		// child関数に入る前にリダイレクションインとヒアドックを判定する必要がある。
-		child(ats->token, envp, fd_pipe, pipe_i);
+		if (token_list_size(ats->token) == 1)
+		{
+			if (add_variable(ats->token->str))
+			{
+				// variable_list_print();
+				ats = ats->next;
+				continue;
+			}
+		}
+		pid_info.pid[pid_info.pipe_i] = child(ats->token, envp, fd_pipe, pid_info.pipe_i);
 		ats = ats->next;
-		pipe_i++;
+		pid_info.pipe_i++;
 	}
 	close_pipe(fd_pipe);
+	while (pid_info.pipe_i--)
+	{
+		// printf("wpid = %d\n", pid_info.pid[i]);
+		waitpid(pid_info.pid[i++], &status, 0);
+	}
 	free_ats(tmp_ats);
-	return (pipe_i);
+	return (status);
 }
 
+t_variable *variable = NULL;
 int	main(int argc, char **argv, char **envp)
 {
 	char	*line;
 	int		status;
+	t_pid_info	pid_info;
 	int		i;
-	int ret = 0;
 
 	status = 0;
 	errno = 0; // エラー番号をリセット
@@ -58,40 +78,39 @@ int	main(int argc, char **argv, char **envp)
 	while (1)
 	{
 		line = readline("minishell$ ");
-		if (line == NULL || (!ft_strncmp(line, "exit", 4)))
+		if (line == NULL || (!ft_strncmp(line, "exit", 4) && ft_strlen(line) == 4))
 			handle_eof(status, line);
 		if (*line)
 		{
+			i = 0;
 			add_history(line);
-			i = run_cmd(line, envp);
-			while (i--)
-				ret = waitpid(-1, &status, 0);
+			status = run_cmd(line, envp);
+			// while (pid_info.pipe_i--)
+			// {
+			// 	printf("wpid = %d\n", pid_info.pid[i]);
+			// 	waitpid(pid_info.pid[i++], &status, 0);
+			// }
+			// printf("status = %d\n", WEXITSTATUS(status));
 			free(line);
 		}
 	}
-	exit(WEXITSTATUS(status));
+	return (WEXITSTATUS(status));
 }
 
 // int main(int argc, char **argv, char **envp)
 // {
 // 	int status = 0;
-// 	t_token *token;
-// 	t_ats *ats;
-// 	int i;
+// 	t_pid_info pid_info;
+// 	int i = 0;
+// 	char *line = "echo a > out| echo b >> out| echo c >> out| echo d > out| cat out";
 
-// 	// char *line = "nosuchcommand";
-// 	char *line = "ls | cat";
-// 	i = run_cmd(line, envp);
-// 	while (i--)
+// 	pid_info = run_cmd(line, envp);
+// 	while (pid_info.pipe_i--)
 // 	{
-// 		write(2, "wait\n", 5);
-// 		waitpid(-1, &status, 0);
-// 		write(2, "wait end\n", 9);
+// 		waitpid(pid_info.pid[i], &status, 0);
+// 		i++;
 // 	}
-// 	exit(WEXITSTATUS(status));
+// 	return(WEXITSTATUS(status));
 // }
 
-// __attribute__((destructor))
-// static void destructor() {
-//     system("leaks -q minishell");
-// }
+// valgrind --leak-check=full -s ./minishell

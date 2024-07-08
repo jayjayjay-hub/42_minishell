@@ -77,6 +77,8 @@ void	free_token(t_token *token)
 	t_token *tmp;
 
 	tmp = token;
+	if (!tmp)
+		return ;
 	while (tmp->next)
 	{
 		free(tmp->str);
@@ -85,7 +87,6 @@ void	free_token(t_token *token)
 	}
 }
 
-// debug用
 void	print_token(t_token *token)
 {
 	t_token *tmp;

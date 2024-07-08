@@ -1,55 +1,140 @@
 #include "minishell.h"
 
-void	del_quote(char **str)
+void	remove_quote(char *str)
 {
-	char	*new_str;
-	char	quote_char;
+	int i;
+	int j;
+	char quote;
 
-	new_str = calloc(1, ft_strlen(*str) + 1);
-	while (**str)
+	i = 0;
+	j = 0;
+	while (str[i])
 	{
-		if (is_quote(**str))
+		if (is_quote(str[i]))
 		{
-			quote_char = **str;
-			while (**str && **str != quote_char)
-				*new_str++ = *(*str)++;
-			if (**str != quote_char)
-				ft_error(NULL, NULL, "quote not closed", 1);
-			*new_str++ = *(*str)++;
+			quote = str[i];
+			i++;
+			while (str[i] && str[i] != quote)
+				str[j++] = str[i++];
+			i++;
 		}
 		else
-			*new_str++ = *(*str)++;
+			str[j++] = str[i++];
 	}
-	*str = new_str;
+	str[j] = '\0';
 }
 
-// token のクオート、ダブルクオートを削除する関数
-void	remove_quote(t_token *token)
-{
-	char	*new_str;
-	char	quote_char;
-	t_token	*tmp;
+// char	*expantion_variable(char *str)
+// {
+// 	int i;
+// 	int j;
+// 	char *key;
+// 	char *value;
+// 	char quote;
+// 	char *tmp;
+// 	char *tmp2;
 
-	tmp = token;
-	while (tmp)
+// 	i = 0;
+// 	j = 0;
+// 	tmp = calloc(1, sizeof(char) * (ft_strlen(str) + 1));
+// 	while (str[i])
+// 	{
+// 		if (is_quote(str[i])) // qoteはそのままコピー
+// 		{
+// 			quote = str[i];
+// 			tmp[j++] = str[i++];
+// 			while (str[i] && str[i] != quote)
+// 				tmp[j++] = str[i++];
+// 			tmp[j++] = str[i++];
+// 		}
+// 		else if (str[i] == '$')
+// 		{
+// 			if (str[i + 1])
+// 			{
+// 				key = get_variable_key(str + i + 1);
+// 				value = get_variable_value(key);
+// 				if (value)
+// 				{
+// 					tmp = ft_strjoin(tmp, value);
+// 					i += ft_strlen(key) + 1;
+// 					j += ft_strlen(value);
+// 					free(key);
+// 					free(value);
+// 				}
+// 				else
+// 					tmp[j++] = str[i++];
+// 			}
+// 			else
+// 				tmp[j++] = str[i++];
+// 		}
+// 		else
+// 			tmp[j++] = str[i++];
+// 	}
+// 	tmp[j] = '\0';
+// 	return (tmp);
+// }
+
+
+void	expantion_variable(char **str)
+{
+	int i;
+	int j;
+	char *key;
+	char *value;
+	char quote;
+	char *tmp;
+	char *tmp2;
+
+	i = 0;
+	j = 0;
+	tmp = calloc(1, sizeof(char) * (ft_strlen(*str) + 1));
+	while ((*str)[i])
 	{
-		new_str = calloc(1, ft_strlen(tmp->str) + 1);
-		while (*tmp->str)
+		if (is_quote((*str)[i])) // qoteはそのままコピー
 		{
-			if (is_quote(*tmp->str))
+			quote = (*str)[i];
+			tmp[j++] = (*str)[i++];
+			while ((*str)[i] && (*str)[i] != quote)
+				tmp[j++] = (*str)[i++];
+			tmp[j++] = (*str)[i++];
+		}
+		else if ((*str)[i] == '$')
+		{
+			if ((*str)[i + 1])
 			{
-				quote_char = *tmp->str;
-				while (*tmp->str && *tmp->str != quote_char)
-					*new_str++ = *tmp->str++;
-				if (*tmp->str != quote_char)
-					ft_error(NULL, NULL, "quote not closed", 1);
-				*new_str++ = *tmp->str++;
+				key = get_variable_key((*str) + i + 1);
+				value = get_variable_value(key);
+				if (value)
+				{
+					tmp2 = ft_strjoin(tmp, value);
+					free(tmp);
+					tmp = tmp2;
+					i += ft_strlen(key) + 1;
+					j += ft_strlen(value);
+					free(key);
+					free(value);
+				}
+				else
+					tmp[j++] = (*str)[i++];
 			}
 			else
-				*new_str++ = *tmp->str++;
+				tmp[j++] = (*str)[i++];
 		}
-		*new_str = '\0';
-		tmp->str = new_str - ft_strlen(tmp->str);
-		tmp = tmp->next;
+		else
+			tmp[j++] = (*str)[i++];
+	}
+	tmp[j] = '\0';
+	free(*str);
+	*str = tmp;
+}
+
+
+void	expantion(t_token * token)
+{
+	while (token && token->type == WORD)
+	{
+		expantion_variable(&token->str);
+		remove_quote(token->str);
+		token = token->next;
 	}
 }

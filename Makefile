@@ -26,7 +26,9 @@ SRC_FILES = main.c token_list.c\
 			parser.c parse_tree_list.c\
 			ats_list.c cd.c\
 			child.c pipe.c\
-			expansion.c
+			variable_list.c variable.c\
+			expansion.c\
+			utils.c
 
 OJB_FILES = $(SRC_FILES:%.c=%.o)
 
@@ -73,6 +75,7 @@ fclean:
 	@$(MAKE) -C $(LIBFT_DIR) fclean
 	@$(RM) $(OBJ_DIR)
 	@$(RM) $(NAME)
+	@$(RM) $(ERROR_DIR)
 	@echo $(R) "$(NAME) fcleaned\n" $(X)
 
 re: fclean all

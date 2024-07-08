@@ -7,6 +7,8 @@
 # include <string.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <sys/types.h>
+# include <sys/stat.h>
 # include <stdbool.h>
 # include <signal.h>
 
@@ -46,12 +48,28 @@ typedef enum e_token_type
 	BRACKET_LEFT, // (
 	BRACKET_RIGHT, // )
 }	t_token_type;
+
+typedef enum e_variable_type
+{
+	STRING,
+	ARRAY,
+}	t_variable_type;
+
 typedef struct s_token
 {
 	char			*str;
 	t_token_type	type;
 	struct s_token	*next;
 }	t_token;
+
+typedef struct s_variable
+{
+	char			*key;
+	char			*value;
+	struct s_variable	*next;
+}	t_variable;
+
+extern t_variable	*variable;
 
 typedef struct s_parse_tree
 {
@@ -72,11 +90,17 @@ typedef struct pipe_fd
 	int	pipe_size;
 }	t_pipe_fd;
 
+typedef struct pid_info
+{
+	pid_t	pid[1024]; //いずれパイプの長さでマロックする必要あり
+	int		pipe_i;
+}	t_pid_info;
+
+
 // main.c
 
 // tokenizer.c
-t_token *tokenize(char *line);
-int		is_quote(char c);
+t_token *tokenize(char *line, int *status);
 
 // list.c
 t_token	*new_token(char *str, t_token_type type);
@@ -96,6 +120,7 @@ void	ft_error(char *cmd, char *target, char *main_message, int status);
 void	redirect(t_token **token);
 
 // parser.c
+int	get_pipe_count(t_token *token);
 t_ats	*parser(t_token *token);
 
 // ats_list.c
@@ -109,7 +134,8 @@ t_ats	*new_ats(t_token *token);
 void	cd(char **cmd);
 
 // child.c
-void	child(t_token *token, char **envp, t_pipe_fd *fd_pipe, int pipe_i);
+pid_t	child(t_token *token, char **envp, t_pipe_fd *fd_pipe, int pipe_i);
+void	syntax_check(t_token *token);
 
 // pipe.c
 t_pipe_fd *create_pipe(t_ats *ats);
@@ -121,6 +147,26 @@ void add_back_parse_tree(t_parse_tree **list, t_parse_tree *new);
 void			free_parse_tree(t_parse_tree *parse_tree);
 
 // expansion.c
-void remove_quote(t_token *token);
+void expantion(t_token *token);
+
+// variable.c
+bool	is_alnum_under(char c);
+bool is_al_under(char c);
+bool add_variable(char *str);
+
+// variable_list.c
+void variable_list_print(void);
+void variable_list_add_back(t_variable *new);
+t_variable	*variable_list_new(char *key, char *value);
+void variable_list_free(void);
+char	*get_variable_value(char *key);
+char *get_variable_key(char *str);
+
+// utils.c
+int		is_quote(char c);
+int		is_metachar(char c);
+int		is_single_quote(char c);
+int		is_double_quote(char c);
+
 
 #endif

@@ -1,31 +1,8 @@
 
 #include "minishell.h"
 
-int is_metachar(char c)
-{
-	return (c && ft_strchr("&|<>()", c));
-}
-
-int	is_quote(char c)
-{
-	return (c && ft_strchr("'\"", c));
-}
-
-bool	is_backslash(char c)
-{
-	return (c == '\\');
-}
-
-bool	is_backslash_quote(char *line)
-{
-	if (strncmp(line, "\\\"", 2) == 0 || strncmp(line, "\\'", 2) == 0 || strncmp(line, "\\\\", 2) == 0)
-		return (true);
-	return (false);
-}
-
 t_token_type	check_type(char *line)
 {
-	// t_token_type	type;
 	if (strncmp(line, "|", 1) == 0)
 		return (PIPE);
 	else if (strncmp(line, "<<", 2) == 0)
@@ -44,84 +21,48 @@ t_token_type	check_type(char *line)
 		return (WORD);
 }
 
-int	word_len(char *line)
+int	get_word_len(char *line)
 {
 	int		len;
-	char	quote_char;
+	char	quote;
 
 	len = 0;
-	while (*line && !is_metachar(*line) && !ft_isspace(*line))
+	while (line[len] && !is_metachar(line[len]))
 	{
-		if (is_backslash(*line))
+		if (is_quote(line[len]))
 		{
-			if (*(line + 1) && is_backslash_quote(line))
-				line += 2;
-		}
-		if (is_quote(*line))
-		{
-			quote_char = *line;
-			line++;
-			while (*line && *line != quote_char)
-			{
+			quote = line[len];
+			len++;
+			while (line[len] && line[len] != quote)
 				len++;
-				line++;
+			if (!line[len])
+			{
+				printf("minishell: quote not closed\n");
+				return (-1);
 			}
-			if (*line != quote_char)
-				ft_error(NULL, NULL, "quote not closed", 1);
+			len++;
 		}
 		else
 			len++;
-		line++;
 	}
 	return (len);
 }
 
-char *get_word(char *line, int *bachslash_quote)
+char	*get_word(char *line)
 {
 	char	*word;
-	int		len;
-	char	quote_char;
+	int		word_len;
+	char	quote;
 
-	len = 0;
-	word = ft_calloc(1, word_len(line) + 1);
-	while (*line && !is_metachar(*line) && !ft_isspace(*line))
+	word_len = get_word_len(line);
+	if (word_len == -1)
+		return (NULL);
+	word = ft_substr(line, 0, word_len);
+	if (!word)
 	{
-		if (is_backslash(*line))
-		{
-			if (*(line + 1) && is_backslash_quote(line))
-			{
-				*bachslash_quote += 1;
-				word[len++] = line[1];
-				line += 2;
-			}
-		}
-		else if (*line && is_quote(*line))
-		{
-			quote_char = *line;
-			*bachslash_quote += 2;
-			line++;
-			while (*line && *line != quote_char)
-			{
-				if (is_backslash(*line))
-				{
-					if (*(line + 1) && is_backslash_quote(line))
-					{
-						*bachslash_quote += 1;
-						word[len++] = line[1];
-						line += 2;
-					}
-				}
-				else
-					word[len++] = *line++;
-			}
-			if (*line != quote_char)
-				ft_error(NULL, NULL, "quote not closed", 1);
-			line++;
-		}
-		else
-			word[len++] = *line++;
+		printf("minishell: malloc failed\n");
+		return (NULL);
 	}
-	word[len] = '\0';
 	return (word);
 }
 
@@ -133,29 +74,33 @@ char	*get_operator(char *line, t_token_type type)
 	len = 1;
 	if (type == REDIRECT_HERE_DOC || type == REDIRECT_APPEND)
 		len = 2;
-	operator = ft_calloc(1, len + 1);
-	ft_strlcpy(operator, line, len + 1);
+	operator = ft_substr(line, 0, len);
+	if (!operator)
+	{
+		printf("minishell: malloc failed\n");
+		return (NULL);
+	}
 	return (operator);
 }
 
 int	add_token(t_token **token, char *line, t_token_type type)
 {
 	t_token		*new;
-	char 		*token_str;
-	char 		*rest;
-	int			bachslash;
+	char		*token_str;
+	char		*rest;
 
-	bachslash = 0;
 	if (type == WORD)
-		token_str = get_word(line, &bachslash);
+		token_str = get_word(line);
 	else
 		token_str = get_operator(line, type);
+	if (!token_str)
+		return (0);
 	new = new_token(token_str, type);
 	add_back(token, new);
-	return (strlen(token_str) + bachslash);
+	return (strlen(token_str));
 }
 
-t_token *tokenize(char *line)
+t_token	*tokenize(char *line, int *status)
 {
 	t_token			*token;
 	t_token_type	type;
@@ -164,12 +109,18 @@ t_token *tokenize(char *line)
 	token = NULL;
 	while (*line)
 	{
-		line = pass_space(line); // スペースを飛ばす
-		if (!*line) // 空白行だったら終了
+		line = pass_space(line);
+		if (!*line || *line == '#')
 			break ;
-		type = check_type(line); // トークンの種類をチェック
-		token_len = add_token(&token, line, type); // トークンを取得
-		line += token_len; // トークンの長さ分だけlineを進める
+		type = check_type(line);
+		token_len = add_token(&token, line, type);
+		if (!token_len)
+		{
+			free_token(token);
+			*status = 258;
+			return (NULL);
+		}
+		line += token_len;
 	}
 	// print_token(token);
 	return (token);

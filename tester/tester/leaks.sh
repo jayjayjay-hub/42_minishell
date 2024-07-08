@@ -3,8 +3,8 @@
 # ------------------------------------------------------------------------------
 # User settings
 # ------------------------------------------------------------------------------
-readonly MINISHELL_DIR="../.."
-readonly MINISHELL_EXE="minishell"
+readonly MINISHELL_DIR="../minishell"
+readonly MINISHELL_EXE="minishell_leaks"
 readonly MAKE_TARGET="leaks"
 # ------------------------------------------------------------------------------
 

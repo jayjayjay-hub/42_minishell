@@ -10,6 +10,7 @@ pwd
 echo
 ls
 ./.out
+/out
 .out
 nosuchfile
 
@@ -19,20 +20,40 @@ ls /
 echo hello    world
 echo 'hello   world' '42Tokyo'
 echo '"hello   world"' '42Tokyo'
-echo "hello   world" \"42Tokyo\"
-echo "'hello   world'\" \"42Tokyo\"
+echo "hello   world" "42Tokyo"
+echo "'hello   world'" "42Tokyo"
 echo hello'      world'
-echo hello'  world  '\"  42Tokyo  \"
+echo hello'  world  '"  42Tokyo  "
 
 # step6 Redirection
 echo hello >test
 echo hello >f1>f2>f3>test
+#ls no_such_file > out1.txt > out2.txt > out3.txt 2> err1.txt 2> err2.txt 2> err3.txt| cat out1.txt out2.txt out3.txt err1.txt err2.txt err3.txt
+#ls > out1.txt > out2.txt > out3.txt 2> err1.txt 2> err2.txt 2> err3.txt| cat out1.txt out2.txt out3.txt err1.txt err2.txt err3.txt
+#echo hello 2147483647> file
+#echo hello 2147483648> file
+# 不適切なtestな気がする echo a > f| echo b >> f| cat f f f >> ff| cat ff ff >> f| cat f
+echo a > f| echo b >> f| cat f f f >> ff| cat ff ff >> f| cat f
+ls>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f|cat f
 
 # step7 Pipe
 ls | abc
 abc | ls
 ls | cat
-ls -al | cat -en
+ls -a | cat -en
 cat Makefile | grep -n all
 #sleep 1 | sleep 3 | sleep 2 | cat | cat -e | cat -n | echo hello
 ls -|a
+
+# multi Pipe
+ls | cat -en | ls -a | cat -e | cat -n
+cat -en Makefile | grep 1 | sort -r
+# sleep 2 | sleep 1 | cat | cat -e | cat -n | echo hello
+
+#mix Pipe
+ls -l | cat < Makefile | grep -n all >> test
+< Makefile cat -en | cat | cat > f1 | cat -en | grep 1 >f1 >> test
+
+#変数のテスト
+#変数登録かつ出力
+#test=123 | abc=1dk | echo $test $abc $123
