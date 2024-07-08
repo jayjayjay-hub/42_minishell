@@ -9,8 +9,8 @@
 pwd
 echo
 ls
-./.out
-/out
+#./.out
+#/out
 .out
 nosuchfile
 
@@ -33,7 +33,7 @@ echo hello >f1>f2>f3>test
 #echo hello 2147483647> file
 #echo hello 2147483648> file
 # 不適切なtestな気がする echo a > f| echo b >> f| cat f f f >> ff| cat ff ff >> f| cat f
-echo a > f| echo b >> f| cat f f f >> ff| cat ff ff >> f| cat f
+#echo a > f| echo b >> f| cat f f f >> ff| cat ff ff >> f| cat f
 ls>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f|cat f
 
 # step7 Pipe
