@@ -161,6 +161,7 @@ t_variable	*variable_list_new(char *key, char *value);
 void variable_list_free(void);
 char	*get_variable_value(char *key);
 char *get_variable_key(char *str);
+bool edit_variable(char *key, char *value);
 
 // utils.c
 int		is_quote(char c);

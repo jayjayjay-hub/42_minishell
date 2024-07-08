@@ -95,7 +95,7 @@ bool	edit_variable(char *key, char *value)
 		if (!strcmp(tmp->key, key))
 		{
 			free(tmp->value);
-			tmp->value = value;
+			tmp->value = strdup(value);
 			return (true);
 		}
 		tmp = tmp->next;
