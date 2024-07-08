@@ -100,12 +100,27 @@ int	add_token(t_token **token, char *line, t_token_type type)
 	return (strlen(token_str));
 }
 
+bool	pipe_syntax_check(char *line)
+{
+	if (line[0] == '|')
+	{
+		printf("minishell: syntax error near unexpected token `|'\n");
+		return (false);
+	}
+	return (true);
+}
+
 t_token	*tokenize(char *line, int *status)
 {
 	t_token			*token;
 	t_token_type	type;
 	int				token_len;
 
+	if (!pipe_syntax_check(line))
+	{
+		*status = 258;
+		return (NULL);
+	}
 	token = NULL;
 	while (*line)
 	{
