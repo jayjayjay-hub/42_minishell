@@ -26,7 +26,10 @@ t_ats	*parser(t_token *token)
 			token = token->next;
 		new = new_ats(token);
 		if (!new)
-			ft_error(NULL, NULL, "syntax error", EXIT_FAILURE);
+		{
+			printf("minishell: syntax error near unexpected token \`|'\n");
+			return (NULL);
+		}
 		add_back_ats(&ats, new);
 		while (token && token->type != PIPE)
 			token = token->next;

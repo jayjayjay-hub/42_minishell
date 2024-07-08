@@ -99,7 +99,7 @@ char	**get_cmd(t_token *token)
 
 void	syntax_check(t_token *token)
 {
-	if (token->type >= 1 && token->type <= 5)
+	if (token->type >= PIPE && token->type <= REDIRECT_APPEND)
 	{
 		if (!token->next)
 		{
