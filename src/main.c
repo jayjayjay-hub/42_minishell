@@ -29,11 +29,20 @@ int	run_cmd(char *line, char **envp)
 	t_pid_info pid_info;
 	int i = 0;
 	int status = 0;
+	int fd = 0;
+	t_token *tmp;
 
 	struct_init(&ats, &token, &fd_pipe, &pid_info);
 	token = tokenize(line, &status);
+	tmp = token;
 	expantion(token);
-	// print_token(token);
+	// print_token(tmp);
+	while (tmp && fd == 0)
+	{
+		fd = redirect_open(tmp);
+		// printf("fd = %d\n", fd);
+		tmp = tmp->next;
+	}
 	ats = parser(token);
 	tmp_ats = ats;
 	if (ats)
@@ -49,7 +58,7 @@ int	run_cmd(char *line, char **envp)
 				continue;
 			}
 		}
-		pid_info.pid[pid_info.pipe_i] = child(ats->token, envp, fd_pipe, pid_info.pipe_i);
+		pid_info.pid[pid_info.pipe_i] = child(ats->token, envp, fd_pipe, pid_info.pipe_i, fd);
 		ats = ats->next;
 		pid_info.pipe_i++;
 	}
@@ -85,12 +94,6 @@ int	main(int argc, char **argv, char **envp)
 			i = 0;
 			add_history(line);
 			status = run_cmd(line, envp);
-			// while (pid_info.pipe_i--)
-			// {
-			// 	printf("wpid = %d\n", pid_info.pid[i]);
-			// 	waitpid(pid_info.pid[i++], &status, 0);
-			// }
-			// printf("status = %d\n", WEXITSTATUS(status));
 			free(line);
 		}
 	}

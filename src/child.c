@@ -12,6 +12,15 @@ void	dp_free(char **arg)
 	free(arg);
 }
 
+void	dp_print(char **arg)
+{
+	int	i;
+
+	i = -1;
+	while (arg[++i])
+		ft_putendl_fd(arg[i], 2);
+}
+
 static void	sub_dup2(int first, int second)
 {
 	if (first != 0)
@@ -68,11 +77,12 @@ void	do_execve(char **cmd, char **envp)
 		path = search_path(cmd[0], envp);
 	if (!path)
 		ft_error("minishell", cmd[0], "command not found", CMD_NOT_FOUND);
+	// dp_print(cmd);
 	if (execve(path, cmd, envp) == -1)
 		ft_error(NULL, NULL, "execve failed", EXIT_FAILURE);
 }
 
-char	**get_cmd(t_token *token)
+char	**get_cmd(t_token *token, int fd)
 {
 	int			i;
 	char	**cmd;
@@ -92,31 +102,38 @@ char	**get_cmd(t_token *token)
 			token = token->next;
 			i++;
 		}
-		redirect(&token);
+		redirect(&token, fd);
 	}
 	return (cmd);
 }
 
 void	syntax_check(t_token *token)
 {
-	if (token->type >= 1 && token->type <= 5)
+	t_token	*tmp;
+
+	tmp = token;
+	while (tmp)
 	{
-		if (!token->next)
+		if (token->type >= PIPE && token->type <= REDIRECT_APPEND)
 		{
-			write(2, "minishell: syntax error near unexpected token `newline'\n", 57);
-			exit (2);
+			if (!token->next)
+			{
+				write(2, "minishell: syntax error near unexpected token `newline'\n", 57);
+				exit (2);
+			}
+			else if (token->next->type != WORD)
+			{
+				write(2, "minishell: syntax error near unexpected token `", 47);
+				write(2, token->str, ft_strlen(token->str));
+				write(2, "'\n", 2);
+				exit (2);
+			}
 		}
-		else if (token->next->type != WORD)
-		{
-			write(2, "minishell: syntax error near unexpected token `", 47);
-			write(2, token->str, ft_strlen(token->str));
-			write(2, "'\n", 2);
-			exit (2);
-		}
+		tmp = tmp->next;
 	}
 }
 
-pid_t	child(t_token *token, char **envp, t_pipe_fd *fd_pipe, int pipe_i)
+pid_t	child(t_token *token, char **envp, t_pipe_fd *fd_pipe, int pipe_i, int fd)
 {
 	pid_t	pid;
 	char	**cmd;
@@ -130,7 +147,7 @@ pid_t	child(t_token *token, char **envp, t_pipe_fd *fd_pipe, int pipe_i)
 		if (fd_pipe->pipe_size != 0)
 			sub_dup2(fd_pipe->fd[2 * pipe_i - 2], fd_pipe->fd[2 * pipe_i + 1]);
 		close_pipe(fd_pipe);
-		cmd = get_cmd(token);
+		cmd = get_cmd(token, fd);
 		do_execve(cmd, envp);
 	}
 	// else
