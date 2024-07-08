@@ -24,7 +24,58 @@ void	remove_quote(char *str)
 	str[j] = '\0';
 }
 
-char	*expantion_variable(char *str)
+// char	*expantion_variable(char *str)
+// {
+// 	int i;
+// 	int j;
+// 	char *key;
+// 	char *value;
+// 	char quote;
+// 	char *tmp;
+// 	char *tmp2;
+
+// 	i = 0;
+// 	j = 0;
+// 	tmp = calloc(1, sizeof(char) * (ft_strlen(str) + 1));
+// 	while (str[i])
+// 	{
+// 		if (is_quote(str[i])) // qoteはそのままコピー
+// 		{
+// 			quote = str[i];
+// 			tmp[j++] = str[i++];
+// 			while (str[i] && str[i] != quote)
+// 				tmp[j++] = str[i++];
+// 			tmp[j++] = str[i++];
+// 		}
+// 		else if (str[i] == '$')
+// 		{
+// 			if (str[i + 1])
+// 			{
+// 				key = get_variable_key(str + i + 1);
+// 				value = get_variable_value(key);
+// 				if (value)
+// 				{
+// 					tmp = ft_strjoin(tmp, value);
+// 					i += ft_strlen(key) + 1;
+// 					j += ft_strlen(value);
+// 					free(key);
+// 					free(value);
+// 				}
+// 				else
+// 					tmp[j++] = str[i++];
+// 			}
+// 			else
+// 				tmp[j++] = str[i++];
+// 		}
+// 		else
+// 			tmp[j++] = str[i++];
+// 	}
+// 	tmp[j] = '\0';
+// 	return (tmp);
+// }
+
+
+void	expantion_variable(char **str)
 {
 	int i;
 	int j;
@@ -36,49 +87,53 @@ char	*expantion_variable(char *str)
 
 	i = 0;
 	j = 0;
-	tmp = calloc(1, sizeof(char) * (ft_strlen(str) + 1));
-	while (str[i])
+	tmp = calloc(1, sizeof(char) * (ft_strlen(*str) + 1));
+	while ((*str)[i])
 	{
-		if (is_quote(str[i])) // qoteはそのままコピー
+		if (is_quote((*str)[i])) // qoteはそのままコピー
 		{
-			quote = str[i];
-			tmp[j++] = str[i++];
-			while (str[i] && str[i] != quote)
-				tmp[j++] = str[i++];
-			tmp[j++] = str[i++];
+			quote = (*str)[i];
+			tmp[j++] = (*str)[i++];
+			while ((*str)[i] && (*str)[i] != quote)
+				tmp[j++] = (*str)[i++];
+			tmp[j++] = (*str)[i++];
 		}
-		else if (str[i] == '$')
+		else if ((*str)[i] == '$')
 		{
-			if (str[i + 1])
+			if ((*str)[i + 1])
 			{
-				key = get_variable_key(str + i + 1);
+				key = get_variable_key((*str) + i + 1);
 				value = get_variable_value(key);
 				if (value)
 				{
-					tmp = ft_strjoin(tmp, value);
+					tmp2 = ft_strjoin(tmp, value);
+					free(tmp);
+					tmp = tmp2;
 					i += ft_strlen(key) + 1;
 					j += ft_strlen(value);
 					free(key);
 					free(value);
 				}
 				else
-					tmp[j++] = str[i++];
+					tmp[j++] = (*str)[i++];
 			}
 			else
-				tmp[j++] = str[i++];
+				tmp[j++] = (*str)[i++];
 		}
 		else
-			tmp[j++] = str[i++];
+			tmp[j++] = (*str)[i++];
 	}
 	tmp[j] = '\0';
-	return (tmp);
+	free(*str);
+	*str = tmp;
 }
 
-void expantion(t_token * token)
+
+void	expantion(t_token * token)
 {
 	while (token && token->type == WORD)
 	{
-		token->str = expantion_variable(token->str);
+		expantion_variable(&token->str);
 		remove_quote(token->str);
 		token = token->next;
 	}

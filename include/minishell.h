@@ -153,7 +153,6 @@ void expantion(t_token *token);
 bool	is_alnum_under(char c);
 bool is_al_under(char c);
 bool add_variable(char *str);
-char *expantion_variable(char *str);
 
 // variable_list.c
 void variable_list_print(void);
