@@ -110,7 +110,7 @@ bool	pipe_syntax_check(char *line)
 	return (true);
 }
 
-t_token	*tokenize(char *line, int *status)
+t_token	*tokenize(char *line)
 {
 	t_token			*token;
 	t_token_type	type;
@@ -118,7 +118,7 @@ t_token	*tokenize(char *line, int *status)
 
 	if (!pipe_syntax_check(line))
 	{
-		*status = 258;
+		g_status = 258 * 2;
 		return (NULL);
 	}
 	token = NULL;
@@ -132,7 +132,7 @@ t_token	*tokenize(char *line, int *status)
 		if (!token_len)
 		{
 			free_token(token);
-			*status = 258;
+			g_status = 258;
 			return (NULL);
 		}
 		line += token_len;

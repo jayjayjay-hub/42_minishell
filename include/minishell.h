@@ -37,6 +37,8 @@
 // signal
 typedef struct sigaction	t_sig;
 
+extern int	g_status;
+
 typedef enum e_token_type
 {
 	WORD,
@@ -100,7 +102,7 @@ typedef struct pid_info
 // main.c
 
 // tokenizer.c
-t_token *tokenize(char *line, int *status);
+t_token *tokenize(char *line);
 
 // list.c
 t_token	*new_token(char *str, t_token_type type);

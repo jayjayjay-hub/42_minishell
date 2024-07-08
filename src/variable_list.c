@@ -60,6 +60,8 @@ char	*get_variable_key(char *str)
 	char	*key;
 
 	i = 0;
+	if (strlen(str) == 1 && str[0] == '?')
+		return (strdup("?"));
 	if (!is_al_under(str[i]))
 		return (NULL);
 	i++;
@@ -76,6 +78,8 @@ char	*get_variable_value(char *key)
 	tmp = variable;
 	if (!key)
 		return (NULL);
+	if (key && strlen(key) == 1 && key[0] == '?')
+		return (ft_itoa(WEXITSTATUS(g_status)));
 	while (tmp)
 	{
 		if (!strcmp(tmp->key, key))

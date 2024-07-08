@@ -27,7 +27,7 @@ t_ats	*parser(t_token *token)
 		new = new_ats(token);
 		if (!new)
 		{
-			printf("minishell: syntax error near unexpected token \`|'\n");
+			printf("minishell: syntax error near unexpected token `|'\n");
 			return (NULL);
 		}
 		add_back_ats(&ats, new);

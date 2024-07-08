@@ -1,12 +1,12 @@
 #include "minishell.h"
 
 // eofが来た場合の処理
-void	handle_eof(int status, char *line)
+void	handle_eof(char *line)
 {
 	write(2, "exit\n", 5);
 	if (line)
 		free(line);
-	exit(WEXITSTATUS(status));
+	exit(WEXITSTATUS(g_status));
 }
 
 void	struct_init(t_ats **ats, t_token **token, t_pipe_fd **fd_pipe, t_pid_info *pid_info)
@@ -20,7 +20,7 @@ void	struct_init(t_ats **ats, t_token **token, t_pipe_fd **fd_pipe, t_pid_info *
 
 // 子プロセスを生成して子プロセス内でコマンドを実行する。親プロセスでは子プロセスの終了を待つ。
 // こっちでcmd = tokenizer(line)をして兄弟プロセスを作る予定。|や;で区切ってそれまでを二重配列にして入れる。
-int	run_cmd(char *line, char **envp)
+void	run_cmd(char *line, char **envp)
 {
 	t_ats	*ats;
 	t_ats	*tmp_ats;
@@ -28,10 +28,9 @@ int	run_cmd(char *line, char **envp)
 	t_pipe_fd	*fd_pipe;
 	t_pid_info pid_info;
 	int i = 0;
-	int status = 0;
 
 	struct_init(&ats, &token, &fd_pipe, &pid_info);
-	token = tokenize(line, &status);
+	token = tokenize(line);
 	expantion(token);
 	// print_token(token);
 	ats = parser(token);
@@ -57,21 +56,19 @@ int	run_cmd(char *line, char **envp)
 	while (pid_info.pipe_i--)
 	{
 		// printf("wpid = %d\n", pid_info.pid[i]);
-		waitpid(pid_info.pid[i++], &status, 0);
+		waitpid(pid_info.pid[i++], &g_status, 0);
 	}
 	free_ats(tmp_ats);
-	return (status);
 }
 
 t_variable *variable = NULL;
+int g_status = 0;
 int	main(int argc, char **argv, char **envp)
 {
 	char	*line;
-	int		status;
 	t_pid_info	pid_info;
 	int		i;
 
-	status = 0;
 	errno = 0; // エラー番号をリセット
 	register_signal();
 	rl_outstream = stderr;
@@ -79,12 +76,12 @@ int	main(int argc, char **argv, char **envp)
 	{
 		line = readline("minishell$ ");
 		if (line == NULL || (!ft_strncmp(line, "exit", 4) && ft_strlen(line) == 4))
-			handle_eof(status, line);
+			handle_eof(line);
 		if (*line)
 		{
 			i = 0;
 			add_history(line);
-			status = run_cmd(line, envp);
+			run_cmd(line, envp);
 			// while (pid_info.pipe_i--)
 			// {
 			// 	printf("wpid = %d\n", pid_info.pid[i]);
@@ -94,7 +91,7 @@ int	main(int argc, char **argv, char **envp)
 			free(line);
 		}
 	}
-	return (WEXITSTATUS(status));
+	return (WEXITSTATUS(g_status));
 }
 
 // int main(int argc, char **argv, char **envp)
