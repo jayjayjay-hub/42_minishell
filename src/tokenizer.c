@@ -3,7 +3,6 @@
 
 t_token_type	check_type(char *line)
 {
-	// t_token_type	type;
 	if (strncmp(line, "|", 1) == 0)
 		return (PIPE);
 	else if (strncmp(line, "<<", 2) == 0)
@@ -87,8 +86,8 @@ char	*get_operator(char *line, t_token_type type)
 int	add_token(t_token **token, char *line, t_token_type type)
 {
 	t_token		*new;
-	char 		*token_str;
-	char 		*rest;
+	char		*token_str;
+	char		*rest;
 
 	if (type == WORD)
 		token_str = get_word(line);
@@ -101,28 +100,27 @@ int	add_token(t_token **token, char *line, t_token_type type)
 	return (strlen(token_str));
 }
 
-t_token *tokenize(char *line, int *status)
+t_token	*tokenize(char *line, int *status)
 {
 	t_token			*token;
 	t_token_type	type;
 	int				token_len;
 
 	token = NULL;
-	int debug = 0;
 	while (*line)
 	{
-		line = pass_space(line); // スペースを飛ばす
-		if (!*line || *line == '#') // 空文字かコメント行なら終了
+		line = pass_space(line);
+		if (!*line || *line == '#')
 			break ;
-		type = check_type(line); // トークンの種類をチェック
-		token_len = add_token(&token, line, type); // トークンを取得
-		if (!token_len) // トークンの取得に失敗したらエラー
+		type = check_type(line);
+		token_len = add_token(&token, line, type);
+		if (!token_len)
 		{
 			free_token(token);
 			*status = 258;
 			return (NULL);
 		}
-		line += token_len; // トークンの長さ分だけlineを進める
+		line += token_len;
 	}
 	// print_token(token);
 	return (token);
