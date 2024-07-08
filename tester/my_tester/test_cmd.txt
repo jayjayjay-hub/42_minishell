@@ -35,6 +35,8 @@ echo hello >f1>f2>f3>test
 # 不適切なtestな気がする echo a > f| echo b >> f| cat f f f >> ff| cat ff ff >> f| cat f
 #echo a > f| echo b >> f| cat f f f >> ff| cat ff ff >> f| cat f
 ls>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f>f|cat f
+#echo a > out | echo b > out | echo c >> out | echo d > out
+#echo a > out | echo b > out | echo c >> out | echo d > $out
 
 # step7 Pipe
 ls | abc

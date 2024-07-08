@@ -85,6 +85,24 @@ char	*get_variable_value(char *key)
 	return (NULL);
 }
 
+bool	edit_variable(char *key, char *value)
+{
+	t_variable	*tmp;
+
+	tmp = variable;
+	while (tmp)
+	{
+		if (!strcmp(tmp->key, key))
+		{
+			free(tmp->value);
+			tmp->value = value;
+			return (true);
+		}
+		tmp = tmp->next;
+	}
+	return (false);
+}
+
 void	variable_list_print(void)
 {
 	t_variable	*tmp;
