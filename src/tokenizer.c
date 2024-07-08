@@ -70,8 +70,7 @@ char	*get_operator(char *line, t_token_type type)
 	len = 1;
 	if (type == REDIRECT_HERE_DOC || type == REDIRECT_APPEND)
 		len = 2;
-	operator = ft_calloc(1, len + 1);
-	ft_strlcpy(operator, line, len + 1);
+	operator = ft_substr(line, 0, len);
 	return (operator);
 }
 
