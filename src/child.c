@@ -12,6 +12,15 @@ void	dp_free(char **arg)
 	free(arg);
 }
 
+void	dp_print(char **arg)
+{
+	int	i;
+
+	i = -1;
+	while (arg[++i])
+		ft_putendl_fd(arg[i], 2);
+}
+
 static void	sub_dup2(int first, int second)
 {
 	if (first != 0)
@@ -68,6 +77,7 @@ void	do_execve(char **cmd, char **envp)
 		path = search_path(cmd[0], envp);
 	if (!path)
 		ft_error("minishell", cmd[0], "command not found", CMD_NOT_FOUND);
+	// dp_print(cmd);
 	if (execve(path, cmd, envp) == -1)
 		ft_error(NULL, NULL, "execve failed", EXIT_FAILURE);
 }
@@ -97,23 +107,42 @@ char	**get_cmd(t_token *token)
 	return (cmd);
 }
 
-void	syntax_check(t_token *token)
+bool	syntax_check(t_token *token)
 {
-	if (token->type >= PIPE && token->type <= REDIRECT_APPEND)
+	t_token	*tmp;
+
+	tmp = token;
+	if (token && token->type == PIPE)
 	{
-		if (!token->next)
-		{
-			write(2, "minishell: syntax error near unexpected token `newline'\n", 57);
-			exit (2);
-		}
-		else if (token->next->type != WORD)
-		{
-			write(2, "minishell: syntax error near unexpected token `", 47);
-			write(2, token->str, ft_strlen(token->str));
-			write(2, "'\n", 2);
-			exit (2);
-		}
+		write(2, "minishell: syntax error near unexpected token `|'\n", 51);
+		g_status = 258 * 2;
+		free_token(token);
+		return (false);
 	}
+	while (tmp)
+	{
+		if (token->type >= PIPE && token->type <= REDIRECT_APPEND)
+		{
+			if (!token->next)
+			{
+				write(2, "minishell: syntax error near unexpected token `newline'\n", 57);
+				g_status = 258 * 2;
+				free_token(token);
+				return (false);
+			}
+			else if (token->next->type != WORD)
+			{
+				write(2, "minishell: syntax error near unexpected token `", 47);
+				write(2, token->str, ft_strlen(token->str));
+				write(2, "'\n", 2);
+				g_status = 258 * 2;
+				free_token(token);
+				return (false);
+			}
+		}
+		tmp = tmp->next;
+	}
+	return (true);
 }
 
 pid_t	child(t_token *token, char **envp, t_pipe_fd *fd_pipe, int pipe_i)
@@ -121,6 +150,7 @@ pid_t	child(t_token *token, char **envp, t_pipe_fd *fd_pipe, int pipe_i)
 	pid_t	pid;
 	char	**cmd;
 
+	// print_token(token);
 	pid = fork();
 	if (pid == -1)
 		ft_error(NULL, NULL, "fork failed", 1);

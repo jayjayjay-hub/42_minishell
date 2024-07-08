@@ -37,7 +37,7 @@ t_ats	*new_ats(t_token *token)
 	// Pipeまでのトークンをats->tokenに追加
 	while (token && token->type != PIPE)
 	{
-		add_back(&tmp, new_token(token->str, token->type));
+		add_back(&tmp, new_token(token->str, token->type, token->fd));
 		token = token->next;
 	}
 	if (tmp)

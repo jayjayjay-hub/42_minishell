@@ -28,15 +28,26 @@ void	run_cmd(char *line, char **envp)
 	t_pipe_fd	*fd_pipe;
 	t_pid_info pid_info;
 	int i = 0;
+	t_token *tmp;
 
 	struct_init(&ats, &token, &fd_pipe, &pid_info);
 	token = tokenize(line);
+	if (!syntax_check(token))
+		return ;
+	tmp = token;
 	expantion(token);
-	// print_token(token);
+	while (token)
+	{
+		redirect_open((&token));
+		// printf("fd = %d\n", (token)->fd);
+		token = token->next;
+	}
+	token = tmp;
 	ats = parser(token);
 	tmp_ats = ats;
 	if (ats)
 		fd_pipe = create_pipe(ats);
+	// print_ats(ats);
 	while (ats)
 	{
 		if (token_list_size(ats->token) == 1)

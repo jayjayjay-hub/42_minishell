@@ -61,6 +61,7 @@ typedef struct s_token
 {
 	char			*str;
 	t_token_type	type;
+	int 			fd;
 	struct s_token	*next;
 }	t_token;
 
@@ -105,7 +106,7 @@ typedef struct pid_info
 t_token *tokenize(char *line);
 
 // list.c
-t_token	*new_token(char *str, t_token_type type);
+t_token	*new_token(char *str, t_token_type type, int fd);
 void		add_back(t_token **list, t_token *new);
 void		free_token(t_token *token);
 int			token_list_size(t_token *token);
@@ -120,6 +121,7 @@ void	ft_error(char *cmd, char *target, char *main_message, int status);
 
 // redirect.c
 void	redirect(t_token **token);
+int	redirect_open(t_token **token);
 
 // parser.c
 int	get_pipe_count(t_token *token);
@@ -137,7 +139,7 @@ void	cd(char **cmd);
 
 // child.c
 pid_t	child(t_token *token, char **envp, t_pipe_fd *fd_pipe, int pipe_i);
-void	syntax_check(t_token *token);
+bool	syntax_check(t_token *token);
 
 // pipe.c
 t_pipe_fd *create_pipe(t_ats *ats);
