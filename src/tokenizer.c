@@ -49,7 +49,7 @@ int	get_word_len(char *line)
 	return (len);
 }
 
-char *get_word(char *line)
+char	*get_word(char *line)
 {
 	char	*word;
 	int		word_len;
@@ -58,30 +58,7 @@ char *get_word(char *line)
 	word_len = get_word_len(line);
 	if (word_len == -1)
 		return (NULL);
-	word = ft_calloc(1, word_len + 1); // null文字分を確保
-	word_len = 0;
-	while (line[word_len] && !is_metachar(line[word_len]))
-	{
-		if (is_quote(line[word_len]))
-		{
-			quote = line[word_len];
-			word[word_len] = line[word_len];
-			word_len++;
-			while (line[word_len] && line[word_len] != quote)
-			{
-				word[word_len] = line[word_len];
-				word_len++;
-			}
-			word[word_len] = line[word_len];
-			word_len++;
-		}
-		else
-		{
-			word[word_len] = line[word_len];
-			word_len++;
-		}
-	}
-	word[word_len] = '\0'; // null文字を追加
+	word = ft_substr(line, 0, word_len);
 	return (word);
 }
 
