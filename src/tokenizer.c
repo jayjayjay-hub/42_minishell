@@ -24,93 +24,64 @@ t_token_type	check_type(char *line)
 
 int	get_word_len(char *line)
 {
-	int	len;
+	int		len;
+	char	quote;
 
 	len = 0;
 	while (line[len] && !is_metachar(line[len]))
 	{
-		if (is_single_quote(line[len]))
+		if (is_quote(line[len]))
 		{
+			quote = line[len];
 			len++;
-			while (line[len] && !is_single_quote(line[len]))
+			while (line[len] && line[len] != quote)
 				len++;
 			if (!line[len])
 			{
-				printf("single quote error\n");
+				printf("minishell: quote not closed\n");
 				return (-1);
 			}
-		}
-		else if (is_double_quote(line[len]))
-		{
 			len++;
-			while (line[len] && !is_double_quote(line[len]))
-				len++;
-			if (!line[len])
-			{
-				printf("doble quote error\n");
-				return (-1);
-			}
 		}
-		len++;
+		else
+			len++;
 	}
 	return (len);
-}
-
-bool	single_quote(char **line, char **word, int *word_len)
-{
-	(*word)[*word_len] = **line;
-	(*word_len)++;
-	(*line)++;
-	while (**line && !is_single_quote(**line))
-	{
-		(*word)[*word_len] = **line;
-		(*word_len)++;
-		(*line)++;
-	}
-	(*word)[*word_len] = **line;
-	(*word_len)++;
-	(*line)++;
-	return (true);
-}
-
-bool	double_quote(char **line, char **word, int *word_len)
-{
-	(*word)[*word_len] = **line;
-	(*word_len)++;
-	(*line)++;
-	while (**line && !is_double_quote(**line))
-	{
-		(*word)[*word_len] = **line;
-		(*word_len)++;
-		(*line)++;
-	}
-	(*word)[*word_len] = **line;
-	(*word_len)++;
-	(*line)++;
-	return (true);
 }
 
 char *get_word(char *line)
 {
 	char	*word;
 	int		word_len;
+	char	quote;
 
 	word_len = get_word_len(line);
 	if (word_len == -1)
 		return (NULL);
-	word = ft_calloc(1, word_len + 1); // word_lenを実装する
+	word = ft_calloc(1, word_len + 1); // null文字分を確保
 	word_len = 0;
-	while (*line && !is_metachar(*line))
+	while (line[word_len] && !is_metachar(line[word_len]))
 	{
-		if (is_single_quote(*line))
-			single_quote(&line, &word, &word_len);
-		else if (is_double_quote(*line))
-			double_quote(&line, &word, &word_len);
+		if (is_quote(line[word_len]))
+		{
+			quote = line[word_len];
+			word[word_len] = line[word_len];
+			word_len++;
+			while (line[word_len] && line[word_len] != quote)
+			{
+				word[word_len] = line[word_len];
+				word_len++;
+			}
+			word[word_len] = line[word_len];
+			word_len++;
+		}
 		else
-			word[word_len++] = *line++;
+		{
+			word[word_len] = line[word_len];
+			word_len++;
+		}
 	}
-	// null文字を追加
-	word[word_len] = '\0';
+	word[word_len] = '\0'; // null文字を追加
 	return (word);
 }
 
