@@ -76,15 +76,10 @@ char	*expantion_variable(char *str)
 
 void expantion(t_token * token)
 {
-	if (!token)
-		return;
-	while (token)
+	while (token && token->type == WORD)
 	{
-		if (token->type == WORD)
-		{
-			token->str = expantion_variable(token->str);
-			remove_quote(token->str);
-		}
+		token->str = expantion_variable(token->str);
+		remove_quote(token->str);
 		token = token->next;
 	}
 }
