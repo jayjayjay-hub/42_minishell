@@ -39,7 +39,6 @@ void	run_cmd(char *line, char **envp)
 	while (token)
 	{
 		redirect_open((&token));
-		// printf("fd = %d\n", (token)->fd);
 		token = token->next;
 	}
 	token = tmp;
@@ -65,10 +64,7 @@ void	run_cmd(char *line, char **envp)
 	}
 	close_pipe(fd_pipe);
 	while (pid_info.pipe_i--)
-	{
-		// printf("wpid = %d\n", pid_info.pid[i]);
 		waitpid(pid_info.pid[i++], &g_status, 0);
-	}
 	free_ats(tmp_ats);
 }
 
@@ -93,12 +89,6 @@ int	main(int argc, char **argv, char **envp)
 			i = 0;
 			add_history(line);
 			run_cmd(line, envp);
-			// while (pid_info.pipe_i--)
-			// {
-			// 	printf("wpid = %d\n", pid_info.pid[i]);
-			// 	waitpid(pid_info.pid[i++], &status, 0);
-			// }
-			// printf("status = %d\n", WEXITSTATUS(status));
 			free(line);
 		}
 	}
