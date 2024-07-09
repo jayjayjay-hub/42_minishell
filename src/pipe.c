@@ -33,10 +33,12 @@ void	close_pipe(t_pipe_fd *fd_pipe)
 	if (!fd_pipe || fd_pipe->pipe_size == 0)
 		return ;
 	fd_pipe->pipe_size *= 2;
-	while (i <= fd_pipe->pipe_size)
+	while (i < fd_pipe->pipe_size)
 	{
 		if (fd_pipe->fd[i] != 0 && fd_pipe->fd[i] != 1)
 			close(fd_pipe->fd[i]);
 		i++;
 	}
+	free(fd_pipe->fd);
+	free(fd_pipe);
 }

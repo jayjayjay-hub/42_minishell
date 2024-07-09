@@ -95,7 +95,7 @@ typedef struct pipe_fd
 
 typedef struct pid_info
 {
-	pid_t	pid[1024]; //todo いずれパイプの長さでマロックする必要あり
+	pid_t	*pid;
 	int		pipe_i;
 }	t_pid_info;
 

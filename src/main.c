@@ -9,11 +9,12 @@ void	handle_eof(char *line)
 	exit(WEXITSTATUS(g_status));
 }
 
-void	struct_init(t_ats **ats, t_token **token, t_pipe_fd **fd_pipe, t_pid_info *pid_info)
+void	struct_init(t_ats *ats, t_token *token, t_pipe_fd *fd_pipe, t_pid_info *pid_info)
 {
-	*ats = NULL;
-	*token = NULL;
-	*fd_pipe = NULL;
+	ats = NULL;
+	token = NULL;
+	fd_pipe = NULL;
+	pid_info->pid = NULL;
 	pid_info->pipe_i = 0;
 	pid_info = NULL;
 }
@@ -22,9 +23,11 @@ void	make_child(t_ats *ats, char **envp, t_pipe_fd *fd_pipe, t_pid_info pid_info
 {
 	int i;
 
-	i = 0;
+	i = -1;
 	if (ats)
 		fd_pipe = create_pipe(ats);
+	// printf("pipe_size: %d\n", fd_pipe->pipe_size);
+	pid_info.pid = (pid_t *)malloc(sizeof(pid_t) * (fd_pipe->pipe_size + 1));
 	while (ats)
 	{
 		if (token_list_size(ats->token) == 1)
@@ -41,8 +44,10 @@ void	make_child(t_ats *ats, char **envp, t_pipe_fd *fd_pipe, t_pid_info pid_info
 		ats = ats->next;
 	}
 	close_pipe(fd_pipe);
+	i = 0;
 	while (pid_info.pipe_i--)
 		waitpid(pid_info.pid[i++], &g_status, 0);
+	free(pid_info.pid);
 }
 
 void	run_cmd(char *line, char **envp)
@@ -52,7 +57,7 @@ void	run_cmd(char *line, char **envp)
 	t_pipe_fd	*fd_pipe;
 	t_pid_info pid_info;
 
-	struct_init(&ats, &token, &fd_pipe, &pid_info);
+	struct_init(ats, token, fd_pipe, &pid_info);
 	token = tokenize(line);
 	if (!syntax_check(token))
 		return ;
