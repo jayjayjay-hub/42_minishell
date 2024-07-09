@@ -34,7 +34,7 @@ void	read_heredoc(char *eof, int tmp_fd)
 			if (!line)
 			{
 				ft_error("minishell", "warning",
-					"here-document was delimited by end-of-file", 0);
+					"here-document delimited by end-of-file", 0);
 				break ;
 			}
 			free(line);

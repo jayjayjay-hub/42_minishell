@@ -52,10 +52,10 @@ void	make_child(t_ats *ats, char **envp, t_pipe_fd *fd_pipe, t_pid_info pid_info
 
 void	run_cmd(char *line, char **envp)
 {
-	t_ats	*ats;
-	t_token	*token;
+	t_ats		*ats;
+	t_token		*token;
 	t_pipe_fd	*fd_pipe;
-	t_pid_info pid_info;
+	t_pid_info 	pid_info;
 
 	struct_init(ats, token, fd_pipe, &pid_info);
 	token = tokenize(line);
@@ -72,9 +72,8 @@ t_variable *variable = NULL;
 int g_status = 0;
 int	main(int argc, char **argv, char **envp)
 {
-	char	*line;
+	char		*line;
 	t_pid_info	pid_info;
-	int		i;
 
 	errno = 0; // エラー番号をリセット
 	register_signal();
@@ -86,7 +85,6 @@ int	main(int argc, char **argv, char **envp)
 			handle_eof(line);
 		if (*line)
 		{
-			i = 0;
 			add_history(line);
 			run_cmd(line, envp);
 			free(line);
