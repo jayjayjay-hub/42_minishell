@@ -21,21 +21,22 @@ void	redirect(t_token **token)
 	}
 }
 
-int	open_heredoc(char *eof)
+void	read_heredoc(char *eof, int tmp_fd)
 {
-	int tmp_fd;
-	int fd;
 	char *line;
 
-
-	tmp_fd = open(HEREDOC, O_WRONLY | O_CREAT | O_TRUNC, S_IREAD | S_IWRITE);
-	if (tmp_fd == -1)
-		ft_error("minishell", "here_doc", "No such file or directory", 1);
 	while (1)
 	{
 		line = readline("> ");
-		if (!line || *line == '\n' || (ft_strlen(line) == ft_strlen(eof) && !ft_strncmp(line, eof, ft_strlen(line))))
+		if (!line || *line == '\n' || (ft_strlen(line) == ft_strlen(eof) &&
+			!ft_strncmp(line, eof, ft_strlen(line))))
 		{
+			if (!line)
+			{
+				ft_error("minishell", "warning",
+					"here-document was delimited by end-of-file", 0);
+				break ;
+			}
 			free(line);
 			if (*line == '\n')
 				continue ;
@@ -44,8 +45,21 @@ int	open_heredoc(char *eof)
 		ft_putendl_fd(line, tmp_fd);
 		free(line);
 	}
+}
+
+int	open_heredoc(char *eof)
+{
+	int tmp_fd;
+	int fd;
+
+	tmp_fd = open(HEREDOC, O_WRONLY | O_CREAT | O_TRUNC, S_IREAD | S_IWRITE);
+	if (tmp_fd == -1)
+		ft_error("minishell", "here_doc", "No such file or directory", 1);
+	read_heredoc(eof, tmp_fd);
 	close(tmp_fd);
 	fd = open(HEREDOC, O_RDONLY);
+	if (fd == -1)
+		ft_error("minishell", "here_doc", "No such file or directory", 1);
 	unlink(HEREDOC);
 	return (fd);
 }
