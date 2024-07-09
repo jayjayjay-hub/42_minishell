@@ -39,6 +39,4 @@ void	close_pipe(t_pipe_fd *fd_pipe)
 			close(fd_pipe->fd[i]);
 		i++;
 	}
-	free(fd_pipe->fd);
-	free(fd_pipe);
 }

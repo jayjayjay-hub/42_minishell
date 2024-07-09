@@ -23,10 +23,9 @@ void	make_child(t_ats *ats, char **envp, t_pipe_fd *fd_pipe, t_pid_info pid_info
 {
 	int i;
 
-	i = -1;
+	i = 0;
 	if (ats)
 		fd_pipe = create_pipe(ats);
-	// printf("pipe_size: %d\n", fd_pipe->pipe_size);
 	pid_info.pid = (pid_t *)malloc(sizeof(pid_t) * (fd_pipe->pipe_size + 1));
 	while (ats)
 	{
@@ -44,9 +43,10 @@ void	make_child(t_ats *ats, char **envp, t_pipe_fd *fd_pipe, t_pid_info pid_info
 		ats = ats->next;
 	}
 	close_pipe(fd_pipe);
-	i = 0;
 	while (pid_info.pipe_i--)
 		waitpid(pid_info.pid[i++], &g_status, 0);
+	free(fd_pipe->fd);
+	free(fd_pipe);
 	free(pid_info.pid);
 }
 
