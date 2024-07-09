@@ -87,10 +87,9 @@ char	**get_cmd(t_token *token)
 	char	**cmd;
 
 	i = 0;
-	cmd = (char **)malloc(sizeof(char *) * token_list_size(token) + 1);
+	cmd = (char **)ft_calloc(token_list_size(token) + 1, sizeof(char *));
 	if (!cmd)
 		ft_error("malloc", "cmd", "malloc failed", 1);
-	cmd[token_list_size(token)] = NULL;
 	while (token)
 	{
 		while (token && token->type == WORD)
@@ -117,7 +116,14 @@ pid_t	child(t_token *token, char **envp, t_pipe_fd *fd_pipe, int pipe_i)
 	if (pid == 0)
 	{
 		if (fd_pipe->pipe_size != 0)
-			sub_dup2(fd_pipe->fd[2 * pipe_i - 2], fd_pipe->fd[2 * pipe_i + 1]);
+		{
+			if (pipe_i == 0)
+				sub_dup2(0, fd_pipe->fd[2 * pipe_i + 1]);
+			else if (pipe_i == fd_pipe->pipe_size)
+				sub_dup2(fd_pipe->fd[2 * pipe_i - 2], 0);
+			else
+				sub_dup2(fd_pipe->fd[2 * pipe_i - 2], fd_pipe->fd[2 * pipe_i + 1]);
+		}
 		close_pipe(fd_pipe);
 		cmd = get_cmd(token);
 		do_execve(cmd, envp);

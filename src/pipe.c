@@ -3,10 +3,11 @@
 
 t_pipe_fd *create_pipe(t_ats *ats)
 {
+	int			i;
+	t_ats		*tmp_ats;
 	t_pipe_fd	*fd;
-	t_ats	*tmp_ats;
-	int		i = 0;
 
+	i = 0;
 	tmp_ats = ats;
 	fd = (t_pipe_fd *)malloc(sizeof(t_pipe_fd));
 	if (!fd)
