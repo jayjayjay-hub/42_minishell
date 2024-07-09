@@ -18,35 +18,13 @@ void	struct_init(t_ats **ats, t_token **token, t_pipe_fd **fd_pipe, t_pid_info *
 	pid_info = NULL;
 }
 
-// 子プロセスを生成して子プロセス内でコマンドを実行する。親プロセスでは子プロセスの終了を待つ。
-// こっちでcmd = tokenizer(line)をして兄弟プロセスを作る予定。|や;で区切ってそれまでを二重配列にして入れる。
-void	run_cmd(char *line, char **envp)
+void	make_child(t_ats *ats, char **envp, t_pipe_fd *fd_pipe, t_pid_info pid_info)
 {
-	t_ats	*ats;
-	t_ats	*tmp_ats;
-	t_token	*token;
-	t_pipe_fd	*fd_pipe;
-	t_pid_info pid_info;
-	int i = 0;
-	t_token *tmp;
+	int i;
 
-	struct_init(&ats, &token, &fd_pipe, &pid_info);
-	token = tokenize(line);
-	if (!syntax_check(token))
-		return ;
-	tmp = token;
-	expantion(token);
-	while (token)
-	{
-		redirect_open((&token));
-		token = token->next;
-	}
-	token = tmp;
-	ats = parser(token);
-	tmp_ats = ats;
+	i = 0;
 	if (ats)
 		fd_pipe = create_pipe(ats);
-	// print_ats(ats);
 	while (ats)
 	{
 		if (token_list_size(ats->token) == 1)
@@ -59,13 +37,30 @@ void	run_cmd(char *line, char **envp)
 			}
 		}
 		pid_info.pid[pid_info.pipe_i] = child(ats->token, envp, fd_pipe, pid_info.pipe_i);
-		ats = ats->next;
 		pid_info.pipe_i++;
+		ats = ats->next;
 	}
 	close_pipe(fd_pipe);
 	while (pid_info.pipe_i--)
 		waitpid(pid_info.pid[i++], &g_status, 0);
-	free_ats(tmp_ats);
+}
+
+void	run_cmd(char *line, char **envp)
+{
+	t_ats	*ats;
+	t_token	*token;
+	t_pipe_fd	*fd_pipe;
+	t_pid_info pid_info;
+
+	struct_init(&ats, &token, &fd_pipe, &pid_info);
+	token = tokenize(line);
+	if (!syntax_check(token))
+		return ;
+	expantion(token);
+	redirect_open(token);
+	ats = parser(token);
+	make_child(ats, envp, fd_pipe, pid_info);
+	free_ats(ats);
 }
 
 t_variable *variable = NULL;

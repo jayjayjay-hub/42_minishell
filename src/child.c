@@ -77,7 +77,6 @@ void	do_execve(char **cmd, char **envp)
 		path = search_path(cmd[0], envp);
 	if (!path)
 		ft_error("minishell", cmd[0], "command not found", CMD_NOT_FOUND);
-	// dp_print(cmd);
 	if (execve(path, cmd, envp) == -1)
 		ft_error(NULL, NULL, "execve failed", EXIT_FAILURE);
 }
@@ -112,25 +111,16 @@ pid_t	child(t_token *token, char **envp, t_pipe_fd *fd_pipe, int pipe_i)
 	pid_t	pid;
 	char	**cmd;
 
-	// print_token(token);
 	pid = fork();
 	if (pid == -1)
 		ft_error(NULL, NULL, "fork failed", 1);
 	if (pid == 0)
 	{
-		syntax_check(token);
 		if (fd_pipe->pipe_size != 0)
 			sub_dup2(fd_pipe->fd[2 * pipe_i - 2], fd_pipe->fd[2 * pipe_i + 1]);
 		close_pipe(fd_pipe);
 		cmd = get_cmd(token);
 		do_execve(cmd, envp);
 	}
-	// else
-	// 	printf("pid= %d cmd= %s\n", pid, token->str);
 	return (pid);
 }
-
-// cmd[i] = calloc(1, ft_strlen(token->str) + 1);
-// if (!cmd[i])
-// 	ft_error("malloc", "cmd", "malloc failed", 1);
-// strncpy(cmd[i], token->str, ft_strlen(token->str));

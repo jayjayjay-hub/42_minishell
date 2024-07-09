@@ -5,6 +5,8 @@ bool	syntax_check(t_token *token)
 {
 	t_token	*tmp;
 
+	if (!token)
+		return (false);
 	tmp = token;
 	while (tmp)
 	{

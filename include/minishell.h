@@ -121,7 +121,8 @@ void	ft_error(char *cmd, char *target, char *main_message, int status);
 
 // redirect.c
 void	redirect(t_token **token);
-int	redirect_open(t_token **token);
+void	redirect_open(t_token *token);
+void	close_redirect(t_token *token);
 
 // parser.c
 int	get_pipe_count(t_token *token);
