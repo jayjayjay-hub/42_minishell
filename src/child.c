@@ -107,44 +107,6 @@ char	**get_cmd(t_token *token)
 	return (cmd);
 }
 
-bool	syntax_check(t_token *token)
-{
-	t_token	*tmp;
-
-	tmp = token;
-	if (token && token->type == PIPE)
-	{
-		write(2, "minishell: syntax error near unexpected token `|'\n", 51);
-		g_status = 258 * 2;
-		free_token(token);
-		return (false);
-	}
-	while (tmp)
-	{
-		if (token->type >= PIPE && token->type <= REDIRECT_APPEND)
-		{
-			if (!token->next)
-			{
-				write(2, "minishell: syntax error near unexpected token `newline'\n", 57);
-				g_status = 258 * 2;
-				free_token(token);
-				return (false);
-			}
-			else if (token->next->type != WORD)
-			{
-				write(2, "minishell: syntax error near unexpected token `", 47);
-				write(2, token->str, ft_strlen(token->str));
-				write(2, "'\n", 2);
-				g_status = 258 * 2;
-				free_token(token);
-				return (false);
-			}
-		}
-		tmp = tmp->next;
-	}
-	return (true);
-}
-
 pid_t	child(t_token *token, char **envp, t_pipe_fd *fd_pipe, int pipe_i)
 {
 	pid_t	pid;

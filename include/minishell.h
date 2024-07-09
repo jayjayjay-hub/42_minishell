@@ -139,7 +139,6 @@ void	cd(char **cmd);
 
 // child.c
 pid_t	child(t_token *token, char **envp, t_pipe_fd *fd_pipe, int pipe_i);
-bool	syntax_check(t_token *token);
 
 // pipe.c
 t_pipe_fd *create_pipe(t_ats *ats);
@@ -172,6 +171,9 @@ int		is_quote(char c);
 int		is_metachar(char c);
 int		is_single_quote(char c);
 int		is_double_quote(char c);
+
+// syntax.c
+bool	syntax_check(t_token *token);
 
 
 #endif
