@@ -11,7 +11,7 @@ t_pipe_fd *create_pipe(t_ats *ats)
 	fd = (t_pipe_fd *)malloc(sizeof(t_pipe_fd));
 	if (!fd)
 		ft_error("minishell", NULL, "malloc failed", 1);
-	fd->fd = (int *)malloc(sizeof(int) * 100); // パイプの数*2でマロックする必要あり
+	fd->fd = (int *)malloc(sizeof(int) * 100); // todoパイプの数*2でマロックする必要あり
 	if (!fd->fd)
 		ft_error("minishell", NULL, "malloc failed", 1);
 	while (tmp_ats && tmp_ats->next)
