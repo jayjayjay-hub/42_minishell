@@ -151,7 +151,7 @@ void add_back_parse_tree(t_parse_tree **list, t_parse_tree *new);
 void			free_parse_tree(t_parse_tree *parse_tree);
 
 // expansion.c
-void expantion(t_token *token);
+void	expansion(t_token *token);
 
 // variable.c
 bool	is_alnum_under(char c);

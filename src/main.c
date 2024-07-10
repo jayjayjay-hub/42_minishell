@@ -61,7 +61,7 @@ void	run_cmd(char *line, char **envp)
 	token = tokenize(line);
 	if (!syntax_check(token))
 		return ;
-	expantion(token);
+	expansion(token);
 	redirect_open(token);
 	ats = parser(token);
 	make_child(ats, envp, fd_pipe, pid_info);

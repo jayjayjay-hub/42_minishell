@@ -24,7 +24,7 @@ void	remove_quote(char *str)
 	str[j] = '\0';
 }
 
-// char	*expantion_variable(char *str)
+// char	*expansion_variable(char *str)
 // {
 // 	int i;
 // 	int j;
@@ -75,7 +75,7 @@ void	remove_quote(char *str)
 // }
 
 
-void	expantion_variable(char **str)
+void	expansion_variable(char **str)
 {
 	int i;
 	int j;
@@ -90,7 +90,7 @@ void	expantion_variable(char **str)
 	tmp = calloc(1, sizeof(char) * (ft_strlen(*str) + 1));
 	while ((*str)[i])
 	{
-		if (is_quote((*str)[i])) // qoteはそのままコピー
+		if (is_quote((*str)[i])) // quoteはそのままコピー
 		{
 			quote = (*str)[i];
 			tmp[j++] = (*str)[i++];
@@ -129,13 +129,13 @@ void	expantion_variable(char **str)
 }
 
 
-void	expantion(t_token * token)
+void	expansion(t_token * token)
 {
 	while (token)
 	{
 		if (token->type == WORD)
 		{
-			expantion_variable(&token->str);
+			expansion_variable(&token->str);
 			remove_quote(token->str);
 		}
 		token = token->next;
