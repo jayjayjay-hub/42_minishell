@@ -32,7 +32,8 @@ SRC_FILES = main.c token_list.c\
 			syntax.c\
 			env_list.c env.c\
 			builtin_cd.c\
-			builtin_echo.c
+			builtin_echo.c\
+			builtin_pwd.c
 
 OJB_FILES = $(SRC_FILES:%.c=%.o)
 

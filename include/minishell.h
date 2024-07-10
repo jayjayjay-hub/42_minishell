@@ -204,4 +204,7 @@ bool builtin_cd(t_token *token);
 // builtin_echo.c
 bool builtin_echo(t_token *token);
 
+// builtin_pwd.c
+bool builtin_pwd(t_token *token);
+
 #endif
