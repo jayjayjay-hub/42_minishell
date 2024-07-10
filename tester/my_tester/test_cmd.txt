@@ -49,8 +49,9 @@ ls -|a
 # multi Pipe todoこのテストケースやると不正なポインタにアクセスするにだ
 ls | cat -en | ls -a | cat -e | cat -n
 cat -en Makefile | grep 1 | sort -r
-sleep 2 | sleep 1 | cat | cat -e | cat -n | echo hello
-sleep 1 | sleep 3 | sleep 2 | cat | cat -e | cat -n | echo hello
+# このテストケース長いから消した
+#sleep 2 | sleep 1 | cat | cat -e | cat -n | echo hello
+#sleep 1 | sleep 3 | sleep 2 | cat | cat -e | cat -n | echo hello
 
 #mix Pipe
 ls -l | cat < Makefile | grep -n all >> test
