@@ -70,6 +70,7 @@ void	run_cmd(char *line, char **envp)
 }
 
 t_variable *variable = NULL;
+t_env		*g_env = NULL;
 int g_status = 0;
 int	main(int argc, char **argv, char **envp)
 {
@@ -79,6 +80,7 @@ int	main(int argc, char **argv, char **envp)
 	errno = 0; // エラー番号をリセット
 	register_signal();
 	rl_outstream = stderr;
+	init_env(envp);
 	while (1)
 	{
 		line = readline("minishell$ ");

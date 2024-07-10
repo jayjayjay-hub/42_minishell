@@ -39,6 +39,15 @@ typedef struct sigaction	t_sig;
 
 extern int	g_status;
 
+typedef struct s_env
+{
+	char	*key;
+	char	*value;
+	struct s_env	*next;
+}	t_env;
+
+extern t_env	*g_env;
+
 typedef enum e_token_type
 {
 	WORD,
@@ -176,5 +185,16 @@ int		is_double_quote(char c);
 // syntax.c
 bool	syntax_check(t_token *token);
 
+// env_list.c
+void add_back_env(t_env *new);;
+char *get_env_key(char *env_line);
+char *get_env_value(char *env_line);
+t_env *new_env(char *env_line);
+void free_env(void);
+void	print_env(void);
+int	env_list_size(void);
+
+// env.c
+void init_env(char **envp);
 
 #endif
