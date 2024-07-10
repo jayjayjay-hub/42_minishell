@@ -38,9 +38,16 @@ void	make_child(t_ats *ats, char **envp, t_pipe_fd *fd_pipe, t_pid_info pid_info
 				continue;
 			}
 		}
-		if (ats->token->type == WORD && !ft_strncmp(ats->token->str, "cd", 3) && ft_strlen(ats->token->str) == 2)
+		if (ats->token->type == WORD && ft_strlen(ats->token->str) == 2 && !ft_strncmp(ats->token->str, "cd", 3))
 		{
 			if(!builtin_cd(ats->token))
+				return ;
+			ats = ats->next;
+			continue;
+		}
+		if (ats->token->type == WORD && ft_strlen(ats->token->str) == 4 && !ft_strncmp(ats->token->str, "echo", 5))
+		{
+			if(!builtin_echo(ats->token))
 				return ;
 			ats = ats->next;
 			continue;

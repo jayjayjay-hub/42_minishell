@@ -201,4 +201,7 @@ void init_env(char **envp);
 // builtin_cd.c
 bool builtin_cd(t_token *token);
 
+// builtin_echo.c
+bool builtin_echo(t_token *token);
+
 #endif
