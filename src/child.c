@@ -77,7 +77,6 @@ void	do_execve(char **cmd, char **envp)
 		path = search_path(cmd[0], envp);
 	if (!path)
 		ft_error("minishell", cmd[0], "command not found", CMD_NOT_FOUND);
-	// dp_print(cmd);
 	if (execve(path, cmd, envp) == -1)
 		ft_error(NULL, NULL, "execve failed", EXIT_FAILURE);
 }
@@ -88,10 +87,9 @@ char	**get_cmd(t_token *token)
 	char	**cmd;
 
 	i = 0;
-	cmd = (char **)malloc(sizeof(char *) * token_list_size(token) + 1);
+	cmd = (char **)ft_calloc(token_list_size(token) + 1, sizeof(char *));
 	if (!cmd)
 		ft_error("malloc", "cmd", "malloc failed", 1);
-	cmd[token_list_size(token)] = NULL;
 	while (token)
 	{
 		while (token && token->type == WORD)
@@ -107,68 +105,28 @@ char	**get_cmd(t_token *token)
 	return (cmd);
 }
 
-bool	syntax_check(t_token *token)
-{
-	t_token	*tmp;
-
-	tmp = token;
-	if (token && token->type == PIPE)
-	{
-		write(2, "minishell: syntax error near unexpected token `|'\n", 51);
-		g_status = 258 * 2;
-		free_token(token);
-		return (false);
-	}
-	while (tmp)
-	{
-		if (token->type >= PIPE && token->type <= REDIRECT_APPEND)
-		{
-			if (!token->next)
-			{
-				write(2, "minishell: syntax error near unexpected token `newline'\n", 57);
-				g_status = 258 * 2;
-				free_token(token);
-				return (false);
-			}
-			else if (token->next->type != WORD)
-			{
-				write(2, "minishell: syntax error near unexpected token `", 47);
-				write(2, token->str, ft_strlen(token->str));
-				write(2, "'\n", 2);
-				g_status = 258 * 2;
-				free_token(token);
-				return (false);
-			}
-		}
-		tmp = tmp->next;
-	}
-	return (true);
-}
-
 pid_t	child(t_token *token, char **envp, t_pipe_fd *fd_pipe, int pipe_i)
 {
 	pid_t	pid;
 	char	**cmd;
 
-	// print_token(token);
 	pid = fork();
 	if (pid == -1)
 		ft_error(NULL, NULL, "fork failed", 1);
 	if (pid == 0)
 	{
-		syntax_check(token);
 		if (fd_pipe->pipe_size != 0)
-			sub_dup2(fd_pipe->fd[2 * pipe_i - 2], fd_pipe->fd[2 * pipe_i + 1]);
+		{
+			if (pipe_i == 0)
+				sub_dup2(0, fd_pipe->fd[2 * pipe_i + 1]);
+			else if (pipe_i == fd_pipe->pipe_size)
+				sub_dup2(fd_pipe->fd[2 * pipe_i - 2], 0);
+			else
+				sub_dup2(fd_pipe->fd[2 * pipe_i - 2], fd_pipe->fd[2 * pipe_i + 1]);
+		}
 		close_pipe(fd_pipe);
 		cmd = get_cmd(token);
 		do_execve(cmd, envp);
 	}
-	// else
-	// 	printf("pid= %d cmd= %s\n", pid, token->str);
 	return (pid);
 }
-
-// cmd[i] = calloc(1, ft_strlen(token->str) + 1);
-// if (!cmd[i])
-// 	ft_error("malloc", "cmd", "malloc failed", 1);
-// strncpy(cmd[i], token->str, ft_strlen(token->str));

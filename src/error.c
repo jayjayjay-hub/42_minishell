@@ -4,15 +4,15 @@ void	ft_error(char *cmd, char *target, char *main_message, int status)
 {
 	if (cmd)
 	{
-		write(2, cmd, ft_strlen(cmd));
-		write(2, ": ", 2);
+		ft_putstr_fd(cmd, 2);
+		ft_putstr_fd(": ", 2);
 	}
 	if (target)
 	{
-		write(2, target, ft_strlen(target));
-		write(2, ": ", 2);
+		ft_putstr_fd(target, 2);
+		ft_putstr_fd(": ", 2);
 	}
-	write(2, main_message, ft_strlen(main_message));
-	write(2, "\n", 1);
-	exit(status);
+	ft_putendl_fd(main_message, 2);
+	if (status)
+		exit(status);
 }

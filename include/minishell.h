@@ -95,7 +95,7 @@ typedef struct pipe_fd
 
 typedef struct pid_info
 {
-	pid_t	pid[1024]; //いずれパイプの長さでマロックする必要あり
+	pid_t	*pid;
 	int		pipe_i;
 }	t_pid_info;
 
@@ -121,7 +121,8 @@ void	ft_error(char *cmd, char *target, char *main_message, int status);
 
 // redirect.c
 void	redirect(t_token **token);
-int	redirect_open(t_token **token);
+void	redirect_open(t_token *token);
+void	close_redirect(t_token *token);
 
 // parser.c
 int	get_pipe_count(t_token *token);
@@ -139,7 +140,6 @@ void	cd(char **cmd);
 
 // child.c
 pid_t	child(t_token *token, char **envp, t_pipe_fd *fd_pipe, int pipe_i);
-bool	syntax_check(t_token *token);
 
 // pipe.c
 t_pipe_fd *create_pipe(t_ats *ats);
@@ -172,6 +172,9 @@ int		is_quote(char c);
 int		is_metachar(char c);
 int		is_single_quote(char c);
 int		is_double_quote(char c);
+
+// syntax.c
+bool	syntax_check(t_token *token);
 
 
 #endif

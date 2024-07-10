@@ -9,45 +9,24 @@ void	handle_eof(char *line)
 	exit(WEXITSTATUS(g_status));
 }
 
-void	struct_init(t_ats **ats, t_token **token, t_pipe_fd **fd_pipe, t_pid_info *pid_info)
+void	struct_init(t_ats *ats, t_token *token, t_pipe_fd *fd_pipe, t_pid_info *pid_info)
 {
-	*ats = NULL;
-	*token = NULL;
-	*fd_pipe = NULL;
+	ats = NULL;
+	token = NULL;
+	fd_pipe = NULL;
+	pid_info->pid = NULL;
 	pid_info->pipe_i = 0;
 	pid_info = NULL;
 }
 
-// 子プロセスを生成して子プロセス内でコマンドを実行する。親プロセスでは子プロセスの終了を待つ。
-// こっちでcmd = tokenizer(line)をして兄弟プロセスを作る予定。|や;で区切ってそれまでを二重配列にして入れる。
-void	run_cmd(char *line, char **envp)
+void	make_child(t_ats *ats, char **envp, t_pipe_fd *fd_pipe, t_pid_info pid_info)
 {
-	t_ats	*ats;
-	t_ats	*tmp_ats;
-	t_token	*token;
-	t_pipe_fd	*fd_pipe;
-	t_pid_info pid_info;
-	int i = 0;
-	t_token *tmp;
+	int i;
 
-	struct_init(&ats, &token, &fd_pipe, &pid_info);
-	token = tokenize(line);
-	if (!syntax_check(token))
-		return ;
-	tmp = token;
-	expantion(token);
-	while (token)
-	{
-		redirect_open((&token));
-		// printf("fd = %d\n", (token)->fd);
-		token = token->next;
-	}
-	token = tmp;
-	ats = parser(token);
-	tmp_ats = ats;
+	i = 0;
 	if (ats)
 		fd_pipe = create_pipe(ats);
-	// print_ats(ats);
+	pid_info.pid = (pid_t *)malloc(sizeof(pid_t) * (fd_pipe->pipe_size + 1));
 	while (ats)
 	{
 		if (token_list_size(ats->token) == 1)
@@ -60,25 +39,42 @@ void	run_cmd(char *line, char **envp)
 			}
 		}
 		pid_info.pid[pid_info.pipe_i] = child(ats->token, envp, fd_pipe, pid_info.pipe_i);
-		ats = ats->next;
 		pid_info.pipe_i++;
+		ats = ats->next;
 	}
 	close_pipe(fd_pipe);
 	while (pid_info.pipe_i--)
-	{
-		// printf("wpid = %d\n", pid_info.pid[i]);
 		waitpid(pid_info.pid[i++], &g_status, 0);
-	}
-	free_ats(tmp_ats);
+	free(fd_pipe->fd);
+	free(fd_pipe);
+	free(pid_info.pid);
+}
+
+void	run_cmd(char *line, char **envp)
+{
+	t_ats		*ats;
+	t_token		*token;
+	t_pipe_fd	*fd_pipe;
+	t_pid_info 	pid_info;
+
+	struct_init(ats, token, fd_pipe, &pid_info);
+	token = tokenize(line);
+	if (!syntax_check(token))
+		return ;
+	expantion(token);
+	redirect_open(token);
+	ats = parser(token);
+	make_child(ats, envp, fd_pipe, pid_info);
+	close_redirect(token);
+	free_ats(ats);
 }
 
 t_variable *variable = NULL;
 int g_status = 0;
 int	main(int argc, char **argv, char **envp)
 {
-	char	*line;
+	char		*line;
 	t_pid_info	pid_info;
-	int		i;
 
 	errno = 0; // エラー番号をリセット
 	register_signal();
@@ -90,15 +86,8 @@ int	main(int argc, char **argv, char **envp)
 			handle_eof(line);
 		if (*line)
 		{
-			i = 0;
 			add_history(line);
 			run_cmd(line, envp);
-			// while (pid_info.pipe_i--)
-			// {
-			// 	printf("wpid = %d\n", pid_info.pid[i]);
-			// 	waitpid(pid_info.pid[i++], &status, 0);
-			// }
-			// printf("status = %d\n", WEXITSTATUS(status));
 			free(line);
 		}
 	}

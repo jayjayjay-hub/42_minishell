@@ -1,95 +1,6 @@
 
 #include "minishell.h"
 
-// void	redirect_in(t_token **token)
-// {
-// 	int	fd;
-
-// 	*token = (*token)->next;
-// 	fd = open((*token)->str, O_RDONLY);
-// 	if (fd == -1)
-// 		ft_error("minishell", (*token)->str, "No such file or directory", 1);
-// 	dup2(fd, STDIN_FILENO);
-// 	close(fd);
-// 	*token = (*token)->next;
-// }
-
-// void	redirect_out(t_token **token)
-// {
-// 	int	fd;
-
-// 	*token = (*token)->next;
-// 	// overwirte check start
-// 	// fd = open((*token)->str, O_RDONLY);
-// 	// if (fd != -1)
-// 	// 	ft_error("minishell", (*token)->str, "cannot overwrite existing file", 1);
-// 	// overwirte check end
-// 	fd = open((*token)->str, O_WRONLY | O_CREAT | O_TRUNC, S_IREAD | S_IWRITE);
-// 	if (fd == -1)
-// 		ft_error("minishell", (*token)->str, "No such file or directory", 1);
-// 	dup2(fd, STDOUT_FILENO);
-// 	close(fd);
-// 	*token = (*token)->next;
-// }
-
-// void	redirect_append(t_token **token)
-// {
-// 	int	fd;
-
-// 	*token = (*token)->next;
-// 	fd = open((*token)->str, O_WRONLY | O_CREAT | O_APPEND, S_IREAD | S_IWRITE);
-// 	if (fd == -1)
-// 		ft_error("minishell", (*token)->str, "No such file or directory", 1);
-// 	dup2(fd, STDOUT_FILENO);
-// 	close(fd);
-// 	*token = (*token)->next;
-// }
-
-// void	redirect_here_doc(t_token **token)
-// {
-// 	int		tmp_fd;
-// 	int		fd;
-// 	char	*line;
-
-// 	*token = (*token)->next;
-// 	tmp_fd = open(HEREDOC, O_WRONLY | O_CREAT | O_TRUNC, S_IREAD | S_IWRITE);
-// 	if (tmp_fd == -1)
-// 		ft_error("minishell", "here_doc", "No such file or directory", 1);
-// 	while (1)
-// 	{
-// 		line = readline("> ");
-// 		if (!line || *line == '\n' || (ft_strlen(line) == ft_strlen((*token)->str) && !ft_strncmp(line, (*token)->str, ft_strlen(line))))
-// 		{
-// 			free(line);
-// 			if (*line == '\n')
-// 				continue ;
-// 			break ;
-// 		}
-// 		ft_putendl_fd(line, tmp_fd);
-// 		free(line);
-// 	}
-// 	fd = open(HEREDOC, O_RDONLY);
-// 	dup2(fd, STDIN_FILENO);
-// 	close(fd);
-// 	unlink(HEREDOC);
-// 	*token = (*token)->next;
-// }
-
-// void	redirect(t_token **token)
-// {
-// 	if (!*token)
-// 		return ;
-// 	syntax_check(*token);
-// 	if ((*token)->type == REDIRECT_IN)
-// 		redirect_in(token);
-// 	else if ((*token)->type == REDIRECT_OUT)
-// 		redirect_out(token);
-// 	else if ((*token)->type == REDIRECT_APPEND)
-// 		redirect_append(token);
-// 	else if ((*token)->type == REDIRECT_HERE_DOC)
-// 		redirect_here_doc(token);
-// }
-
 void	redirect(t_token **token)
 {
 	if (!*token)
@@ -110,21 +21,22 @@ void	redirect(t_token **token)
 	}
 }
 
-int	open_heredoc(char *eof)
+void	read_heredoc(char *eof, int tmp_fd)
 {
-	int tmp_fd;
-	int fd;
 	char *line;
 
-
-	tmp_fd = open(HEREDOC, O_WRONLY | O_CREAT | O_TRUNC, S_IREAD | S_IWRITE);
-	if (tmp_fd == -1)
-		ft_error("minishell", "here_doc", "No such file or directory", 1);
 	while (1)
 	{
 		line = readline("> ");
-		if (!line || *line == '\n' || (ft_strlen(line) == ft_strlen(eof) && !ft_strncmp(line, eof, ft_strlen(line))))
+		if (!line || *line == '\n' || (ft_strlen(line) == ft_strlen(eof) &&
+			!ft_strncmp(line, eof, ft_strlen(line))))
 		{
+			if (!line)
+			{
+				ft_error("minishell", "warning",
+					"here-document delimited by end-of-file", 0);
+				break ;
+			}
 			free(line);
 			if (*line == '\n')
 				continue ;
@@ -133,25 +45,52 @@ int	open_heredoc(char *eof)
 		ft_putendl_fd(line, tmp_fd);
 		free(line);
 	}
+}
+
+int	open_heredoc(char *eof)
+{
+	int tmp_fd;
+	int fd;
+
+	tmp_fd = open(HEREDOC, O_WRONLY | O_CREAT | O_TRUNC, S_IREAD | S_IWRITE);
+	if (tmp_fd == -1)
+		ft_error("minishell", "here_doc", "No such file or directory", 1);
+	read_heredoc(eof, tmp_fd);
 	close(tmp_fd);
 	fd = open(HEREDOC, O_RDONLY);
+	if (fd == -1)
+		ft_error("minishell", "here_doc", "No such file or directory", 1);
 	unlink(HEREDOC);
 	return (fd);
 }
 
-int	redirect_open(t_token **token)
+void	redirect_open(t_token *token)
 {
-	if (!(*token)->next || (*token)->next->type != WORD)
-		return (0);
-	if ((*token)->type == REDIRECT_IN)
-		(*token)->fd = open((*token)->next->str, O_RDONLY);
-	else if ((*token)->type == REDIRECT_OUT)
-		(*token)->fd = open((*token)->next->str, O_WRONLY | O_CREAT | O_TRUNC, S_IREAD | S_IWRITE);
-	else if ((*token)->type == REDIRECT_APPEND)
-		(*token)->fd = open((*token)->next->str, O_WRONLY | O_CREAT | O_APPEND, S_IREAD | S_IWRITE);
-	else if ((*token)->type == REDIRECT_HERE_DOC)
-		(*token)->fd = open_heredoc((*token)->next->str);
-	if ((*token)->fd == -1)
-		ft_error("minishell", (*token)->next->str, "No such file or directory", 1);
-	return (0);
+	while (token)
+	{
+		if (token->type == REDIRECT_IN)
+			token->fd = open(token->next->str, O_RDONLY);
+		else if (token->type == REDIRECT_OUT)
+			token->fd = open(token->next->str, O_WRONLY | O_CREAT | O_TRUNC, S_IREAD | S_IWRITE);
+		else if (token->type == REDIRECT_APPEND)
+			token->fd = open(token->next->str, O_WRONLY | O_CREAT | O_APPEND, S_IREAD | S_IWRITE);
+		else if (token->type == REDIRECT_HERE_DOC)
+			token->fd = open_heredoc(token->next->str);
+		if (token->fd == -1)
+			ft_error("minishell", token->next->str, "No such file or directory", 1);
+		token = token->next;
+	}
+}
+
+void	close_redirect(t_token *token)
+{
+	t_token *tmp;
+
+	tmp = token;
+	while (tmp)
+	{
+		if (tmp->type >= REDIRECT_IN && tmp->type <= REDIRECT_APPEND)
+			close(tmp->fd);
+		tmp = tmp->next;
+	}
 }

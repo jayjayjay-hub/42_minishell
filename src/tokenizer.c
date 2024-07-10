@@ -37,7 +37,7 @@ int	get_word_len(char *line)
 				len++;
 			if (!line[len])
 			{
-				printf("minishell: quote not closed\n");
+				ft_putendl_fd("minishell: quote not closed", 2);
 				return (-1);
 			}
 			len++;
@@ -60,7 +60,7 @@ char	*get_word(char *line)
 	word = ft_substr(line, 0, word_len);
 	if (!word)
 	{
-		printf("minishell: malloc failed\n");
+		ft_putendl_fd("minishell: malloc failed", 2);
 		return (NULL);
 	}
 	return (word);
@@ -77,7 +77,7 @@ char	*get_operator(char *line, t_token_type type)
 	operator = ft_substr(line, 0, len);
 	if (!operator)
 	{
-		printf("minishell: malloc failed\n");
+		ft_putendl_fd("minishell: malloc failed", 2);
 		return (NULL);
 	}
 	return (operator);
@@ -104,7 +104,7 @@ bool	pipe_syntax_check(char *line)
 {
 	if (line[0] == '|')
 	{
-		printf("minishell: syntax error near unexpected token `|'\n");
+		ft_putendl_fd("minishell: syntax error near unexpected token `|'", 2);
 		return (false);
 	}
 	return (true);
