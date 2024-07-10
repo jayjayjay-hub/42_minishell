@@ -37,6 +37,8 @@
 // signal
 typedef struct sigaction	t_sig;
 
+extern int	g_status;
+
 typedef enum e_token_type
 {
 	WORD,
@@ -59,6 +61,7 @@ typedef struct s_token
 {
 	char			*str;
 	t_token_type	type;
+	int 			fd;
 	struct s_token	*next;
 }	t_token;
 
@@ -92,7 +95,7 @@ typedef struct pipe_fd
 
 typedef struct pid_info
 {
-	pid_t	pid[1024]; //いずれパイプの長さでマロックする必要あり
+	pid_t	*pid;
 	int		pipe_i;
 }	t_pid_info;
 
@@ -100,10 +103,10 @@ typedef struct pid_info
 // main.c
 
 // tokenizer.c
-t_token *tokenize(char *line, int *status);
+t_token *tokenize(char *line);
 
 // list.c
-t_token	*new_token(char *str, t_token_type type);
+t_token	*new_token(char *str, t_token_type type, int fd);
 void		add_back(t_token **list, t_token *new);
 void		free_token(t_token *token);
 int			token_list_size(t_token *token);
@@ -118,6 +121,8 @@ void	ft_error(char *cmd, char *target, char *main_message, int status);
 
 // redirect.c
 void	redirect(t_token **token);
+void	redirect_open(t_token *token);
+void	close_redirect(t_token *token);
 
 // parser.c
 int	get_pipe_count(t_token *token);
@@ -135,7 +140,6 @@ void	cd(char **cmd);
 
 // child.c
 pid_t	child(t_token *token, char **envp, t_pipe_fd *fd_pipe, int pipe_i);
-void	syntax_check(t_token *token);
 
 // pipe.c
 t_pipe_fd *create_pipe(t_ats *ats);
@@ -161,12 +165,16 @@ t_variable	*variable_list_new(char *key, char *value);
 void variable_list_free(void);
 char	*get_variable_value(char *key);
 char *get_variable_key(char *str);
+bool edit_variable(char *key, char *value);
 
 // utils.c
 int		is_quote(char c);
 int		is_metachar(char c);
 int		is_single_quote(char c);
 int		is_double_quote(char c);
+
+// syntax.c
+bool	syntax_check(t_token *token);
 
 
 #endif

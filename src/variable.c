@@ -54,6 +54,12 @@ bool	add_variable(char *str)
 		return (false);
 	key = ft_substr(str, 0, key_len);
 	value = ft_strdup(tmp + 1);
+	if (edit_variable(key, value))
+	{
+		free(key);
+		free(value);
+		return (true);
+	}
 	new = variable_list_new(key, value);
 	variable_list_add_back(new);
 	return (true);

@@ -3,15 +3,16 @@
 
 t_pipe_fd *create_pipe(t_ats *ats)
 {
+	int			i;
+	t_ats		*tmp_ats;
 	t_pipe_fd	*fd;
-	t_ats	*tmp_ats;
-	int		i = 0;
 
+	i = 0;
 	tmp_ats = ats;
 	fd = (t_pipe_fd *)malloc(sizeof(t_pipe_fd));
 	if (!fd)
 		ft_error("minishell", NULL, "malloc failed", 1);
-	fd->fd = (int *)malloc(sizeof(int) * 100); // パイプの数*2でマロックする必要あり
+	fd->fd = (int *)malloc(sizeof(int) * (ats_list_size(ats) - 1) * 2);
 	if (!fd->fd)
 		ft_error("minishell", NULL, "malloc failed", 1);
 	while (tmp_ats && tmp_ats->next)
@@ -33,7 +34,7 @@ void	close_pipe(t_pipe_fd *fd_pipe)
 	if (!fd_pipe || fd_pipe->pipe_size == 0)
 		return ;
 	fd_pipe->pipe_size *= 2;
-	while (i <= fd_pipe->pipe_size)
+	while (i < fd_pipe->pipe_size)
 	{
 		if (fd_pipe->fd[i] != 0 && fd_pipe->fd[i] != 1)
 			close(fd_pipe->fd[i]);

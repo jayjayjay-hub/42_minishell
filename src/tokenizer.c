@@ -37,7 +37,7 @@ int	get_word_len(char *line)
 				len++;
 			if (!line[len])
 			{
-				printf("minishell: quote not closed\n");
+				ft_putendl_fd("minishell: quote not closed", 2);
 				return (-1);
 			}
 			len++;
@@ -60,7 +60,7 @@ char	*get_word(char *line)
 	word = ft_substr(line, 0, word_len);
 	if (!word)
 	{
-		printf("minishell: malloc failed\n");
+		ft_putendl_fd("minishell: malloc failed", 2);
 		return (NULL);
 	}
 	return (word);
@@ -77,7 +77,7 @@ char	*get_operator(char *line, t_token_type type)
 	operator = ft_substr(line, 0, len);
 	if (!operator)
 	{
-		printf("minishell: malloc failed\n");
+		ft_putendl_fd("minishell: malloc failed", 2);
 		return (NULL);
 	}
 	return (operator);
@@ -95,17 +95,32 @@ int	add_token(t_token **token, char *line, t_token_type type)
 		token_str = get_operator(line, type);
 	if (!token_str)
 		return (0);
-	new = new_token(token_str, type);
+	new = new_token(token_str, type, 0);
 	add_back(token, new);
 	return (strlen(token_str));
 }
 
-t_token	*tokenize(char *line, int *status)
+bool	pipe_syntax_check(char *line)
+{
+	if (line[0] == '|')
+	{
+		ft_putendl_fd("minishell: syntax error near unexpected token `|'", 2);
+		return (false);
+	}
+	return (true);
+}
+
+t_token	*tokenize(char *line)
 {
 	t_token			*token;
 	t_token_type	type;
 	int				token_len;
 
+	if (!pipe_syntax_check(line))
+	{
+		g_status = 258 * 2;
+		return (NULL);
+	}
 	token = NULL;
 	while (*line)
 	{
@@ -117,7 +132,7 @@ t_token	*tokenize(char *line, int *status)
 		if (!token_len)
 		{
 			free_token(token);
-			*status = 258;
+			g_status = 258;
 			return (NULL);
 		}
 		line += token_len;

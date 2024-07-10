@@ -26,7 +26,10 @@ t_ats	*parser(t_token *token)
 			token = token->next;
 		new = new_ats(token);
 		if (!new)
-			ft_error(NULL, NULL, "syntax error", EXIT_FAILURE);
+		{
+			ft_putendl_fd("minishell: syntax error near unexpected token `|'", 2);
+			return (NULL);
+		}
 		add_back_ats(&ats, new);
 		while (token && token->type != PIPE)
 			token = token->next;

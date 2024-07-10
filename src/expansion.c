@@ -131,10 +131,13 @@ void	expantion_variable(char **str)
 
 void	expantion(t_token * token)
 {
-	while (token && token->type == WORD)
+	while (token)
 	{
-		expantion_variable(&token->str);
-		remove_quote(token->str);
+		if (token->type == WORD)
+		{
+			expantion_variable(&token->str);
+			remove_quote(token->str);
+		}
 		token = token->next;
 	}
 }
