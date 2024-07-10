@@ -29,7 +29,7 @@ void	add_back_env(t_env *new)
 	}
 }
 
-char *get_env_key(char *env_line)
+char *get_env_key_from_envp(char *env_line)
 {
 	int		i;
 	char	*key;
@@ -44,7 +44,7 @@ char *get_env_key(char *env_line)
 	return (key);
 }
 
-char *get_env_value(char *env_line)
+char *get_env_value_from_envp(char *env_line)
 {
 	int		i;
 	char	*value;
@@ -69,12 +69,28 @@ t_env	*new_env(char *env_line) // env_line ex) HOME=/home/jtakahas
 	env = malloc(sizeof(t_env));
 	if (!env)
 		ft_error("malloc", "env", strerror(errno), EXIT_FAILURE);
-	key = get_env_key(env_line);
-	value = get_env_value(env_line);
+	key = get_env_key_from_envp(env_line);
+	value = get_env_value_from_envp(env_line);
 	env->key = key;
 	env->value = value;
 	env->next = NULL;
 	return (env);
+}
+
+char	*get_env_value(char *key)
+{
+	t_env	*tmp;
+	int		key_len;
+
+	tmp = g_env;
+	key_len = ft_strlen(key);
+	while (tmp)
+	{
+		if (strlen(tmp->key) == key_len && !ft_strncmp(tmp->key, key, key_len))
+			return (strdup(tmp->value));
+		tmp = tmp->next;
+	}
+	return (NULL);
 }
 
 void	free_env(void)

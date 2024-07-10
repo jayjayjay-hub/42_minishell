@@ -38,6 +38,13 @@ void	make_child(t_ats *ats, char **envp, t_pipe_fd *fd_pipe, t_pid_info pid_info
 				continue;
 			}
 		}
+		if (ats->token->type == WORD && !ft_strncmp(ats->token->str, "cd", 3) && ft_strlen(ats->token->str) == 2)
+		{
+			if(!builtin_cd(ats->token))
+				return ;
+			ats = ats->next;
+			continue;
+		}
 		pid_info.pid[pid_info.pipe_i] = child(ats->token, envp, fd_pipe, pid_info.pipe_i);
 		pid_info.pipe_i++;
 		ats = ats->next;
@@ -81,6 +88,7 @@ int	main(int argc, char **argv, char **envp)
 	register_signal();
 	rl_outstream = stderr;
 	init_env(envp);
+	// print_env();
 	while (1)
 	{
 		line = readline("minishell$ ");

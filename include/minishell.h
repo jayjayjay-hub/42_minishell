@@ -187,14 +187,18 @@ bool	syntax_check(t_token *token);
 
 // env_list.c
 void add_back_env(t_env *new);;
-char *get_env_key(char *env_line);
-char *get_env_value(char *env_line);
+char *get_env_key_from_envp(char *env_line);
+char *get_env_value_from_envp(char *env_line);
 t_env *new_env(char *env_line);
 void free_env(void);
 void	print_env(void);
 int	env_list_size(void);
+char *get_env_value(char *key);
 
 // env.c
 void init_env(char **envp);
+
+// builtin_cd.c
+bool builtin_cd(t_token *token);
 
 #endif
