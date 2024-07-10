@@ -60,7 +60,7 @@ char *get_env_value_from_envp(char *env_line)
 	return (value);
 }
 
-t_env	*new_env(char *env_line) // env_line ex) HOME=/home/jtakahas
+t_env	*new_env(char *env_line)
 {
 	t_env	*env;
 	char	*key;
@@ -75,6 +75,34 @@ t_env	*new_env(char *env_line) // env_line ex) HOME=/home/jtakahas
 	env->value = value;
 	env->next = NULL;
 	return (env);
+}
+
+void	export_env(char *key, char *value)
+{
+	t_env	*tmp;
+	char *tmp_value;
+	char *key_value;
+
+	tmp = g_env;
+	if (!value)
+	{
+		value = get_variable_value(key);
+		if (!value)
+			return ;
+	}
+	while (tmp)
+	{
+		if (strlen(tmp->key) == strlen(key) && !ft_strncmp(tmp->key, key, strlen(key)))
+		{
+			tmp_value = tmp->value;
+			tmp->value = strdup(value);
+			free(tmp_value);
+			return ;
+		}
+		tmp = tmp->next;
+	}
+	key_value = ft_strjoin(key, ft_strjoin("=", value));
+	add_back_env(new_env(key_value));
 }
 
 char	*get_env_value(char *key)
@@ -107,15 +135,14 @@ void	free_env(void)
 	}
 }
 
-void	print_env(void)
+void	print_env(void) // exportで表示するときに使う
 {
 	t_env	*tmp;
 
 	tmp = g_env;
-	printf("<< env list >>\n\n");
 	while (tmp)
 	{
-		printf("%s=%s\n", tmp->key, tmp->value);
+		printf("declare -x %s=\"%s\"\n", tmp->key, tmp->value);
 		tmp = tmp->next;
 	}
 }

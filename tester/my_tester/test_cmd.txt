@@ -69,3 +69,16 @@ ls -l | cat < Makefile | grep -n all >> test
 #|>>
 #|<.
 #<>|K<<
+
+# cd
+cd .. | pwd
+cd | pwd
+cd | ls
+
+# pwd
+pwd
+
+# export
+export
+export MY_ENV=123 | export | grep -wc
+export MY_ENV=123 | export | grep MY_ENV

@@ -181,6 +181,7 @@ int		is_quote(char c);
 int		is_metachar(char c);
 int		is_single_quote(char c);
 int		is_double_quote(char c);
+int strlen_double_ptr(char **str);
 
 // syntax.c
 bool	syntax_check(t_token *token);
@@ -194,6 +195,7 @@ void free_env(void);
 void	print_env(void);
 int	env_list_size(void);
 char *get_env_value(char *key);
+void export_env(char *key, char *value);
 
 // env.c
 void init_env(char **envp);
@@ -206,5 +208,8 @@ bool builtin_echo(t_token *token);
 
 // builtin_pwd.c
 bool builtin_pwd(t_token *token);
+
+// builtin_export.c
+bool builtin_export(t_token *token);
 
 #endif
