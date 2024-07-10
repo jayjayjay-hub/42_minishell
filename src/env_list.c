@@ -135,7 +135,7 @@ void	free_env(void)
 	}
 }
 
-void	print_env(void) // exportで表示するときに使う
+void	print_export_env(void) // exportで表示するときに使う
 {
 	t_env	*tmp;
 
@@ -143,6 +143,18 @@ void	print_env(void) // exportで表示するときに使う
 	while (tmp)
 	{
 		printf("declare -x %s=\"%s\"\n", tmp->key, tmp->value);
+		tmp = tmp->next;
+	}
+}
+
+void	print_env(void) // envで表示するときに使う
+{
+	t_env	*tmp;
+
+	tmp = g_env;
+	while (tmp)
+	{
+		printf("%s=%s\n", tmp->key, tmp->value);
 		tmp = tmp->next;
 	}
 }

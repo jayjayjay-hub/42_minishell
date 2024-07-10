@@ -8,7 +8,7 @@ bool builtin_export(t_token *token)
 
 	if (!token->next)
 	{
-		print_env();
+		print_export_env();
 		return (true);
 	}
 	token = token->next;

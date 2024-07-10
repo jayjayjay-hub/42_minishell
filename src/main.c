@@ -67,6 +67,14 @@ void	make_child(t_ats *ats, char **envp, t_pipe_fd *fd_pipe, t_pid_info pid_info
 			ats = ats->next;
 			continue;
 		}
+		// env
+		if (ats->token->type == WORD && ft_strlen(ats->token->str) == 3 && !ft_strncmp(ats->token->str, "env", 4))
+		{
+			if(!builtin_env(ats->token))
+				return ;
+			ats = ats->next;
+			continue;
+		}
 		pid_info.pid[pid_info.pipe_i] = child(ats->token, envp, fd_pipe, pid_info.pipe_i);
 		pid_info.pipe_i++;
 		ats = ats->next;

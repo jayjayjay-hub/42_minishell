@@ -192,6 +192,7 @@ char *get_env_key_from_envp(char *env_line);
 char *get_env_value_from_envp(char *env_line);
 t_env *new_env(char *env_line);
 void free_env(void);
+void	print_export_env(void);
 void	print_env(void);
 int	env_list_size(void);
 char *get_env_value(char *key);
@@ -211,5 +212,8 @@ bool builtin_pwd(t_token *token);
 
 // builtin_export.c
 bool builtin_export(t_token *token);
+
+// builtin_env.c
+bool builtin_env(t_token *token);
 
 #endif
