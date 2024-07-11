@@ -15,12 +15,8 @@ bool	ft_str_isdigit(char *str)
 	return (true);
 }
 
-bool	exit_check(t_token *token)
+bool	builtin_exit(t_token *token)
 {
-	if (!token)
-		return (false);
-	if (!(!ft_strncmp(token->str, "exit", 4) && ft_strlen(token->str) == 4))
-		return (false);
 	if (token_list_size(token) > 2)
 	{
 		ft_putendl_fd("minishell: exit: too many arguments", 2);
@@ -34,11 +30,13 @@ bool	exit_check(t_token *token)
 		ft_putendl_fd("exit", 2);
 		if (!token->next)
 			exit(WEXITSTATUS(g_status));
-		if (!ft_str_isdigit(token->next->str))
+		else if (!ft_str_isdigit(token->next->str))
 		{
 			ft_putendl_fd("minishell: exit: h: numeric argument required", 2);
 			g_status = 258 * 2;
 		}
+		else
+			g_status = 258 * ft_atoi(token->next->str);
 		exit(WEXITSTATUS(g_status));
 	}
 }

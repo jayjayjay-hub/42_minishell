@@ -30,8 +30,9 @@ SRC_FILES = main.c token_list.c\
 			expansion.c\
 			utils.c\
 			syntax.c\
-			exit.c\
 			env_list.c env.c\
+			builtin.c\
+			builtin_exit.c\
 			builtin_cd.c\
 			builtin_echo.c\
 			builtin_pwd.c\
