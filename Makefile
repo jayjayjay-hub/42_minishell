@@ -24,12 +24,18 @@ SRC_FILES = main.c token_list.c\
 			tokenizer.c signal.c\
 			error.c redirect.c\
 			parser.c parse_tree_list.c\
-			ats_list.c cd.c\
+			ats_list.c\
 			child.c pipe.c\
 			variable_list.c variable.c\
 			expansion.c\
 			utils.c\
-			syntax.c
+			syntax.c\
+			env_list.c env.c\
+			builtin_cd.c\
+			builtin_echo.c\
+			builtin_pwd.c\
+			builtin_export.c\
+			builtin_env.c
 
 OJB_FILES = $(SRC_FILES:%.c=%.o)
 

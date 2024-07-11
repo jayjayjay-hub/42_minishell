@@ -38,6 +38,43 @@ void	make_child(t_ats *ats, char **envp, t_pipe_fd *fd_pipe, t_pid_info pid_info
 				continue;
 			}
 		}
+		if (ats->token->type == WORD && ft_strlen(ats->token->str) == 2 && !ft_strncmp(ats->token->str, "cd", 3))
+		{
+			if(!builtin_cd(ats->token))
+				return ;
+			ats = ats->next;
+			continue;
+		}
+		if (ats->token->type == WORD && ft_strlen(ats->token->str) == 4 && !ft_strncmp(ats->token->str, "echo", 5))
+		{
+			if(!builtin_echo(ats->token))
+				return ;
+			ats = ats->next;
+			continue;
+		}
+		if (ats->token->type == WORD && ft_strlen(ats->token->str) == 3 && !ft_strncmp(ats->token->str, "pwd", 4))
+		{
+			if(!builtin_pwd(ats->token))
+				return ;
+			ats = ats->next;
+			continue;
+		}
+		// export
+		if (ats->token->type == WORD && ft_strlen(ats->token->str) == 6 && !ft_strncmp(ats->token->str, "export", 7))
+		{
+			if(!builtin_export(ats->token))
+				return ;
+			ats = ats->next;
+			continue;
+		}
+		// env
+		if (ats->token->type == WORD && ft_strlen(ats->token->str) == 3 && !ft_strncmp(ats->token->str, "env", 4))
+		{
+			if(!builtin_env(ats->token))
+				return ;
+			ats = ats->next;
+			continue;
+		}
 		pid_info.pid[pid_info.pipe_i] = child(ats->token, envp, fd_pipe, pid_info.pipe_i);
 		pid_info.pipe_i++;
 		ats = ats->next;
@@ -61,7 +98,7 @@ void	run_cmd(char *line, char **envp)
 	token = tokenize(line);
 	if (!syntax_check(token))
 		return ;
-	expantion(token);
+	expansion(token);
 	redirect_open(token);
 	ats = parser(token);
 	make_child(ats, envp, fd_pipe, pid_info);
@@ -70,6 +107,7 @@ void	run_cmd(char *line, char **envp)
 }
 
 t_variable *variable = NULL;
+t_env		*g_env = NULL;
 int g_status = 0;
 int	main(int argc, char **argv, char **envp)
 {
@@ -79,6 +117,8 @@ int	main(int argc, char **argv, char **envp)
 	errno = 0; // エラー番号をリセット
 	register_signal();
 	rl_outstream = stderr;
+	init_env(envp);
+	// print_env();
 	while (1)
 	{
 		line = readline("minishell$ ");

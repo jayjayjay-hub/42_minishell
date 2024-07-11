@@ -39,6 +39,15 @@ typedef struct sigaction	t_sig;
 
 extern int	g_status;
 
+typedef struct s_env
+{
+	char	*key;
+	char	*value;
+	struct s_env	*next;
+}	t_env;
+
+extern t_env	*g_env;
+
 typedef enum e_token_type
 {
 	WORD,
@@ -151,7 +160,7 @@ void add_back_parse_tree(t_parse_tree **list, t_parse_tree *new);
 void			free_parse_tree(t_parse_tree *parse_tree);
 
 // expansion.c
-void expantion(t_token *token);
+void	expansion(t_token *token);
 
 // variable.c
 bool	is_alnum_under(char c);
@@ -172,9 +181,39 @@ int		is_quote(char c);
 int		is_metachar(char c);
 int		is_single_quote(char c);
 int		is_double_quote(char c);
+int strlen_double_ptr(char **str);
 
 // syntax.c
 bool	syntax_check(t_token *token);
 
+// env_list.c
+void add_back_env(t_env *new);;
+char *get_env_key_from_envp(char *env_line);
+char *get_env_value_from_envp(char *env_line);
+t_env *new_env(char *env_line);
+void free_env(void);
+void	print_export_env(void);
+void	print_env(void);
+int	env_list_size(void);
+char *get_env_value(char *key);
+void export_env(char *key, char *value);
+
+// env.c
+void init_env(char **envp);
+
+// builtin_cd.c
+bool builtin_cd(t_token *token);
+
+// builtin_echo.c
+bool builtin_echo(t_token *token);
+
+// builtin_pwd.c
+bool builtin_pwd(t_token *token);
+
+// builtin_export.c
+bool builtin_export(t_token *token);
+
+// builtin_env.c
+bool builtin_env(t_token *token);
 
 #endif
