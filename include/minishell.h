@@ -202,7 +202,7 @@ void export_env(char *key, char *value);
 void init_env(char **envp);
 
 // builtin_control.c
-bool builtin_control(t_ats *ats);
+bool builtin_control(t_token *token);
 
 // builtin_cd.c
 bool builtin_cd(t_token *token);

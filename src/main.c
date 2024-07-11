@@ -100,8 +100,15 @@ void	run_cmd(char *line, char **envp)
 	expansion(token);
 	redirect_open(token);
 	ats = parser(token);
-	if (builtin_control(ats))
-		return ;
+	if (ats_list_size(ats) == 1)
+	{
+		if (builtin_control(ats->token))
+		{
+			close_redirect(token);
+			free_ats(ats);
+			return ;
+		}
+	}
 	make_child(ats, envp, fd_pipe, pid_info);
 	close_redirect(token);
 	free_ats(ats);

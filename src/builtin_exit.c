@@ -20,9 +20,7 @@ bool	builtin_exit(t_token *token)
 	if (token_list_size(token) > 2)
 	{
 		ft_putendl_fd("minishell: exit: too many arguments", 2);
-		g_status = 1;
-		free_token(token);
-		token = NULL;
+		g_status = 258;
 		return (true);
 	}
 	else
@@ -32,7 +30,9 @@ bool	builtin_exit(t_token *token)
 			exit(WEXITSTATUS(g_status));
 		else if (!ft_str_isdigit(token->next->str))
 		{
-			ft_putendl_fd("minishell: exit: h: numeric argument required", 2);
+			ft_putstr_fd("minishell: exit: ", 2);
+			ft_putstr_fd(token->next->str, 2);
+			ft_putendl_fd(": numeric argument required", 2);
 			g_status = 258 * 2;
 		}
 		else

@@ -82,3 +82,9 @@ pwd
 export
 export MY_ENV=123 | export | grep -wc
 export MY_ENV=123 | export | grep MY_ENV
+
+# exit
+exit 42
+exit 2 2
+exit hello
+exit 5h
