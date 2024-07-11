@@ -9,6 +9,7 @@ bool	builtin_pwd(t_token *token)
 
 	// debug
 	// printf("builtin_pwd\n");
+	// todo pwd > outに対応できるようにしといたから下のif文調整しといて
 	if (token->next)
 	{
 		write(2, "pwd: too many arguments\n", 25);
