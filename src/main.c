@@ -96,7 +96,7 @@ void	run_cmd(char *line, char **envp)
 
 	struct_init(ats, token, fd_pipe, &pid_info);
 	token = tokenize(line);
-	if (!syntax_check(token))
+	if (!syntax_check(token) || exit_check(token))
 		return ;
 	expansion(token);
 	redirect_open(token);
@@ -122,9 +122,9 @@ int	main(int argc, char **argv, char **envp)
 	while (1)
 	{
 		line = readline("minishell$ ");
-		if (line == NULL || (!ft_strncmp(line, "exit", 4) && ft_strlen(line) == 4))
+		if (!line)
 			handle_eof(line);
-		if (*line)
+		else
 		{
 			add_history(line);
 			run_cmd(line, envp);

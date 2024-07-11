@@ -216,4 +216,7 @@ bool builtin_export(t_token *token);
 // builtin_env.c
 bool builtin_env(t_token *token);
 
+// exit.c
+bool	exit_check(t_token *token);
+
 #endif
