@@ -34,46 +34,14 @@ void	make_child(t_ats *ats, char **envp, t_pipe_fd *fd_pipe, t_pid_info pid_info
 			{
 				// variable_list_print();
 				ats = ats->next;
-				continue;
+				continue ;
 			}
 		}
-		// if (ats->token->type == WORD && ft_strlen(ats->token->str) == 2 && !ft_strncmp(ats->token->str, "cd", 3))
-		// {
-		// 	if(!builtin_cd(ats->token))
-		// 		return ;
-		// 	ats = ats->next;
-		// 	continue;
-		// }
-		// if (ats->token->type == WORD && ft_strlen(ats->token->str) == 4 && !ft_strncmp(ats->token->str, "echo", 5))
-		// {
-		// 	if(!builtin_echo(ats->token))
-		// 		return ;
-		// 	ats = ats->next;
-		// 	continue;
-		// }
-		// if (ats->token->type == WORD && ft_strlen(ats->token->str) == 3 && !ft_strncmp(ats->token->str, "pwd", 4))
-		// {
-		// 	if(!builtin_pwd(ats->token))
-		// 		return ;
-		// 	ats = ats->next;
-		// 	continue;
-		// }
-		// // export
-		// if (ats->token->type == WORD && ft_strlen(ats->token->str) == 6 && !ft_strncmp(ats->token->str, "export", 7))
-		// {
-		// 	if(!builtin_export(ats->token))
-		// 		return ;
-		// 	ats = ats->next;
-		// 	continue;
-		// }
-		// // env
-		// if (ats->token->type == WORD && ft_strlen(ats->token->str) == 3 && !ft_strncmp(ats->token->str, "env", 4))
-		// {
-		// 	if(!builtin_env(ats->token))
-		// 		return ;
-		// 	ats = ats->next;
-		// 	continue;
-		// }
+		if (builtin_control(ats->token))
+		{
+			ats = ats->next;
+			continue ;
+		}
 		pid_info.pid[pid_info.pipe_i] = child(ats->token, envp, fd_pipe, pid_info.pipe_i);
 		pid_info.pipe_i++;
 		ats = ats->next;
@@ -100,15 +68,6 @@ void	run_cmd(char *line, char **envp)
 	expansion(token);
 	redirect_open(token);
 	ats = parser(token);
-	if (ats_list_size(ats) == 1)
-	{
-		if (builtin_control(ats->token))
-		{
-			close_redirect(token);
-			free_ats(ats);
-			return ;
-		}
-	}
 	make_child(ats, envp, fd_pipe, pid_info);
 	close_redirect(token);
 	free_ats(ats);

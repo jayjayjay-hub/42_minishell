@@ -12,6 +12,7 @@ void	dp_free(char **arg)
 	free(arg);
 }
 
+// debug用。二次元配列を出力する。
 void	dp_print(char **arg)
 {
 	int	i;
@@ -112,7 +113,7 @@ pid_t	child(t_token *token, char **envp, t_pipe_fd *fd_pipe, int pipe_i)
 
 	pid = fork();
 	if (pid == -1)
-		ft_error(NULL, NULL, "fork failed", 1);
+		ft_error("minishell", NULL, "fork failed", 1);
 	if (pid == 0)
 	{
 		if (fd_pipe->pipe_size != 0)
