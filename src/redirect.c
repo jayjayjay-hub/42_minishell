@@ -89,8 +89,16 @@ void	close_redirect(t_token *token)
 	tmp = token;
 	while (tmp)
 	{
-		if (tmp->type >= REDIRECT_IN && tmp->type <= REDIRECT_APPEND)
+		if (tmp->type == REDIRECT_IN || tmp->type == REDIRECT_APPEND)
+		{
+			dup2(tmp->fd, STDIN_FILENO);
 			close(tmp->fd);
+		}
+		else if (tmp->type == REDIRECT_OUT || tmp->type == REDIRECT_HERE_DOC)
+		{
+			dup2(tmp->fd, STDOUT_FILENO);
+			close(tmp->fd);
+		}
 		tmp = tmp->next;
 	}
 }
