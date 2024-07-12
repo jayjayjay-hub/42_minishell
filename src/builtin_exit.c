@@ -15,8 +15,6 @@ bool	ft_str_isdigit(char *str)
 	return (true);
 }
 
-// bool	
-
 bool	builtin_exit(t_token *token)
 {
 	if (token_list_size(token) > 2)
