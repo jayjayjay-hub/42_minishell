@@ -132,7 +132,7 @@ t_token	*tokenize(char *line)
 		if (!token_len)
 		{
 			free_token(token);
-			g_status = 258;
+			g_status = 258 * 1;
 			return (NULL);
 		}
 		line += token_len;
