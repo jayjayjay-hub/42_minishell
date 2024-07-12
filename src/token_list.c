@@ -34,6 +34,7 @@ void	add_back(t_token **list, t_token *new)
 		while (tmp->next)
 			tmp = tmp->next;
 		tmp->next = new;
+		new->prev = tmp;
 	}
 }
 
@@ -55,6 +56,7 @@ t_token	*new_token(char *str, t_token_type type, int fd)
 	token->type = type;
 	token->fd = fd;
 	token->next = NULL;
+	token->prev = NULL;
 	return token;
 }
 
@@ -96,6 +98,7 @@ void	print_token(t_token *token)
 	while (tmp)
 	{
 		printf("str: %s, type: %d, fd: %d\n", tmp->str, tmp->type, tmp->fd);
+		printf("prev: %p, current: %p, next: %p\n", tmp->prev, tmp ,tmp->next);
 		tmp = tmp->next;
 	}
 }

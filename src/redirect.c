@@ -82,22 +82,29 @@ void	redirect_open(t_token *token)
 	}
 }
 
+
+// 標準入力も閉じてる作り途中
 void	close_redirect(t_token *token)
 {
 	t_token *tmp;
 
 	tmp = token;
+
 	while (tmp)
 	{
 		if (tmp->type == REDIRECT_IN || tmp->type == REDIRECT_APPEND)
 		{
-			dup2(tmp->fd, STDIN_FILENO);
-			close(tmp->fd);
+			if (dup2(tmp->fd, STDIN_FILENO) == -1)
+				ft_error("minishell", "dup2", "dup2 failed", 1);
+			if (close(tmp->fd) == -1)
+				ft_error("minishell", "close", "close failed", 1);
 		}
 		else if (tmp->type == REDIRECT_OUT || tmp->type == REDIRECT_HERE_DOC)
 		{
-			dup2(tmp->fd, STDOUT_FILENO);
-			close(tmp->fd);
+			if (dup2(tmp->fd, STDOUT_FILENO))
+				ft_error("minishell", "dup2", "dup2 failed", 1);
+			if (close(tmp->fd) == -1)
+				ft_error("minishell", "close", "close failed", 1);
 		}
 		tmp = tmp->next;
 	}

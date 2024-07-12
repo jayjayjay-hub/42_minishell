@@ -69,7 +69,7 @@ void	run_cmd(char *line, char **envp)
 	redirect_open(token);
 	ats = parser(token);
 	make_child(ats, envp, fd_pipe, pid_info);
-	close_redirect(token);
+	// close_redirect(token);　作り途中
 	free_ats(ats);
 }
 
