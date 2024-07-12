@@ -83,7 +83,7 @@ void	redirect_open(t_token *token)
 }
 
 
-// 標準入力も閉じてる作り途中
+// backup_fdがないと完成しない
 void	close_redirect(t_token *token)
 {
 	t_token *tmp;

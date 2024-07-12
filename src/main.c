@@ -49,7 +49,7 @@ void	make_child(t_ats *ats, char **envp, t_pipe_fd *fd_pipe, t_pid_info pid_info
 	close_pipe(fd_pipe);
 	while (pid_info.pipe_i--)
 		waitpid(pid_info.pid[i++], &g_status, 0);
-	if (!fd_pipe->pipe_size)
+	// if (!fd_pipe->pipe_size)
 		// close_redirect(ats->token);
 	free(fd_pipe->fd);
 	free(fd_pipe);
