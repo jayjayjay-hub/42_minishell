@@ -24,9 +24,8 @@ bool	builtin_check(t_token *token)
 	return (false);
 }
 
-bool	builtin_control(t_token *token)
+bool	builtin_control(t_token *token, int pipe_check)
 {
-	bool	flag;
 	t_token	*tmp;
 
 	if (!builtin_check(token))
@@ -43,7 +42,11 @@ bool	builtin_control(t_token *token)
 		if (ft_strlen(token->str) == 4 && !ft_strncmp(token->str, "exit", 4))
 			return(builtin_exit(token));
 		else if (ft_strlen(token->str) == 2 && !ft_strncmp(token->str, "cd", 3))
+		{
+			if (pipe_check)
+				return (true);
 			return(builtin_cd(token));
+		}
 		else if (ft_strlen(token->str) == 4 && !ft_strncmp(token->str, "echo", 5))
 			return(builtin_echo(token));
 		else if (ft_strlen(token->str) == 3 && !ft_strncmp(token->str, "pwd", 4))
@@ -56,7 +59,7 @@ bool	builtin_control(t_token *token)
 			return(builtin_env(token));
 		token = token->next;
 	}
-	return (flag);
+	return (true);
 }
 
 		// if (ats->token->type == WORD && ft_strlen(ats->token->str) == 2 && !ft_strncmp(ats->token->str, "cd", 3))

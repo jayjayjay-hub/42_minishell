@@ -19,7 +19,12 @@ void	dp_print(char **arg)
 
 	i = -1;
 	while (arg[++i])
+	{
+		ft_putstr_fd("arg[", 2);
+		ft_putnbr_fd(i, 2);
+		ft_putstr_fd("]: ", 2);
 		ft_putendl_fd(arg[i], 2);
+	}
 }
 
 static void	sub_dup2(int first, int second)
@@ -78,6 +83,8 @@ void	do_execve(char **cmd, char **envp)
 		path = search_path(cmd[0], envp);
 	if (!path)
 		ft_error("minishell", cmd[0], "command not found", CMD_NOT_FOUND);
+	// ft_putendl_fd(path, 2);
+	// dp_print(cmd);
 	if (execve(path, cmd, envp) == -1)
 		ft_error(NULL, NULL, "execve failed", EXIT_FAILURE);
 }
