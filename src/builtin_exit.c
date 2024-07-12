@@ -21,7 +21,7 @@ bool	builtin_exit(t_token *token)
 	{
 		ft_putendl_fd("exit", 2);
 		ft_putendl_fd("minishell: exit: too many arguments", 2);
-		g_status = 258;
+		g_status = 256;
 		return (true);
 	}
 	else
@@ -34,10 +34,10 @@ bool	builtin_exit(t_token *token)
 			ft_putstr_fd("minishell: exit: ", 2);
 			ft_putstr_fd(token->next->str, 2);
 			ft_putendl_fd(": numeric argument required", 2);
-			g_status = 258 * 2;
+			g_status = 256 * 2;
 		}
 		else
-			g_status = 258 * ft_atoi(token->next->str);
+			g_status = 256 * ft_atoi(token->next->str);
 		exit(WEXITSTATUS(g_status));
 	}
 }

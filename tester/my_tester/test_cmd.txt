@@ -85,6 +85,11 @@ export MY_ENV=123 | export | grep MY_ENV
 
 # exit
 exit 42
+exit 2147483647
+exit 2147483648
+exit -4
+exit -2147483648
+exit -2147483649
 exit 2 2
 exit hello
 exit 5h
