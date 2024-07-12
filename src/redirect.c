@@ -89,23 +89,24 @@ void	close_redirect(t_token *token)
 	t_token *tmp;
 
 	tmp = token;
-
+	while (tmp->next)
+		tmp = tmp->next;
 	while (tmp)
 	{
 		if (tmp->type == REDIRECT_IN || tmp->type == REDIRECT_APPEND)
 		{
 			if (dup2(tmp->fd, STDIN_FILENO) == -1)
 				ft_error("minishell", "dup2", "dup2 failed", 1);
-			if (close(tmp->fd) == -1)
-				ft_error("minishell", "close", "close failed", 1);
+			// if (close(tmp->fd) == -1)
+			// 	ft_error("minishell", "close", "close failed", 1);
 		}
 		else if (tmp->type == REDIRECT_OUT || tmp->type == REDIRECT_HERE_DOC)
 		{
-			if (dup2(tmp->fd, STDOUT_FILENO))
+			if (dup2(tmp->fd, STDOUT_FILENO) == -1)
 				ft_error("minishell", "dup2", "dup2 failed", 1);
-			if (close(tmp->fd) == -1)
-				ft_error("minishell", "close", "close failed", 1);
+			// if (close(tmp->fd) == -1)
+			// 	ft_error("minishell", "close", "close failed", 1);
 		}
-		tmp = tmp->next;
+		tmp = tmp->prev;
 	}
 }
