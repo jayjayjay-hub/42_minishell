@@ -93,3 +93,4 @@ exit -2147483649
 exit 2 2
 exit hello
 exit 5h
+exit *7
