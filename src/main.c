@@ -37,7 +37,7 @@ void	make_child(t_ats *ats, char **envp, t_pipe_fd *fd_pipe, t_pid_info pid_info
 				continue ;
 			}
 		}
-		if (builtin_control(ats->token, fd_pipe->pipe_size))
+		if (!fd_pipe->pipe_size && builtin_control(ats->token))
 		{
 			ats = ats->next;
 			continue ;

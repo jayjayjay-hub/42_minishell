@@ -24,11 +24,11 @@ bool	builtin_check(t_token *token)
 	return (false);
 }
 
-bool	builtin_control(t_token *token, int pipe_check)
+bool	builtin_control(t_token *token)
 {
 	t_token	*tmp;
 
-	if (!builtin_check(token) || pipe_check)
+	if (!builtin_check(token))
 		return (false);
 	tmp = token;
 	while (tmp)
