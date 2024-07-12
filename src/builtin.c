@@ -28,7 +28,7 @@ bool	builtin_control(t_token *token, int pipe_check)
 {
 	t_token	*tmp;
 
-	if (!builtin_check(token))
+	if (!builtin_check(token) || pipe_check)
 		return (false);
 	tmp = token;
 	while (tmp)
@@ -42,11 +42,7 @@ bool	builtin_control(t_token *token, int pipe_check)
 		if (ft_strlen(token->str) == 4 && !ft_strncmp(token->str, "exit", 4))
 			return(builtin_exit(token));
 		else if (ft_strlen(token->str) == 2 && !ft_strncmp(token->str, "cd", 3))
-		{
-			if (pipe_check)
-				return (true);
 			return(builtin_cd(token));
-		}
 		else if (ft_strlen(token->str) == 4 && !ft_strncmp(token->str, "echo", 5))
 			return(builtin_echo(token));
 		else if (ft_strlen(token->str) == 3 && !ft_strncmp(token->str, "pwd", 4))
