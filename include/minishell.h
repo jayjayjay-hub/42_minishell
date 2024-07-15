@@ -37,8 +37,6 @@
 // signal
 typedef struct sigaction	t_sig;
 
-extern int	g_status;
-
 typedef struct s_key_value
 {
 	char	*key;

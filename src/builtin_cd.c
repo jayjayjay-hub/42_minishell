@@ -12,7 +12,7 @@ bool	builtin_cd(t_token *token)
 		if (!path)
 		{
 			ft_putendl_fd("cd: HOME not set", 2);
-			g_status = 1;
+			errno = 256 * 1;
 			free(path);
 			return (false);
 		}
@@ -20,7 +20,7 @@ bool	builtin_cd(t_token *token)
 		{
 			ft_putstr_fd("cd: ", 2);
 			perror(path);
-			g_status = 1;
+			errno = 256 * 1;
 			return (false);
 		}
 		return (true);
@@ -29,7 +29,7 @@ bool	builtin_cd(t_token *token)
 	if (token->next)
 	{
 		ft_putendl_fd("minishell: cd: too many arguments", 2);
-		g_status = 256 * 1;
+		errno = 256 * 1;
 		return (false);
 	}
 	if (!ft_strncmp(token->str, "-", 1) && ft_strlen(token->str) == 1)
@@ -45,7 +45,7 @@ bool	builtin_cd(t_token *token)
 	{
 		ft_putstr_fd("cd: ", 2);
 		perror(path);
-		g_status = 256 * 1;
+		errno = 256 * 1;
 		free(path);
 		return (false);
 	}

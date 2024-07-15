@@ -6,7 +6,7 @@ void	handle_eof(char *line)
 	write(2, "exit\n", 5);
 	if (line)
 		free(line);
-	exit(WEXITSTATUS(g_status));
+	exit(WEXITSTATUS(errno));
 }
 
 void	struct_init(t_ats *ats, t_token *token, t_pipe_fd *fd_pipe, t_pid_info *pid_info)
@@ -48,7 +48,7 @@ void	make_child(t_ats *ats, char **envp, t_pipe_fd *fd_pipe, t_pid_info pid_info
 	}
 	close_pipe(fd_pipe);
 	while (pid_info.pipe_i--)
-		waitpid(pid_info.pid[i++], &g_status, 0);
+		waitpid(pid_info.pid[i++], &errno, 0);
 	// if (!fd_pipe->pipe_size)
 		// close_redirect(ats->token);
 	free(fd_pipe->fd);
@@ -74,9 +74,7 @@ void	run_cmd(char *line, char **envp)
 	free_ats(ats);
 }
 
-t_variable *variable = NULL;
 t_env		*g_env = NULL;
-int g_status = 0;
 int	main(int argc, char **argv, char **envp)
 {
 	char		*line;
@@ -99,7 +97,7 @@ int	main(int argc, char **argv, char **envp)
 			free(line);
 		}
 	}
-	return (WEXITSTATUS(g_status));
+	return (WEXITSTATUS(errno));
 }
 
 // int main(int argc, char **argv, char **envp)

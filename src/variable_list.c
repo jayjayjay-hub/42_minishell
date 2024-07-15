@@ -79,7 +79,7 @@ char	*get_variable_value(char *key)
 	if (!key)
 		return (NULL);
 	if (key && strlen(key) == 1 && key[0] == '?')
-		return (ft_itoa(WEXITSTATUS(g_status)));
+		return (ft_itoa(WEXITSTATUS(errno)));
 	while (tmp)
 	{
 		if (!strcmp(tmp->key, key))

@@ -119,7 +119,7 @@ t_token	*tokenize(char *line)
 
 	if (!pipe_syntax_check(line))
 	{
-		g_status = 256 * 2;
+		errno = 256 * 2;
 		return (NULL);
 	}
 	token = NULL;
@@ -133,7 +133,7 @@ t_token	*tokenize(char *line)
 		if (!token_len)
 		{
 			free_token(token);
-			g_status = 256 * 1;
+			errno = 256 * 1;
 			return (NULL);
 		}
 		line += token_len;
