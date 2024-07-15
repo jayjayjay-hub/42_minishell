@@ -14,5 +14,5 @@ void	ft_error(char *cmd, char *target, char *main_message, int status)
 	}
 	ft_putendl_fd(main_message, 2);
 	if (status)
-		exit(WEXITSTATUS(status));
+		exit(status);
 }

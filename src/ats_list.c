@@ -22,6 +22,7 @@ void	add_back_ats(t_ats **list, t_ats *new)
 		while (tmp->next)
 			tmp = tmp->next;
 		tmp->next = new;
+		new->prev = tmp;
 	}
 }
 
@@ -37,13 +38,14 @@ t_ats	*new_ats(t_token *token)
 	// Pipeまでのトークンをats->tokenに追加
 	while (token && token->type != PIPE)
 	{
-		add_back(&tmp, new_token(token->str, token->type, token->fd, token->backup_fd));
+		add_back(&tmp, new_token(token->str, token->type, token->fd));
 		token = token->next;
 	}
 	if (tmp)
 	{
 		ats->token = tmp;
 		ats->next = NULL;
+		ats->prev = NULL;
 	}
 	else
 	{
@@ -88,15 +90,16 @@ void	print_ats(t_ats *ats)
 {
 	int debug = 0;
 
-	printf("<< ats list >>\n\n");
+	printf("<< ats list >>\n");
 	while (ats)
 	{
 		printf("<< ats[%d] >>\n", debug);
 		print_token(ats->token);
 		printf("\n");
+		printf("prev: %p, current: %p, next: %p\n", ats->prev, ats, ats->next);
 		ats = ats->next;
 		if (debug++ > 10)
 			break ;
 	}
-	printf("<< ats list end >>\n");
+	printf("<< ats list end >>\n\n");
 }

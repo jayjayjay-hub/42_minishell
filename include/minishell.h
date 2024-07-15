@@ -102,6 +102,7 @@ typedef struct s_ats
 {
 	t_token			*token;
 	struct s_ats	*next;
+	struct s_ats	*prev;
 }	t_ats;
 
 typedef struct pipe_fd
@@ -125,8 +126,7 @@ t_token *tokenize(char *line);
 // list.c
 t_token	*new_token(char *str,
 					t_token_type type,
-					int fd,
-					int backup_fd);
+					int fd);
 void		add_back(t_token **list, t_token *new);
 void		free_token(t_token *token);
 int			token_list_size(t_token *token);
@@ -214,6 +214,7 @@ t_env *new_key_value(t_key_value *key_value);
 void init_env(char **envp);
 
 // builtin_control.c
+bool	builtin_check(t_token *token);
 bool	builtin_control(t_token *token);
 
 // builtin_cd.c

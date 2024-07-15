@@ -7,15 +7,22 @@ void	redirect(t_token **token)
 		return ;
 	if ((*token)->type >= REDIRECT_IN && (*token)->type <= REDIRECT_APPEND)
 	{
-		if ((*token)->type == REDIRECT_IN)
-			dup2((*token)->fd, STDIN_FILENO);
-		else if ((*token)->type == REDIRECT_OUT)
-			dup2((*token)->fd, STDOUT_FILENO);
-		else if ((*token)->type == REDIRECT_APPEND)
-			dup2((*token)->fd, STDOUT_FILENO);
-		else if ((*token)->type == REDIRECT_HERE_DOC)
-			dup2((*token)->fd, STDIN_FILENO);
-		close((*token)->fd);
+		if ((*token)->type == REDIRECT_IN || (*token)->type == REDIRECT_HERE_DOC)
+		{
+			if (((*token)->backup_fd = dup(STDIN_FILENO)) == -1)
+				ft_error("minishell", NULL, "dup failed", 1);
+			if (dup2((*token)->fd, STDIN_FILENO) == -1)
+				ft_error("minishell", NULL, "dup2 failed", 1);
+		}
+		else
+		{
+			if (((*token)->backup_fd = dup(STDOUT_FILENO)) == -1)
+				ft_error("minishell", NULL, "dup failed", 1);
+			if (dup2((*token)->fd, STDOUT_FILENO) == -1)
+				ft_error("minishell", NULL, "dup2 failed", 1);
+		}
+		if (close((*token)->fd) == -1)
+			ft_error("minishell", NULL, "cfase failed", 1);
 		*token = (*token)->next;
 		*token = (*token)->next;
 	}
@@ -84,29 +91,29 @@ void	redirect_open(t_token *token)
 
 
 // backup_fdがないと完成しない
-// void	close_redirect(t_token *token)
-// {
-// 	t_token *tmp;
+void	close_redirect(t_token *token)
+{
+	t_token *tmp;
 
-// 	tmp = token;
-// 	while (tmp->next)
-// 		tmp = tmp->next;
-// 	while (tmp)
-// 	{
-// 		if (tmp->type == REDIRECT_IN || tmp->type == REDIRECT_APPEND)
-// 		{
-// 			if (dup2(tmp->backup_fd, STDIN_FILENO) == -1)
-// 				ft_error("minishell", "dup2", "dup2 failed", 1);
-// 			// if (close(tmp->fd) == -1)
-// 			// 	ft_error("minishell", "close", "close failed", 1);
-// 		}
-// 		else if (tmp->type == REDIRECT_OUT || tmp->type == REDIRECT_HERE_DOC)
-// 		{
-// 			if (dup2(tmp->backup_fd, STDOUT_FILENO) == -1)
-// 				ft_error("minishell", "dup2", "dup2 failed", 1);
-// 			// if (close(tmp->fd) == -1)
-// 			// 	ft_error("minishell", "close", "close failed", 1);
-// 		}
-// 		tmp = tmp->prev;
-// 	}
-// }
+	tmp = token;
+	while (token->next)
+		token = token->next;
+	while (token->prev)
+	{
+		if (token->type == REDIRECT_IN || token->type == REDIRECT_HERE_DOC)
+		{
+			if (dup2(token->backup_fd, STDIN_FILENO) == -1)
+				ft_error("minishell", "error", "dup2 failed", 1);
+			if (close(token->backup_fd) == -1)
+				ft_error("minishell", "close", "close failed", 1);
+		}
+		else if (token->type == REDIRECT_OUT || token->type == REDIRECT_APPEND)
+		{
+			if (dup2(token->backup_fd, STDOUT_FILENO) == -1)
+				ft_error("minishell", "error", "dup2 failed", 1);
+			if (close(token->backup_fd) == -1)
+				ft_error("minishell", "close", "close failed", 1);
+		}
+		token = token->prev;
+	}
+}

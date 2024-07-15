@@ -22,6 +22,7 @@ void	struct_init(t_ats *ats, t_token *token, t_pipe_fd *fd_pipe, t_pid_info *pid
 void	make_child(t_ats *ats, char **envp, t_pipe_fd *fd_pipe, t_pid_info pid_info)
 {
 	int i;
+	t_ats *tmp = ats;
 
 	i = 0;
 	fd_pipe = create_pipe(ats);
@@ -49,8 +50,8 @@ void	make_child(t_ats *ats, char **envp, t_pipe_fd *fd_pipe, t_pid_info pid_info
 	close_pipe(fd_pipe);
 	while (pid_info.pipe_i--)
 		waitpid(pid_info.pid[i++], &g_status, 0);
-	// if (!fd_pipe->pipe_size)
-		// close_redirect(ats->token);
+	if (!fd_pipe->pipe_size && builtin_check(tmp->token))
+		close_redirect(tmp->token);
 	free(fd_pipe->fd);
 	free(fd_pipe);
 	free(pid_info.pid);
