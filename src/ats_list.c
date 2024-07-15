@@ -5,6 +5,7 @@ typedef struct s_ats
 {
 	t_token			*token;
 	struct s_ats	*next;
+	struct s_ats	*prev;
 }	t_ats;
 */
 
@@ -22,6 +23,7 @@ void	add_back_ats(t_ats **list, t_ats *new)
 		while (tmp->next)
 			tmp = tmp->next;
 		tmp->next = new;
+		new->prev = tmp;
 	}
 }
 
@@ -44,6 +46,7 @@ t_ats	*new_ats(t_token *token)
 	{
 		ats->token = tmp;
 		ats->next = NULL;
+		ats->prev = NULL;
 	}
 	else
 	{
@@ -92,6 +95,8 @@ void	print_ats(t_ats *ats)
 	while (ats)
 	{
 		printf("<< ats[%d] >>\n", debug);
+		printf("next ats: %p\n", ats->next);
+		printf("prev ats: %p\n", ats->prev);
 		print_token(ats->token);
 		printf("\n");
 		ats = ats->next;

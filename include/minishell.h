@@ -100,6 +100,7 @@ typedef struct s_ats
 {
 	t_token			*token;
 	struct s_ats	*next;
+	struct s_ats	*prev;
 }	t_ats;
 
 typedef struct pipe_fd
