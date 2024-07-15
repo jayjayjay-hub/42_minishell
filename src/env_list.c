@@ -77,6 +77,21 @@ t_env	*new_env(char *env_line)
 	return (env);
 }
 
+t_env	*new_key_value(t_key_value *key_value)
+{
+	t_env	*env;
+
+	if (!key_value)
+		return (NULL);
+	env = malloc(sizeof(t_env));
+	if (!env)
+		ft_error("malloc", "env", strerror(errno), EXIT_FAILURE);
+	env->key = key_value->key;
+	env->value = key_value->value;
+	env->next = NULL;
+	return (env);
+}
+
 void	export_env(char *key, char *value)
 {
 	t_env	*tmp;
@@ -86,7 +101,7 @@ void	export_env(char *key, char *value)
 	tmp = g_env;
 	if (!value)
 	{
-		value = get_variable_value(key);
+		value = get_env_value(key);
 		if (!value)
 			return ;
 	}
@@ -112,6 +127,8 @@ char	*get_env_value(char *key)
 
 	tmp = g_env;
 	key_len = ft_strlen(key);
+	if (key_len == 1 && key[0] == '?')
+		return (ft_itoa(error_status(PRINT_ERROR)));
 	while (tmp)
 	{
 		if (strlen(tmp->key) == key_len && !ft_strncmp(tmp->key, key, key_len))
@@ -119,6 +136,28 @@ char	*get_env_value(char *key)
 		tmp = tmp->next;
 	}
 	return (NULL);
+}
+
+bool	edit_env_value(char *key, char *value)
+{
+	t_env	*tmp;
+	char	*tmp_value;
+	int		key_len;
+
+	tmp = g_env;
+	key_len = ft_strlen(key);
+	while (tmp)
+	{
+		if (strlen(tmp->key) == key_len && !ft_strncmp(tmp->key, key, key_len))
+		{
+			tmp_value = tmp->value;
+			tmp->value = strdup(value);
+			free(tmp_value);
+			return (true);
+		}
+		tmp = tmp->next;
+	}
+	return (false);
 }
 
 void	free_env(void)

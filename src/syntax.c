@@ -22,7 +22,7 @@ bool	syntax_check(t_token *token)
 					ft_putstr_fd(tmp->str, 2);
 					ft_putendl_fd("'", 2);
 				}
-				g_status = 256 * 2;
+				error_status(256 * 2);
 				free_token(token);
 				return (false);
 			}

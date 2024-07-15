@@ -16,11 +16,14 @@ typedef struct s_token
 {
 	char			*str;
 	t_token_type	type;
+	int				fd;
+	int				backup_fd;
 	struct s_token	*next;
+	struct s_token	*prev;
 }	t_token;
 */
 
-void	add_back(t_token **list, t_token *new)
+void	token_add_back(t_token **list, t_token *new)
 {
 	t_token	*tmp;
 
@@ -38,7 +41,7 @@ void	add_back(t_token **list, t_token *new)
 	}
 }
 
-t_token	*new_token(char *str, t_token_type type, int fd)
+t_token	*new_token(char *str, t_token_type type, int fd, int backup_fd)
 {
 	t_token *token;
 
@@ -55,6 +58,7 @@ t_token	*new_token(char *str, t_token_type type, int fd)
 		token->str = str;
 	token->type = type;
 	token->fd = fd;
+	token->backup_fd = backup_fd;
 	token->next = NULL;
 	token->prev = NULL;
 	return token;
@@ -74,26 +78,6 @@ int	token_list_size(t_token *token)
 	}
 	return size;
 }
-
-// void	free_token(t_token *token)
-// {
-// 	t_token *tmp;
-
-// 	if (!token)
-// 		return ;
-// 	tmp = token;
-// 	while (tmp)
-// 	{
-// 		free(tmp->str);
-// 		if (!tmp->next)
-// 		{
-// 			free(tmp);
-// 			break ;
-// 		}
-// 		free(tmp);
-// 		tmp = tmp->next;
-// 	}
-// }
 
 void	free_token(t_token *token)
 {
@@ -120,7 +104,7 @@ void	print_token(t_token *token)
 	tmp = token;
 	while (tmp)
 	{
-		printf("str: %s, type: %d, fd: %d\n", tmp->str, tmp->type, tmp->fd);
+		printf("str: %s, type: %d, fd: %d, backup_fd: %d\n", tmp->str, tmp->type, tmp->fd, tmp->backup_fd);
 		printf("prev: %p, current: %p, next: %p\n", tmp->prev, tmp ,tmp->next);
 		tmp = tmp->next;
 	}

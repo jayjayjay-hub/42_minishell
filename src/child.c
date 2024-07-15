@@ -134,7 +134,7 @@ pid_t	child(t_token *token, char **envp, t_pipe_fd *fd_pipe, int pipe_i)
 		}
 		close_pipe(fd_pipe);
 		if (builtin_control(token))
-			exit(WEXITSTATUS(g_status));
+			exit(WEXITSTATUS(errno));
 		cmd = get_cmd(token);
 		do_execve(cmd, envp);
 	}

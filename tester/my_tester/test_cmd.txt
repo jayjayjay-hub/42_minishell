@@ -46,7 +46,7 @@ ls -a | cat -en
 cat Makefile | grep -n all
 ls -|a
 
-# multi Pipe todoこのテストケースやると不正なポインタにアクセスするにだ
+# multi Pipe
 ls | cat -en | ls -a | cat -e | cat -n
 cat -en Makefile | grep 1 | sort -r
 # このテストケース長いから消した
@@ -71,6 +71,9 @@ ls -l | cat < Makefile | grep -n all >> test
 #<>|K<<
 
 # cd
+cd ~
+cd -
+cd ..
 cd .. | pwd
 cd | pwd
 cd | ls

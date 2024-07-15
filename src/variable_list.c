@@ -12,20 +12,20 @@ typedef struct s_variable
 t_variable	*variable;
 */
 
-void	variable_list_add_back(t_variable *new)
-{
-	t_variable	*tmp;
+// void	variable_list_add_back(t_variable *new)
+// {
+// 	t_variable	*tmp;
 
-	if (!variable)
-	{
-		variable = new;
-		return ;
-	}
-	tmp = variable;
-	while (tmp->next)
-		tmp = tmp->next;
-	tmp->next = new;
-}
+// 	if (!variable)
+// 	{
+// 		variable = new;
+// 		return ;
+// 	}
+// 	tmp = variable;
+// 	while (tmp->next)
+// 		tmp = tmp->next;
+// 	tmp->next = new;
+// }
 
 t_variable	*variable_list_new(char *key, char *value)
 {
@@ -40,19 +40,19 @@ t_variable	*variable_list_new(char *key, char *value)
 	return (new);
 }
 
-void	variable_list_free(void)
-{
-	t_variable	*tmp;
+// void	variable_list_free(void)
+// {
+// 	t_variable	*tmp;
 
-	while (variable)
-	{
-		tmp = variable->next;
-		free(variable->key);
-		free(variable->value);
-		free(variable);
-		variable = tmp;
-	}
-}
+// 	while (variable)
+// 	{
+// 		tmp = variable->next;
+// 		free(variable->key);
+// 		free(variable->value);
+// 		free(variable);
+// 		variable = tmp;
+// 	}
+// }
 
 char	*get_variable_key(char *str)
 {
@@ -71,50 +71,50 @@ char	*get_variable_key(char *str)
 	return (key);
 }
 
-char	*get_variable_value(char *key)
-{
-	t_variable	*tmp;
+// char	*get_variable_value(char *key)
+// {
+// 	t_variable	*tmp;
 
-	tmp = variable;
-	if (!key)
-		return (NULL);
-	if (key && strlen(key) == 1 && key[0] == '?')
-		return (ft_itoa(WEXITSTATUS(g_status)));
-	while (tmp)
-	{
-		if (!strcmp(tmp->key, key))
-			return (strdup(tmp->value));
-		tmp = tmp->next;
-	}
-	return (NULL);
-}
+// 	tmp = variable;
+// 	if (!key)
+// 		return (NULL);
+// 	if (key && strlen(key) == 1 && key[0] == '?')
+// 		return (ft_itoa(WEXITSTATUS(errno)));
+// 	while (tmp)
+// 	{
+// 		if (!strcmp(tmp->key, key))
+// 			return (strdup(tmp->value));
+// 		tmp = tmp->next;
+// 	}
+// 	return (NULL);
+// }
 
-bool	edit_variable(char *key, char *value)
-{
-	t_variable	*tmp;
+// bool	edit_variable(char *key, char *value)
+// {
+// 	t_variable	*tmp;
 
-	tmp = variable;
-	while (tmp)
-	{
-		if (!strcmp(tmp->key, key))
-		{
-			free(tmp->value);
-			tmp->value = strdup(value);
-			return (true);
-		}
-		tmp = tmp->next;
-	}
-	return (false);
-}
+// 	tmp = variable;
+// 	while (tmp)
+// 	{
+// 		if (!strcmp(tmp->key, key))
+// 		{
+// 			free(tmp->value);
+// 			tmp->value = strdup(value);
+// 			return (true);
+// 		}
+// 		tmp = tmp->next;
+// 	}
+// 	return (false);
+// }
 
-void	variable_list_print(void)
-{
-	t_variable	*tmp;
+// void	variable_list_print(void)
+// {
+// 	t_variable	*tmp;
 
-	tmp = variable;
-	while (tmp)
-	{
-		printf("key = %s, value = %s\n", tmp->key, tmp->value);
-		tmp = tmp->next;
-	}
-}
+// 	tmp = variable;
+// 	while (tmp)
+// 	{
+// 		printf("key = %s, value = %s\n", tmp->key, tmp->value);
+// 		tmp = tmp->next;
+// 	}
+// }
