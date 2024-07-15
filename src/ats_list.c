@@ -5,6 +5,7 @@ typedef struct s_ats
 {
 	t_token			*token;
 	struct s_ats	*next;
+	struct s_ats	*prev;
 }	t_ats;
 */
 
@@ -38,7 +39,7 @@ t_ats	*new_ats(t_token *token)
 	// Pipeまでのトークンをats->tokenに追加
 	while (token && token->type != PIPE)
 	{
-		add_back(&tmp, new_token(token->str, token->type, token->fd));
+		token_add_back(&tmp, new_token(token->str, token->type, token->fd));
 		token = token->next;
 	}
 	if (tmp)
@@ -94,6 +95,8 @@ void	print_ats(t_ats *ats)
 	while (ats)
 	{
 		printf("<< ats[%d] >>\n", debug);
+		printf("next ats: %p\n", ats->next);
+		printf("prev ats: %p\n", ats->prev);
 		print_token(ats->token);
 		printf("\n");
 		printf("prev: %p, current: %p, next: %p\n", ats->prev, ats, ats->next);

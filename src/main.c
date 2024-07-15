@@ -6,7 +6,7 @@ void	handle_eof(char *line)
 	write(2, "exit\n", 5);
 	if (line)
 		free(line);
-	exit(WEXITSTATUS(g_status));
+	exit(WEXITSTATUS(errno));
 }
 
 void	struct_init(t_ats *ats, t_token *token, t_pipe_fd *fd_pipe, t_pid_info *pid_info)
@@ -29,14 +29,11 @@ void	make_child(t_ats *ats, char **envp, t_pipe_fd *fd_pipe, t_pid_info pid_info
 	pid_info.pid = (pid_t *)malloc(sizeof(pid_t) * (fd_pipe->pipe_size + 1));
 	while (ats)
 	{
-		if (token_list_size(ats->token) == 1)
+		if (add_variable(ats->token))
 		{
-			if (add_variable(ats->token->str))
-			{
-				// variable_list_print();
-				ats = ats->next;
-				continue ;
-			}
+			// variable_list_print();
+			ats = ats->next;
+			continue ;
 		}
 		if (!fd_pipe->pipe_size && builtin_control(ats->token))
 		{
@@ -49,7 +46,10 @@ void	make_child(t_ats *ats, char **envp, t_pipe_fd *fd_pipe, t_pid_info pid_info
 	}
 	close_pipe(fd_pipe);
 	while (pid_info.pipe_i--)
-		waitpid(pid_info.pid[i++], &g_status, 0);
+	{
+		waitpid(pid_info.pid[i++], &errno, 0);
+		error_status(errno);
+	}
 	if (!fd_pipe->pipe_size && builtin_check(tmp->token))
 		close_redirect(tmp->token);
 	free(fd_pipe->fd);
@@ -71,23 +71,20 @@ void	run_cmd(char *line, char **envp)
 	expansion(token);
 	redirect_open(token);
 	ats = parser(token);
+	// print_ats(ats);
 	make_child(ats, envp, fd_pipe, pid_info);
 	free_ats(ats);
 }
 
-t_variable *variable = NULL;
 t_env		*g_env = NULL;
-int g_status = 0;
 int	main(int argc, char **argv, char **envp)
 {
 	char		*line;
 	t_pid_info	pid_info;
 
-	errno = 0; // エラー番号をリセット
 	register_signal();
 	rl_outstream = stderr;
 	init_env(envp);
-	// print_env();
 	while (1)
 	{
 		line = readline("minishell$ ");
@@ -100,7 +97,17 @@ int	main(int argc, char **argv, char **envp)
 			free(line);
 		}
 	}
-	return (WEXITSTATUS(g_status));
+	return (WEXITSTATUS(errno));
+}
+
+int	error_status(int error_code)
+{
+	static int status;
+
+	if (error_code < 0)
+		return (WEXITSTATUS(status));
+	status = error_code;
+	return (WEXITSTATUS(status));
 }
 
 // int main(int argc, char **argv, char **envp)

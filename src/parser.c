@@ -34,7 +34,6 @@ t_ats	*parser(t_token *token)
 		while (token && token->type != PIPE)
 			token = token->next;
 	}
-	// debug
 	// print_ats(ats);
 	return (ats);
 }

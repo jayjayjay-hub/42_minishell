@@ -15,7 +15,7 @@ bool	builtin_pwd(t_token *token)
 	if (!buf)
 	{
 		perror("pwd");
-		g_status = 1;
+		error_status(256 * 1);
 		return (false);
 	}
 	ft_putendl_fd(buf, 1);

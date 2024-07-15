@@ -97,7 +97,7 @@ int	add_token(t_token **token, char *line, t_token_type type)
 		return (0);
 	new = new_token(token_str, type, 0);
 	// todo ここbackup_fdの値は初期値０でいい？
-	add_back(token, new);
+	token_add_back(token, new);
 	return (strlen(token_str));
 }
 
@@ -106,6 +106,7 @@ bool	pipe_syntax_check(char *line)
 	if (line[0] == '|')
 	{
 		ft_putendl_fd("minishell: syntax error near unexpected token `|'", 2);
+		error_status(256 * 1);
 		return (false);
 	}
 	return (true);
@@ -119,7 +120,7 @@ t_token	*tokenize(char *line)
 
 	if (!pipe_syntax_check(line))
 	{
-		g_status = 256 * 2;
+		error_status(256 * 1);
 		return (NULL);
 	}
 	token = NULL;
@@ -133,7 +134,7 @@ t_token	*tokenize(char *line)
 		if (!token_len)
 		{
 			free_token(token);
-			g_status = 256 * 1;
+			error_status(256 * 1);
 			return (NULL);
 		}
 		line += token_len;

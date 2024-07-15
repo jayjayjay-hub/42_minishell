@@ -29,15 +29,15 @@
 # include "get_next_line.h"
 
 // exit status
-# define CMD_NOT_FOUND	127
+# define CMD_NOT_FOUND	256 * 127
+
+# define PRINT_ERROR	-1
 
 // here_doc
 # define HEREDOC "/tmp/.heredoc_tmp"
 
 // signal
 typedef struct sigaction	t_sig;
-
-extern int	g_status;
 
 typedef struct s_key_value
 {
@@ -89,8 +89,6 @@ typedef struct s_variable
 	struct s_variable	*next;
 }	t_variable;
 
-extern t_variable	*variable;
-
 typedef struct s_parse_tree
 {
 	t_token			*token;
@@ -119,15 +117,14 @@ typedef struct pid_info
 
 
 // main.c
+int error_status(int error_code);
 
 // tokenizer.c
 t_token *tokenize(char *line);
 
 // list.c
-t_token	*new_token(char *str,
-					t_token_type type,
-					int fd);
-void		add_back(t_token **list, t_token *new);
+t_token	*new_token(char *str, t_token_type type, int fd);
+void		token_add_back(t_token **list, t_token *new);
 void		free_token(t_token *token);
 int			token_list_size(t_token *token);
 void		print_token(t_token *token);
@@ -176,16 +173,13 @@ void	expansion(t_token *token);
 // variable.c
 bool	is_alnum_under(char c);
 bool is_al_under(char c);
-bool add_variable(char *str);
+bool add_variable(t_token *token);
 
 // variable_list.c
-void variable_list_print(void);
-void variable_list_add_back(t_variable *new);
+// void variable_list_add_back(t_variable *new);
 t_variable	*variable_list_new(char *key, char *value);
-void variable_list_free(void);
-char	*get_variable_value(char *key);
+// void variable_list_free(void);
 char *get_variable_key(char *str);
-bool edit_variable(char *key, char *value);
 
 // utils.c
 int		is_quote(char c);
@@ -207,6 +201,7 @@ void	print_export_env(void);
 void	print_env(void);
 int	env_list_size(void);
 char *get_env_value(char *key);
+bool edit_env_value(char *key, char *value);
 void export_env(char *key, char *value);
 t_env *new_key_value(t_key_value *key_value);
 
