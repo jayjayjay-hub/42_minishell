@@ -1,10 +1,12 @@
 
 #include "minishell.h"
 
-void	redirect(t_token **token)
+bool	redirect(t_token **token)
 {
 	if (!*token)
-		return ;
+		return (true);
+	if ((*token)->fd < 0)
+		return (false);
 	if ((*token)->type >= REDIRECT_IN && (*token)->type <= REDIRECT_APPEND)
 	{
 		if ((*token)->type == REDIRECT_IN || (*token)->type == REDIRECT_HERE_DOC)
@@ -26,6 +28,7 @@ void	redirect(t_token **token)
 		*token = (*token)->next;
 		*token = (*token)->next;
 	}
+	return (true);
 }
 
 void	read_heredoc(char *eof, int tmp_fd)
@@ -61,12 +64,12 @@ int	open_heredoc(char *eof)
 
 	tmp_fd = open(HEREDOC, O_WRONLY | O_CREAT | O_TRUNC, S_IREAD | S_IWRITE);
 	if (tmp_fd == -1)
-		ft_error("minishell", "here_doc", "No such file or directory", 1);
+		ft_error("minishell", "here_doc", "No such file or directory", 0);
 	read_heredoc(eof, tmp_fd);
 	close(tmp_fd);
 	fd = open(HEREDOC, O_RDONLY);
 	if (fd == -1)
-		ft_error("minishell", "here_doc", "No such file or directory", 1);
+		ft_error("minishell", "here_doc", "No such file or directory", 0);
 	unlink(HEREDOC);
 	return (fd);
 }
@@ -84,7 +87,7 @@ void	redirect_open(t_token *token)
 		else if (token->type == REDIRECT_HERE_DOC)
 			token->fd = open_heredoc(token->next->str);
 		if (token->fd == -1)
-			ft_error("minishell", token->next->str, "No such file or directory", 1);
+			ft_error("minishell", token->next->str, "No such file or directory", 0);
 		token = token->next;
 	}
 }

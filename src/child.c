@@ -83,8 +83,6 @@ void	do_execve(char **cmd, char **envp)
 		path = search_path(cmd[0], envp);
 	if (!path)
 		ft_error("minishell", cmd[0], "command not found", CMD_NOT_FOUND);
-	// ft_putendl_fd(path, 2);
-	// dp_print(cmd);
 	if (execve(path, cmd, envp) == -1)
 		ft_error(NULL, NULL, "execve failed", EXIT_FAILURE);
 }
@@ -108,7 +106,8 @@ char	**get_cmd(t_token *token)
 			token = token->next;
 			i++;
 		}
-		redirect(&token);
+		if (!redirect(&token))
+			exit(error_status(256 * 1));
 	}
 	return (cmd);
 }
@@ -134,7 +133,7 @@ pid_t	child(t_token *token, char **envp, t_pipe_fd *fd_pipe, int pipe_i)
 		}
 		close_pipe(fd_pipe);
 		if (builtin_control(token))
-			exit(WEXITSTATUS(errno));
+			exit(WEXITSTATUS(PRINT_ERROR));
 		cmd = get_cmd(token);
 		do_execve(cmd, envp);
 	}

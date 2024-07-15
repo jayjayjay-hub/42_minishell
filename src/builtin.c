@@ -35,7 +35,8 @@ bool	builtin_control(t_token *token)
 	{
 		while (tmp && tmp->type == WORD)
 			tmp = tmp->next;
-		redirect(&tmp);
+		if (!redirect(&tmp))
+			return (true);
 	}
 	while (token)
 	{
