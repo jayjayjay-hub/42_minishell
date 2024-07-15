@@ -19,6 +19,7 @@ typedef struct s_token
 	int				fd;
 	int				backup_fd;
 	struct s_token	*next;
+	struct s_token	*prev;
 }	t_token;
 */
 
@@ -123,7 +124,7 @@ void	print_token(t_token *token)
 	tmp = token;
 	while (tmp)
 	{
-		printf("str: %s, type: %d, fd: %d\n", tmp->str, tmp->type, tmp->fd);
+		printf("str: %s, type: %d, fd: %d, backup_fd: %d\n", tmp->str, tmp->type, tmp->fd, tmp->backup_fd);
 		printf("prev: %p, current: %p, next: %p\n", tmp->prev, tmp ,tmp->next);
 		tmp = tmp->next;
 	}
