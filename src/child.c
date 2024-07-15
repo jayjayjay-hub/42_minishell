@@ -113,7 +113,7 @@ char	**get_cmd(t_token *token)
 	return (cmd);
 }
 
-pid_t	child(t_token *token, char **envp, t_pipe_fd *fd_pipe, int pipe_i)
+pid_t	child(t_token *token, char **envp, t_pipe_fd *fd_pipe, int pipe_i, t_env *env)
 {
 	pid_t	pid;
 	char	**cmd;
@@ -133,7 +133,7 @@ pid_t	child(t_token *token, char **envp, t_pipe_fd *fd_pipe, int pipe_i)
 				sub_dup2(fd_pipe->fd[2 * pipe_i - 2], fd_pipe->fd[2 * pipe_i + 1]);
 		}
 		close_pipe(fd_pipe);
-		if (builtin_control(token))
+		if (builtin_control(token, &env))
 			exit(WEXITSTATUS(errno));
 		cmd = get_cmd(token);
 		do_execve(cmd, envp);

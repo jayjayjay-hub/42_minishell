@@ -52,8 +52,6 @@ typedef struct s_env
 	struct s_env	*next;
 }	t_env;
 
-extern t_env	*g_env;
-
 typedef enum e_token_type
 {
 	WORD,
@@ -152,11 +150,8 @@ int		ats_list_size(t_ats *ats);
 void	print_ats(t_ats *ats);
 t_ats	*new_ats(t_token *token);
 
-// cd.c
-void	cd(char **cmd);
-
 // child.c
-pid_t	child(t_token *token, char **envp, t_pipe_fd *fd_pipe, int pipe_i);
+pid_t	child(t_token *token, char **envp, t_pipe_fd *fd_pipe, int pipe_i, t_env *env);
 
 // pipe.c
 t_pipe_fd *create_pipe(t_ats *ats);
@@ -168,12 +163,12 @@ void add_back_parse_tree(t_parse_tree **list, t_parse_tree *new);
 void			free_parse_tree(t_parse_tree *parse_tree);
 
 // expansion.c
-void	expansion(t_token *token);
+void	expansion(t_token *token, t_env *env);
 
 // variable.c
 bool	is_alnum_under(char c);
 bool is_al_under(char c);
-bool add_variable(t_token *token);
+bool add_variable(t_token *token, t_env **env);
 
 // variable_list.c
 // void variable_list_add_back(t_variable *new);
@@ -192,28 +187,28 @@ int strlen_double_ptr(char **str);
 bool	syntax_check(t_token *token);
 
 // env_list.c
-void add_back_env(t_env *new);;
+void add_back_env(t_env *new, t_env **env);
 char *get_env_key_from_envp(char *env_line);
 char *get_env_value_from_envp(char *env_line);
 t_env *new_env(char *env_line);
-void free_env(void);
-void	print_export_env(void);
-void	print_env(void);
-int	env_list_size(void);
-char *get_env_value(char *key);
-bool edit_env_value(char *key, char *value);
-void export_env(char *key, char *value);
+void free_env(t_env *env);
+void	print_export_env(t_env *env);
+void	print_env(t_env *env);
+int	env_list_size(t_env *env);
+char *get_env_value(char *key, t_env *env);
+bool edit_env_value(char *key, char *value, t_env **env);
+void export_env(char *key, char *value, t_env **env);
 t_env *new_key_value(t_key_value *key_value);
 
 // env.c
-void init_env(char **envp);
+t_env *init_env(char **envp);
 
 // builtin_control.c
 bool	builtin_check(t_token *token);
-bool	builtin_control(t_token *token);
+bool	builtin_control(t_token *token, t_env **env);
 
 // builtin_cd.c
-bool builtin_cd(t_token *token);
+bool builtin_cd(t_token *token, t_env **env);
 
 // builtin_echo.c
 bool builtin_echo(t_token *token);
@@ -222,12 +217,12 @@ bool builtin_echo(t_token *token);
 bool builtin_pwd(t_token *token);
 
 // builtin_export.c
-bool builtin_export(t_token *token);
+bool builtin_export(t_token *token, t_env **env);
 
 // builtin_env.c
-bool builtin_env(t_token *token);
+bool builtin_env(t_token *token, t_env *env);
 
 // builtin_exit.c
-bool	builtin_exit(t_token *token);
+bool builtin_exit(t_token *token);
 
 #endif

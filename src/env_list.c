@@ -7,22 +7,19 @@ typedef struct s_env
 	char	*value;
 	struct s_env	*next;
 }	t_env;
-
-extern t_env	*env;
-g_envはmain.cで定義
 */
 
-void	add_back_env(t_env *new)
+void	add_back_env(t_env *new, t_env **env)
 {
 	t_env	*tmp;
 
 	if (!new)
 		return ;
-	if (!g_env)
-		g_env = new;
+	if (!env || !*env)
+		*env = new;
 	else
 	{
-		tmp = g_env;
+		tmp = *env;
 		while (tmp->next)
 			tmp = tmp->next;
 		tmp->next = new;
@@ -92,16 +89,16 @@ t_env	*new_key_value(t_key_value *key_value)
 	return (env);
 }
 
-void	export_env(char *key, char *value)
+void	export_env(char *key, char *value, t_env **env)
 {
 	t_env	*tmp;
-	char *tmp_value;
-	char *key_value;
+	char	*tmp_value;
+	char	*key_value;
 
-	tmp = g_env;
+	tmp = *env;
 	if (!value)
 	{
-		value = get_env_value(key);
+		value = get_env_value(key, *env);
 		if (!value)
 			return ;
 	}
@@ -117,15 +114,15 @@ void	export_env(char *key, char *value)
 		tmp = tmp->next;
 	}
 	key_value = ft_strjoin(key, ft_strjoin("=", value));
-	add_back_env(new_env(key_value));
+	add_back_env(new_env(key_value), env);
 }
 
-char	*get_env_value(char *key)
+char	*get_env_value(char *key, t_env *env)
 {
 	t_env	*tmp;
 	int		key_len;
 
-	tmp = g_env;
+	tmp = env;
 	key_len = ft_strlen(key);
 	if (key_len == 1 && key[0] == '?')
 		return (ft_itoa(error_status(PRINT_ERROR)));
@@ -138,13 +135,13 @@ char	*get_env_value(char *key)
 	return (NULL);
 }
 
-bool	edit_env_value(char *key, char *value)
+bool	edit_env_value(char *key, char *value, t_env **env)
 {
 	t_env	*tmp;
 	char	*tmp_value;
 	int		key_len;
 
-	tmp = g_env;
+	tmp = *env;
 	key_len = ft_strlen(key);
 	while (tmp)
 	{
@@ -160,41 +157,46 @@ bool	edit_env_value(char *key, char *value)
 	return (false);
 }
 
-void	free_env(void)
+void	free_env(t_env *env)
 {
 	t_env	*tmp;
 
-	while (g_env)
+	while (env)
 	{
-		tmp = g_env->next;
-		free(g_env->key);
-		free(g_env->value);
-		free(g_env);
-		g_env = tmp;
+		tmp = env->next;
+		free(env->key);
+		free(env->value);
+		free(env);
+		env = tmp;
 	}
 }
 
-void	print_export_env(void) // exportで表示するときに使う
+void	print_export_env(t_env *env)
 {
 	t_env	*tmp;
 
-	tmp = g_env;
+	tmp = env;
 	while (tmp)
 	{
 		ft_putstr_fd("declare -x ", 1);
 		ft_putstr_fd(tmp->key, 1);
-		ft_putstr_fd("=\"", 1);
-		ft_putstr_fd(tmp->value, 1);
-		ft_putendl_fd("\"", 1);
+		if (tmp->value)
+		{
+			ft_putstr_fd("=\"", 1);
+			ft_putstr_fd(tmp->value, 1);
+			ft_putendl_fd("\"", 1);
+		}
+		else
+			ft_putchar_fd('\n', 1);
 		tmp = tmp->next;
 	}
 }
 
-void	print_env(void) // envで表示するときに使う
+void	print_env(t_env *env)
 {
 	t_env	*tmp;
 
-	tmp = g_env;
+	tmp = env;
 	while (tmp)
 	{
 		ft_putstr_fd(tmp->key, 1);
@@ -204,13 +206,13 @@ void	print_env(void) // envで表示するときに使う
 	}
 }
 
-int	env_list_size(void)
+int	env_list_size(t_env *env)
 {
 	int		size;
 	t_env	*tmp;
 
 	size = 0;
-	tmp = g_env;
+	tmp = env;
 	while (tmp)
 	{
 		size++;
