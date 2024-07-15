@@ -79,26 +79,6 @@ int	token_list_size(t_token *token)
 	return size;
 }
 
-// void	free_token(t_token *token)
-// {
-// 	t_token *tmp;
-
-// 	if (!token)
-// 		return ;
-// 	tmp = token;
-// 	while (tmp)
-// 	{
-// 		free(tmp->str);
-// 		if (!tmp->next)
-// 		{
-// 			free(tmp);
-// 			break ;
-// 		}
-// 		free(tmp);
-// 		tmp = tmp->next;
-// 	}
-// }
-
 void	free_token(t_token *token)
 {
 	t_token *tmp;
