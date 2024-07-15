@@ -32,7 +32,15 @@ bool	builtin_cd(t_token *token)
 		g_status = 256 * 1;
 		return (false);
 	}
-	path = strdup(token->str);
+	if (ft_strncmp(token->str, "-", 1) == 0)
+	{
+		path = get_env_value("OLDPWD");
+		ft_putendl_fd(path, 1);
+	}
+	else if (ft_strncmp(token->str, "~", 1) == 0)
+		path = get_env_value("HOME");
+	else
+		path = ft_strdup(token->str);
 	if (chdir(path) == -1)
 	{
 		ft_putstr_fd("cd: ", 2);
