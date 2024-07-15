@@ -28,16 +28,24 @@ bool	builtin_cd(t_token *token)
 	token = token->next;
 	if (token->next)
 	{
-		ft_putendl_fd("cd: too many arguments", 2);
+		ft_putendl_fd("minishell: cd: too many arguments", 2);
 		g_status = 256 * 1;
 		return (false);
 	}
-	path = strdup(token->str);
+	if (!ft_strncmp(token->str, "-", 1) && ft_strlen(token->str) == 1)
+	{
+		path = get_env_value("OLDPWD");
+		ft_putendl_fd(path, 1);
+	}
+	else if (!ft_strncmp(token->str, "~", 1) && ft_strlen(token->str) == 1)
+		path = get_env_value("HOME");
+	else
+		path = ft_strdup(token->str);
 	if (chdir(path) == -1)
 	{
 		ft_putstr_fd("cd: ", 2);
 		perror(path);
-		g_status = 1;
+		g_status = 256 * 1;
 		free(path);
 		return (false);
 	}

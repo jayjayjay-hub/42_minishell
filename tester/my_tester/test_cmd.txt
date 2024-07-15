@@ -71,6 +71,9 @@ ls -l | cat < Makefile | grep -n all >> test
 #<>|K<<
 
 # cd
+cd ~
+cd -
+cd ..
 cd .. | pwd
 cd | pwd
 cd | ls
