@@ -11,14 +11,14 @@ bool	builtin_cd(t_token *token)
 		path = get_env_value("HOME");
 		if (!path)
 		{
-			write(2, "cd: HOME not set\n", 17);
+			ft_putendl_fd("cd: HOME not set", 2);
 			g_status = 1;
 			free(path);
 			return (false);
 		}
 		if (chdir(path) == -1)
 		{
-			write(2, "cd: ", 4);
+			ft_putstr_fd("cd: ", 2);
 			perror(path);
 			g_status = 1;
 			return (false);
@@ -28,14 +28,14 @@ bool	builtin_cd(t_token *token)
 	token = token->next;
 	if (token->next)
 	{
-		write(2, "cd: too many arguments\n", 24);
+		ft_putendl_fd("cd: too many arguments", 2);
 		g_status = 256 * 1;
 		return (false);
 	}
 	path = strdup(token->str);
 	if (chdir(path) == -1)
 	{
-		write(2, "cd: ", 4);
+		ft_putstr_fd("cd: ", 2);
 		perror(path);
 		g_status = 1;
 		free(path);

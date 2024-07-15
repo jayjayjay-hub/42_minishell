@@ -12,13 +12,19 @@ void	dp_free(char **arg)
 	free(arg);
 }
 
+// debug用。二次元配列を出力する。
 void	dp_print(char **arg)
 {
 	int	i;
 
 	i = -1;
 	while (arg[++i])
+	{
+		ft_putstr_fd("arg[", 2);
+		ft_putnbr_fd(i, 2);
+		ft_putstr_fd("]: ", 2);
 		ft_putendl_fd(arg[i], 2);
+	}
 }
 
 static void	sub_dup2(int first, int second)
@@ -77,6 +83,8 @@ void	do_execve(char **cmd, char **envp)
 		path = search_path(cmd[0], envp);
 	if (!path)
 		ft_error("minishell", cmd[0], "command not found", CMD_NOT_FOUND);
+	// ft_putendl_fd(path, 2);
+	// dp_print(cmd);
 	if (execve(path, cmd, envp) == -1)
 		ft_error(NULL, NULL, "execve failed", EXIT_FAILURE);
 }
@@ -112,7 +120,7 @@ pid_t	child(t_token *token, char **envp, t_pipe_fd *fd_pipe, int pipe_i)
 
 	pid = fork();
 	if (pid == -1)
-		ft_error(NULL, NULL, "fork failed", 1);
+		ft_error("minishell", NULL, "fork failed", 1);
 	if (pid == 0)
 	{
 		if (fd_pipe->pipe_size != 0)
@@ -125,6 +133,8 @@ pid_t	child(t_token *token, char **envp, t_pipe_fd *fd_pipe, int pipe_i)
 				sub_dup2(fd_pipe->fd[2 * pipe_i - 2], fd_pipe->fd[2 * pipe_i + 1]);
 		}
 		close_pipe(fd_pipe);
+		if (builtin_control(token))
+			exit(WEXITSTATUS(g_status));
 		cmd = get_cmd(token);
 		do_execve(cmd, envp);
 	}

@@ -24,8 +24,7 @@ void	make_child(t_ats *ats, char **envp, t_pipe_fd *fd_pipe, t_pid_info pid_info
 	int i;
 
 	i = 0;
-	if (ats)
-		fd_pipe = create_pipe(ats);
+	fd_pipe = create_pipe(ats);
 	pid_info.pid = (pid_t *)malloc(sizeof(pid_t) * (fd_pipe->pipe_size + 1));
 	while (ats)
 	{
@@ -35,45 +34,13 @@ void	make_child(t_ats *ats, char **envp, t_pipe_fd *fd_pipe, t_pid_info pid_info
 			{
 				// variable_list_print();
 				ats = ats->next;
-				continue;
+				continue ;
 			}
 		}
-		if (ats->token->type == WORD && ft_strlen(ats->token->str) == 2 && !ft_strncmp(ats->token->str, "cd", 3))
+		if (!fd_pipe->pipe_size && builtin_control(ats->token))
 		{
-			if(!builtin_cd(ats->token))
-				return ;
 			ats = ats->next;
-			continue;
-		}
-		if (ats->token->type == WORD && ft_strlen(ats->token->str) == 4 && !ft_strncmp(ats->token->str, "echo", 5))
-		{
-			if(!builtin_echo(ats->token))
-				return ;
-			ats = ats->next;
-			continue;
-		}
-		if (ats->token->type == WORD && ft_strlen(ats->token->str) == 3 && !ft_strncmp(ats->token->str, "pwd", 4))
-		{
-			if(!builtin_pwd(ats->token))
-				return ;
-			ats = ats->next;
-			continue;
-		}
-		// export
-		if (ats->token->type == WORD && ft_strlen(ats->token->str) == 6 && !ft_strncmp(ats->token->str, "export", 7))
-		{
-			if(!builtin_export(ats->token))
-				return ;
-			ats = ats->next;
-			continue;
-		}
-		// env
-		if (ats->token->type == WORD && ft_strlen(ats->token->str) == 3 && !ft_strncmp(ats->token->str, "env", 4))
-		{
-			if(!builtin_env(ats->token))
-				return ;
-			ats = ats->next;
-			continue;
+			continue ;
 		}
 		pid_info.pid[pid_info.pipe_i] = child(ats->token, envp, fd_pipe, pid_info.pipe_i);
 		pid_info.pipe_i++;
@@ -82,6 +49,8 @@ void	make_child(t_ats *ats, char **envp, t_pipe_fd *fd_pipe, t_pid_info pid_info
 	close_pipe(fd_pipe);
 	while (pid_info.pipe_i--)
 		waitpid(pid_info.pid[i++], &g_status, 0);
+	// if (!fd_pipe->pipe_size)
+		// close_redirect(ats->token);
 	free(fd_pipe->fd);
 	free(fd_pipe);
 	free(pid_info.pid);
@@ -102,7 +71,6 @@ void	run_cmd(char *line, char **envp)
 	redirect_open(token);
 	ats = parser(token);
 	make_child(ats, envp, fd_pipe, pid_info);
-	close_redirect(token);
 	free_ats(ats);
 }
 
@@ -122,9 +90,9 @@ int	main(int argc, char **argv, char **envp)
 	while (1)
 	{
 		line = readline("minishell$ ");
-		if (line == NULL || (!ft_strncmp(line, "exit", 4) && ft_strlen(line) == 4))
+		if (!line)
 			handle_eof(line);
-		if (*line)
+		else
 		{
 			add_history(line);
 			run_cmd(line, envp);

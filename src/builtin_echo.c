@@ -14,7 +14,7 @@ bool	builtin_echo(t_token *token)
 		token = token->next;
 	}
 	token = token->next;
-	while (token)
+	while (token && token->type == WORD)
 	{
 		write(1, token->str, strlen(token->str));
 		token = token->next;

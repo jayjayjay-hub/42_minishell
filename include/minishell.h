@@ -71,7 +71,9 @@ typedef struct s_token
 	char			*str;
 	t_token_type	type;
 	int 			fd;
+	// int				backup_fd; todoこれ追加しといてー
 	struct s_token	*next;
+	struct s_token	*prev;
 }	t_token;
 
 typedef struct s_variable
@@ -201,6 +203,9 @@ void export_env(char *key, char *value);
 // env.c
 void init_env(char **envp);
 
+// builtin_control.c
+bool	builtin_control(t_token *token);
+
 // builtin_cd.c
 bool builtin_cd(t_token *token);
 
@@ -215,5 +220,8 @@ bool builtin_export(t_token *token);
 
 // builtin_env.c
 bool builtin_env(t_token *token);
+
+// builtin_exit.c
+bool	builtin_exit(t_token *token);
 
 #endif

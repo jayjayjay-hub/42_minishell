@@ -61,6 +61,11 @@ void	free_ats(t_ats *ats)
 	{
 		tmp = ats->next;
 		free_token(ats->token);
+		if (!tmp)
+		{
+			free(ats);
+			break ;
+		}
 		free(ats);
 		ats = tmp;
 	}

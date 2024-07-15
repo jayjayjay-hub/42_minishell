@@ -34,6 +34,7 @@ void	add_back(t_token **list, t_token *new)
 		while (tmp->next)
 			tmp = tmp->next;
 		tmp->next = new;
+		new->prev = tmp;
 	}
 }
 
@@ -55,6 +56,7 @@ t_token	*new_token(char *str, t_token_type type, int fd)
 	token->type = type;
 	token->fd = fd;
 	token->next = NULL;
+	token->prev = NULL;
 	return token;
 }
 
@@ -73,18 +75,41 @@ int	token_list_size(t_token *token)
 	return size;
 }
 
+// void	free_token(t_token *token)
+// {
+// 	t_token *tmp;
+
+// 	if (!token)
+// 		return ;
+// 	tmp = token;
+// 	while (tmp)
+// 	{
+// 		free(tmp->str);
+// 		if (!tmp->next)
+// 		{
+// 			free(tmp);
+// 			break ;
+// 		}
+// 		free(tmp);
+// 		tmp = tmp->next;
+// 	}
+// }
+
 void	free_token(t_token *token)
 {
 	t_token *tmp;
 
-	tmp = token;
-	if (!tmp)
-		return ;
-	while (tmp->next)
+	while (token)
 	{
-		free(tmp->str);
-		free(tmp);
-		tmp = tmp->next;
+		tmp = token->next;
+		free(token->str);
+		if (!tmp)
+		{
+			free(token);
+			break ;
+		}
+		free(token);
+		token = tmp;
 	}
 }
 
@@ -96,6 +121,7 @@ void	print_token(t_token *token)
 	while (tmp)
 	{
 		printf("str: %s, type: %d, fd: %d\n", tmp->str, tmp->type, tmp->fd);
+		printf("prev: %p, current: %p, next: %p\n", tmp->prev, tmp ,tmp->next);
 		tmp = tmp->next;
 	}
 }

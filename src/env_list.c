@@ -142,7 +142,11 @@ void	print_export_env(void) // exportで表示するときに使う
 	tmp = g_env;
 	while (tmp)
 	{
-		printf("declare -x %s=\"%s\"\n", tmp->key, tmp->value);
+		ft_putstr_fd("declare -x ", 1);
+		ft_putstr_fd(tmp->key, 1);
+		ft_putstr_fd("=\"", 1);
+		ft_putstr_fd(tmp->value, 1);
+		ft_putendl_fd("\"", 1);
 		tmp = tmp->next;
 	}
 }
@@ -154,7 +158,9 @@ void	print_env(void) // envで表示するときに使う
 	tmp = g_env;
 	while (tmp)
 	{
-		printf("%s=%s\n", tmp->key, tmp->value);
+		ft_putstr_fd(tmp->key, 1);
+		ft_putchar_fd('=', 1);
+		ft_putendl_fd(tmp->value, 1);
 		tmp = tmp->next;
 	}
 }
