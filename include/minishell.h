@@ -39,6 +39,12 @@ typedef struct sigaction	t_sig;
 
 extern int	g_status;
 
+typedef struct s_key_value
+{
+	char	*key;
+	char	*value;
+}	t_key_value;
+
 typedef struct s_env
 {
 	char	*key;
@@ -202,6 +208,7 @@ void	print_env(void);
 int	env_list_size(void);
 char *get_env_value(char *key);
 void export_env(char *key, char *value);
+t_env *new_key_value(t_key_value *key_value);
 
 // env.c
 void init_env(char **envp);
