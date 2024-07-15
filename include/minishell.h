@@ -176,16 +176,13 @@ void	expansion(t_token *token);
 // variable.c
 bool	is_alnum_under(char c);
 bool is_al_under(char c);
-bool add_variable(char *str);
+bool add_variable(t_token *token);
 
 // variable_list.c
-void variable_list_print(void);
 // void variable_list_add_back(t_variable *new);
 t_variable	*variable_list_new(char *key, char *value);
 // void variable_list_free(void);
-char	*get_variable_value(char *key);
 char *get_variable_key(char *str);
-bool edit_variable(char *key, char *value);
 
 // utils.c
 int		is_quote(char c);

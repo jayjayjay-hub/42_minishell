@@ -28,14 +28,11 @@ void	make_child(t_ats *ats, char **envp, t_pipe_fd *fd_pipe, t_pid_info pid_info
 	pid_info.pid = (pid_t *)malloc(sizeof(pid_t) * (fd_pipe->pipe_size + 1));
 	while (ats)
 	{
-		if (token_list_size(ats->token) == 1)
+		if (add_variable(ats->token))
 		{
-			if (add_variable(ats->token->str))
-			{
-				// variable_list_print();
-				ats = ats->next;
-				continue ;
-			}
+			// variable_list_print();
+			ats = ats->next;
+			continue ;
 		}
 		if (!fd_pipe->pipe_size && builtin_control(ats->token))
 		{
