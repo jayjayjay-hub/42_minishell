@@ -39,6 +39,12 @@ typedef struct sigaction	t_sig;
 
 extern int	g_status;
 
+typedef struct s_key_value
+{
+	char	*key;
+	char	*value;
+}	t_key_value;
+
 typedef struct s_env
 {
 	char	*key;
@@ -71,7 +77,7 @@ typedef struct s_token
 	char			*str;
 	t_token_type	type;
 	int 			fd;
-	// int				backup_fd; todoこれ追加しといてー
+	int				backup_fd;
 	struct s_token	*next;
 	struct s_token	*prev;
 }	t_token;
@@ -117,7 +123,10 @@ typedef struct pid_info
 t_token *tokenize(char *line);
 
 // list.c
-t_token	*new_token(char *str, t_token_type type, int fd);
+t_token	*new_token(char *str,
+					t_token_type type,
+					int fd,
+					int backup_fd);
 void		add_back(t_token **list, t_token *new);
 void		free_token(t_token *token);
 int			token_list_size(t_token *token);
@@ -199,6 +208,7 @@ void	print_env(void);
 int	env_list_size(void);
 char *get_env_value(char *key);
 void export_env(char *key, char *value);
+t_env *new_key_value(t_key_value *key_value);
 
 // env.c
 void init_env(char **envp);

@@ -9,13 +9,8 @@ bool	builtin_pwd(t_token *token)
 
 	// debug
 	// printf("builtin_pwd\n");
-	// todo コメントアウトしてるif文いらないと思うんだけど確認よろしく
-	// if (token->next)
-	// {
-	// 	write(2, "pwd: too many arguments\n", 25);
-	// 	g_status = 256 * 1;
-	// 	return (false);
-	// }
+	// 完了 コメントアウトしてるif文いらないと思うんだけど確認よろしく
+	// 確かにそうだわいらないわ
 	buf = getcwd(NULL, 0);
 	if (!buf)
 	{

@@ -16,51 +16,56 @@ bool	is_al_under(char c)
 
 bool	is_valid_variable(char *str)
 {
-	int	i;
+	int	index;
 
-	i = 0;
+	index = 0;
 	if (!str)
 		return (false);
-	if (!is_al_under(str[i]))
+	if (!is_al_under(str[index]))
 		return (false);
-	i++;
-	while (str[i])
-	{
-		if (!is_alnum_under(str[i]))
-			return (false);
-		i++;
-	}
+	index++;
+	while (str[index] && is_alnum_under(str[index]))
+		index++;
+	if (!str[index] || str[index] != '=')
+		return (false);
+	index++;
+	if (!str[index])
+		return (false);
 	return (true);
+}
+
+t_key_value *get_key_value(char *str)
+{
+	t_key_value	*key_value;
+	char		*tmp;
+	int			key_len;
+
+	key_value = (t_key_value *)malloc(sizeof(t_key_value));
+	if (!key_value)
+		return (NULL);
+	tmp = strchr(str, '=');
+	if (!tmp)
+	{
+		free(key_value);
+		return (NULL);
+	}
+	key_len = tmp - str;
+	key_value->key = ft_substr(str, 0, key_len);
+	key_value->value = ft_strdup(tmp + 1);
+	return (key_value);
 }
 
 bool	add_variable(char *str)
 {
-	t_variable	*new;
-	char		*key;
-	char		*value;
-	char		*tmp;
-	int			key_len;
+	t_env	*new;
+	t_key_value	*key_value;
 
-	tmp = strchr(str, '=');
-	if (!tmp)
+	if (!is_valid_variable(str))
 		return (false);
-	key_len = 0;
-	if (!is_al_under(str[key_len]))
+	key_value = get_key_value(str);
+	new = new_key_value(key_value);
+	if (!new)
 		return (false);
-	key_len++;
-	while (str[key_len] && is_alnum_under(str[key_len]) && str[key_len] != '=')
-		key_len++;
-	if (str[key_len] != '=')
-		return (false);
-	key = ft_substr(str, 0, key_len);
-	value = ft_strdup(tmp + 1);
-	if (edit_variable(key, value))
-	{
-		free(key);
-		free(value);
-		return (true);
-	}
-	new = variable_list_new(key, value);
-	variable_list_add_back(new);
+	add_back_env(new);
 	return (true);
 }
