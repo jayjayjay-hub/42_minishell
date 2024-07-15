@@ -28,7 +28,7 @@ bool	builtin_cd(t_token *token)
 	token = token->next;
 	if (token->next)
 	{
-		ft_putendl_fd("cd: too many arguments", 2);
+		ft_putendl_fd("minishell: cd: too many arguments", 2);
 		g_status = 256 * 1;
 		return (false);
 	}
