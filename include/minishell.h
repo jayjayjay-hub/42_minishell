@@ -31,6 +31,8 @@
 // exit status
 # define CMD_NOT_FOUND	256 * 127
 
+# define PRINT_ERROR	-1
+
 // here_doc
 # define HEREDOC "/tmp/.heredoc_tmp"
 

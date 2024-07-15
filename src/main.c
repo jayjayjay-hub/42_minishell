@@ -86,7 +86,6 @@ int	main(int argc, char **argv, char **envp)
 	register_signal();
 	rl_outstream = stderr;
 	init_env(envp);
-	// print_env();
 	while (1)
 	{
 		line = readline("minishell$ ");

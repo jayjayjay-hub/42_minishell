@@ -128,7 +128,7 @@ char	*get_env_value(char *key)
 	tmp = g_env;
 	key_len = ft_strlen(key);
 	if (key_len == 1 && key[0] == '?')
-		return (ft_itoa(error_status(-1)));
+		return (ft_itoa(error_status(PRINT_ERROR)));
 	while (tmp)
 	{
 		if (strlen(tmp->key) == key_len && !ft_strncmp(tmp->key, key, key_len))
