@@ -80,7 +80,7 @@ void	do_execve(char **cmd, char **envp)
 			ft_error("minishell", cmd[0], "No such file or directory", CMD_NOT_FOUND);
 	}
 	else
-		path = _path(cmd[0], envp);
+		path = search_path(cmd[0], envp);
 	if (!path)
 		ft_error("minishell", cmd[0], "command not found", CMD_NOT_FOUND);
 	// ft_putendl_fd(path, 2);
