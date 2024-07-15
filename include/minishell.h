@@ -204,6 +204,7 @@ void	print_export_env(void);
 void	print_env(void);
 int	env_list_size(void);
 char *get_env_value(char *key);
+bool edit_env_value(char *key, char *value);
 void export_env(char *key, char *value);
 t_env *new_key_value(t_key_value *key_value);
 

@@ -65,6 +65,13 @@ bool	add_variable(t_token *token)
 		if (!is_valid_variable(token->str))
 			return (false);
 		key_value = get_key_value(token->str);
+		if (edit_env_value(key_value->key, key_value->value))
+		{
+			free(key_value->key);
+			free(key_value->value);
+			token = token->next;
+			continue ;
+		}
 		new = new_key_value(key_value);
 		if (!new)
 			return (false);

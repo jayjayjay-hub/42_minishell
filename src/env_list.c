@@ -138,6 +138,28 @@ char	*get_env_value(char *key)
 	return (NULL);
 }
 
+bool	edit_env_value(char *key, char *value)
+{
+	t_env	*tmp;
+	char	*tmp_value;
+	int		key_len;
+
+	tmp = g_env;
+	key_len = ft_strlen(key);
+	while (tmp)
+	{
+		if (strlen(tmp->key) == key_len && !ft_strncmp(tmp->key, key, key_len))
+		{
+			tmp_value = tmp->value;
+			tmp->value = strdup(value);
+			free(tmp_value);
+			return (true);
+		}
+		tmp = tmp->next;
+	}
+	return (false);
+}
+
 void	free_env(void)
 {
 	t_env	*tmp;
