@@ -117,7 +117,10 @@ typedef struct pid_info
 t_token *tokenize(char *line);
 
 // list.c
-t_token	*new_token(char *str, t_token_type type, int fd);
+t_token	*new_token(char *str,
+					t_token_type type,
+					int fd,
+					int backup_fd);
 void		add_back(t_token **list, t_token *new);
 void		free_token(t_token *token);
 int			token_list_size(t_token *token);

@@ -16,6 +16,8 @@ typedef struct s_token
 {
 	char			*str;
 	t_token_type	type;
+	int				fd;
+	int				backup_fd;
 	struct s_token	*next;
 }	t_token;
 */
@@ -38,7 +40,7 @@ void	add_back(t_token **list, t_token *new)
 	}
 }
 
-t_token	*new_token(char *str, t_token_type type, int fd)
+t_token	*new_token(char *str, t_token_type type, int fd, int backup_fd)
 {
 	t_token *token;
 
@@ -55,6 +57,7 @@ t_token	*new_token(char *str, t_token_type type, int fd)
 		token->str = str;
 	token->type = type;
 	token->fd = fd;
+	token->backup_fd = backup_fd;
 	token->next = NULL;
 	token->prev = NULL;
 	return token;
