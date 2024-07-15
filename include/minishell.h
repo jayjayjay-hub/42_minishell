@@ -71,7 +71,7 @@ typedef struct s_token
 	char			*str;
 	t_token_type	type;
 	int 			fd;
-	// int				backup_fd; todoこれ追加しといてー
+	int				backup_fd;
 	struct s_token	*next;
 	struct s_token	*prev;
 }	t_token;
