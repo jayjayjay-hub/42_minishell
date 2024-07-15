@@ -87,8 +87,6 @@ typedef struct s_variable
 	struct s_variable	*next;
 }	t_variable;
 
-extern t_variable	*variable;
-
 typedef struct s_parse_tree
 {
 	t_token			*token;
