@@ -29,7 +29,7 @@
 # include "get_next_line.h"
 
 // exit status
-# define CMD_NOT_FOUND	127
+# define CMD_NOT_FOUND	256 * 127
 
 // here_doc
 # define HEREDOC "/tmp/.heredoc_tmp"
@@ -116,6 +116,7 @@ typedef struct pid_info
 
 
 // main.c
+int error_status(int error_code);
 
 // tokenizer.c
 t_token *tokenize(char *line);
@@ -125,7 +126,7 @@ t_token	*new_token(char *str,
 					t_token_type type,
 					int fd,
 					int backup_fd);
-void		add_back(t_token **list, t_token *new);
+void		token_add_back(t_token **list, t_token *new);
 void		free_token(t_token *token);
 int			token_list_size(t_token *token);
 void		print_token(t_token *token);
@@ -178,9 +179,9 @@ bool add_variable(char *str);
 
 // variable_list.c
 void variable_list_print(void);
-void variable_list_add_back(t_variable *new);
+// void variable_list_add_back(t_variable *new);
 t_variable	*variable_list_new(char *key, char *value);
-void variable_list_free(void);
+// void variable_list_free(void);
 char	*get_variable_value(char *key);
 char *get_variable_key(char *str);
 bool edit_variable(char *key, char *value);

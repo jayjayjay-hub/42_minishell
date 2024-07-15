@@ -48,9 +48,12 @@ void	make_child(t_ats *ats, char **envp, t_pipe_fd *fd_pipe, t_pid_info pid_info
 	}
 	close_pipe(fd_pipe);
 	while (pid_info.pipe_i--)
+	{
 		waitpid(pid_info.pid[i++], &errno, 0);
+		error_status(errno);
+	}
 	// if (!fd_pipe->pipe_size)
-		// close_redirect(ats->token);
+	// close_redirect(ats->token);
 	free(fd_pipe->fd);
 	free(fd_pipe);
 	free(pid_info.pid);
@@ -80,7 +83,6 @@ int	main(int argc, char **argv, char **envp)
 	char		*line;
 	t_pid_info	pid_info;
 
-	errno = 0; // エラー番号をリセット
 	register_signal();
 	rl_outstream = stderr;
 	init_env(envp);
@@ -98,6 +100,16 @@ int	main(int argc, char **argv, char **envp)
 		}
 	}
 	return (WEXITSTATUS(errno));
+}
+
+int	error_status(int error_code)
+{
+	static int status;
+
+	if (error_code < 0)
+		return (WEXITSTATUS(status));
+	status = error_code;
+	return (WEXITSTATUS(status));
 }
 
 // int main(int argc, char **argv, char **envp)

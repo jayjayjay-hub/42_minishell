@@ -24,7 +24,7 @@ void	remove_quote(char *str)
 	str[j] = '\0';
 }
 
-void	variable_loop(char **str, char **tmp, int *i, int *j)
+void	variable_env(char **str, char **tmp, int *i, int *j)
 {
 	char *key;
 	char *value;
@@ -34,7 +34,7 @@ void	variable_loop(char **str, char **tmp, int *i, int *j)
 	if ((*str)[*i + 1])
 	{
 		key = get_variable_key((*str) + *i + 1);
-		value = get_variable_value(key);
+		value = get_env_value(key);
 		if (value)
 		{
 			tmp2 = ft_strjoin(*tmp, value);
@@ -46,13 +46,21 @@ void	variable_loop(char **str, char **tmp, int *i, int *j)
 			free(value);
 		}
 		else
-			(*tmp)[*j++] = (*str)[*i++];
+		{
+			(*tmp)[*j] = (*str)[*i];
+			(*j)++;
+			(*i)++;
+		}
 	}
 	else
-		(*tmp)[*j++] = (*str)[*i++];
+	{
+		(*tmp)[*j] = (*str)[*i];
+		(*j)++;
+		(*i)++;
+	}
 }
 
-void	expansion_variable(char **str)
+void	expansion_env(char **str)
 {
 	int i;
 	int j;
@@ -64,21 +72,29 @@ void	expansion_variable(char **str)
 	tmp = calloc(1, sizeof(char) * (ft_strlen(*str) + 1));
 	while ((*str)[i])
 	{
-		if (is_quote((*str)[i])) // quoteはそのままコピー
+		if (is_single_quote((*str)[i]))
+		{
+			quote = (*str)[i];
+			tmp[j++] = (*str)[i++];
+			while ((*str)[i] && (*str)[i] != quote)
+				tmp[j++] = (*str)[i++];
+			tmp[j++] = (*str)[i++];
+		}
+		else if (is_double_quote((*str)[i]))
 		{
 			quote = (*str)[i];
 			tmp[j++] = (*str)[i++];
 			while ((*str)[i] && (*str)[i] != quote)
 			{
 				if ((*str)[i] == '$')
-					variable_loop(str, &tmp, &i, &j);
+					variable_env(str, &tmp, &i, &j);
 				else
 					tmp[j++] = (*str)[i++];
 			}
 			tmp[j++] = (*str)[i++];
 		}
 		else if ((*str)[i] == '$')
-			variable_loop(str, &tmp, &i, &j);
+			variable_env(str, &tmp, &i, &j);
 		else
 			tmp[j++] = (*str)[i++];
 	}
@@ -93,7 +109,7 @@ void	expansion(t_token * token)
 	{
 		if (token->type == WORD)
 		{
-			expansion_variable(&token->str);
+			expansion_env(&token->str);
 			remove_quote(token->str);
 		}
 		token = token->next;

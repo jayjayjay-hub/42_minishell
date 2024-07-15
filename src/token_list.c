@@ -23,7 +23,7 @@ typedef struct s_token
 }	t_token;
 */
 
-void	add_back(t_token **list, t_token *new)
+void	token_add_back(t_token **list, t_token *new)
 {
 	t_token	*tmp;
 
