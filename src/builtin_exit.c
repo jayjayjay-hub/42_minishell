@@ -17,6 +17,9 @@ bool	ft_str_isdigit(char *str)
 
 bool	builtin_exit(t_token *token)
 {
+	int	ret;
+
+	ret = 0;
 	if (token_list_size(token) > 2)
 	{
 		ft_putendl_fd("exit", 2);
@@ -37,7 +40,7 @@ bool	builtin_exit(t_token *token)
 			error_status(256 * 2);
 		}
 		else
-			error_status((size_t)ft_atoi(token->next->str) * 256);
-		exit(error_status(PRINT_ERROR));
+			ret = (size_t)ft_atoi(token->next->str);
+		exit(ret);
 	}
 }

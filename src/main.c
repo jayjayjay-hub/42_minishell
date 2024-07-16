@@ -31,9 +31,10 @@ void	struct_init(t_cmd *cmd, char **envp)
 void	make_child(t_cmd *command, t_env *env)
 {
 	int i;
-	t_ats *tmp = command->ats;
+	t_ats *tmp;
 
 	i = 0;
+	tmp = command->ats;
 	command->fd_pipe = create_pipe(command->ats);
 	command->pid_info.pid = (pid_t *)malloc(sizeof(pid_t) * (command->fd_pipe->pipe_size + 1));
 	while (command->ats)
