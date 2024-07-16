@@ -26,7 +26,7 @@ void	add_back_env(t_env *new, t_env **env)
 	}
 }
 
-char *get_env_key_from_envp(char *env_line)
+char	*get_env_key_from_envp(char *env_line)
 {
 	int		i;
 	char	*key;
@@ -41,7 +41,7 @@ char *get_env_key_from_envp(char *env_line)
 	return (key);
 }
 
-char *get_env_value_from_envp(char *env_line)
+char	*get_env_value_from_envp(char *env_line)
 {
 	int		i;
 	char	*value;
@@ -104,7 +104,8 @@ void	export_env(char *key, char *value, t_env **env)
 	}
 	while (tmp)
 	{
-		if (strlen(tmp->key) == strlen(key) && !ft_strncmp(tmp->key, key, strlen(key)))
+		if (strlen(tmp->key) == strlen(key)
+			&& !ft_strncmp(tmp->key, key, strlen(key)))
 		{
 			tmp_value = tmp->value;
 			tmp->value = strdup(value);

@@ -20,22 +20,23 @@ void	struct_init(t_cmd *cmd, char **envp)
 
 void	make_child(t_cmd *command, t_env *env)
 {
-	int i;
-	t_ats *tmp;
+	int		i;
+	t_ats	*tmp;
 
 	i = 0;
 	tmp = command->ats;
 	command->fd_pipe = create_pipe(command->ats);
-	command->pid_info.pid = (pid_t *)malloc(sizeof(pid_t) * (command->fd_pipe->pipe_size + 1));
+	command->pid_info.pid = (pid_t *)malloc(sizeof(pid_t)
+			* (command->fd_pipe->pipe_size + 1));
 	while (command->ats)
 	{
 		if (add_variable(command->ats->token, &env))
 		{
-			// variable_list_print();
 			command->ats = command->ats->next;
 			continue ;
 		}
-		if (!command->fd_pipe->pipe_size && builtin_control(command->ats->token, &env))
+		if (!command->fd_pipe->pipe_size
+			&& builtin_control(command->ats->token, &env))
 		{
 			command->ats = command->ats->next;
 			continue ;
@@ -98,7 +99,7 @@ int	main(int argc, char **argv, char **envp)
 
 int	error_status(int error_code)
 {
-	static int status;
+	static int	status;
 
 	if (error_code < 0)
 		return (WEXITSTATUS(status));

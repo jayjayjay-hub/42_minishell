@@ -1,10 +1,10 @@
 #include "minishell.h"
 
-bool builtin_export(t_token *token, t_env **env)
+bool	builtin_export(t_token *token, t_env **env)
 {
-	char *key;
-	char *value;
-	int	key_len;
+	char	*key;
+	char	*value;
+	int		key_len;
 
 	if (!token->next)
 	{

@@ -67,7 +67,8 @@ void	pass_single_quote(char **tmp, char **str, int *i, int *j)
 	(*j)++;
 }
 
-void	expansion_double_quote(char **str, char **tmp, int *i, int *j, t_env *env)
+void	expansion_double_quote(char **str,
+	char **tmp, int *i, int *j, t_env *env)
 {
 	(*tmp)[*j] = (*str)[*i];
 	(*i)++;

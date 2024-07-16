@@ -20,16 +20,15 @@ bool	builtin_exit(t_token *token)
 	int	ret;
 
 	ret = 0;
+	ft_putendl_fd("exit", 1);
 	if (token_list_size(token) > 2)
 	{
-		ft_putendl_fd("exit", 2);
 		ft_putendl_fd("minishell: exit: too many arguments", 2);
 		error_status(256 * 1);
 		return (true);
 	}
 	else
 	{
-		ft_putendl_fd("exit", 2);
 		if (!token->next)
 			exit(error_status(PRINT_ERROR));
 		else if (!ft_str_isdigit(token->next->str))

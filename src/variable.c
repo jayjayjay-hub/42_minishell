@@ -34,7 +34,7 @@ bool	is_valid_variable(char *str)
 	return (true);
 }
 
-t_key_value *get_key_value(char *str)
+t_key_value	*get_key_value(char *str)
 {
 	t_key_value	*key_value;
 	char		*tmp;

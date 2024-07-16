@@ -43,7 +43,7 @@ void	token_add_back(t_token **list, t_token *new)
 
 t_token	*new_token(char *str, t_token_type type, int fd)
 {
-	t_token *token;
+	t_token	*token;
 
 	token = malloc(sizeof(t_token));
 	if (!token)
@@ -61,7 +61,7 @@ t_token	*new_token(char *str, t_token_type type, int fd)
 	token->backup_fd = -1;
 	token->next = NULL;
 	token->prev = NULL;
-	return token;
+	return (token);
 }
 
 int	token_list_size(t_token *token)
@@ -76,12 +76,12 @@ int	token_list_size(t_token *token)
 		size++;
 		token = token->next;
 	}
-	return size;
+	return (size);
 }
 
 void	free_token(t_token *token)
 {
-	t_token *tmp;
+	t_token	*tmp;
 
 	while (token)
 	{
@@ -99,13 +99,14 @@ void	free_token(t_token *token)
 
 void	print_token(t_token *token)
 {
-	t_token *tmp;
+	t_token	*tmp;
 
 	tmp = token;
 	while (tmp)
 	{
-		printf("str: %s, type: %d, fd: %d, backup_fd: %d\n", tmp->str, tmp->type, tmp->fd, tmp->backup_fd);
-		// printf("prev: %p, current: %p, next: %p\n", tmp->prev, tmp ,tmp->next);
+		printf ("str: %s, type: %d, fd: %d, backup_fd: %d\n",
+			tmp->str, tmp->type, tmp->fd, tmp->backup_fd);
+		printf ("prev: %p, current: %p, next: %p\n", tmp->prev, tmp, tmp->next);
 		tmp = tmp->next;
 	}
 }
