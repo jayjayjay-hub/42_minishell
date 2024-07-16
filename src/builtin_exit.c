@@ -28,7 +28,7 @@ bool	builtin_exit(t_token *token)
 	{
 		ft_putendl_fd("exit", 2);
 		if (!token->next)
-			exit(errno);
+			exit(error_status(PRINT_ERROR));
 		else if (!ft_str_isdigit(token->next->str))
 		{
 			ft_putstr_fd("minishell: exit: ", 2);
@@ -37,7 +37,7 @@ bool	builtin_exit(t_token *token)
 			error_status(256 * 2);
 		}
 		else
-			errno = (size_t)ft_atoi(token->next->str);
-		exit(errno);
+			error_status((size_t)ft_atoi(token->next->str) * 256);
+		exit(error_status(PRINT_ERROR));
 	}
 }

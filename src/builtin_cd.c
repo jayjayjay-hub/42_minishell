@@ -2,13 +2,13 @@
 
 // builtin_cd.c
 
-bool	builtin_cd(t_token *token)
+bool	builtin_cd(t_token *token, t_env **env)
 {
 	char	*path;
 
 	if (!token->next)
 	{
-		path = get_env_value("HOME");
+		path = get_env_value("HOME", *env);
 		if (!path)
 		{
 			ft_putendl_fd("cd: HOME not set", 2);
@@ -34,11 +34,11 @@ bool	builtin_cd(t_token *token)
 	}
 	if (!ft_strncmp(token->str, "-", 1) && ft_strlen(token->str) == 1)
 	{
-		path = get_env_value("OLDPWD");
+		path = get_env_value("OLDPWD", *env);
 		ft_putendl_fd(path, 1);
 	}
 	else if (!ft_strncmp(token->str, "~", 1) && ft_strlen(token->str) == 1)
-		path = get_env_value("HOME");
+		path = get_env_value("HOME", *env);
 	else
 		path = ft_strdup(token->str);
 	if (chdir(path) == -1)

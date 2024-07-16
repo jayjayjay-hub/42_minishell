@@ -24,7 +24,7 @@ bool	builtin_check(t_token *token)
 	return (false);
 }
 
-bool	builtin_control(t_token *token)
+bool	builtin_control(t_token *token, t_env **env)
 {
 	t_token	*tmp;
 
@@ -43,17 +43,17 @@ bool	builtin_control(t_token *token)
 		if (ft_strlen(token->str) == 4 && !ft_strncmp(token->str, "exit", 4))
 			return(builtin_exit(token));
 		else if (ft_strlen(token->str) == 2 && !ft_strncmp(token->str, "cd", 3))
-			return(builtin_cd(token));
+			return(builtin_cd(token, env));
 		else if (ft_strlen(token->str) == 4 && !ft_strncmp(token->str, "echo", 5))
 			return(builtin_echo(token));
 		else if (ft_strlen(token->str) == 3 && !ft_strncmp(token->str, "pwd", 4))
 			return(builtin_pwd(token));
 		// export
 		else if (ft_strlen(token->str) == 6 && !ft_strncmp(token->str, "export", 7))
-			return(builtin_export(token));
+			return(builtin_export(token, env));
 		// env
 		else if (ft_strlen(token->str) == 3 && !ft_strncmp(token->str, "env", 4))
-			return(builtin_env(token));
+			return(builtin_env(token, *env));
 		token = token->next;
 	}
 	return (true);

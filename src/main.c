@@ -19,7 +19,7 @@ void	struct_init(t_ats *ats, t_token *token, t_pipe_fd *fd_pipe, t_pid_info *pid
 	pid_info = NULL;
 }
 
-void	make_child(t_ats *ats, char **envp, t_pipe_fd *fd_pipe, t_pid_info pid_info)
+void	make_child(t_ats *ats, char **envp, t_pipe_fd *fd_pipe, t_pid_info pid_info, t_env *env)
 {
 	int i;
 	t_ats *tmp = ats;
@@ -29,18 +29,18 @@ void	make_child(t_ats *ats, char **envp, t_pipe_fd *fd_pipe, t_pid_info pid_info
 	pid_info.pid = (pid_t *)malloc(sizeof(pid_t) * (fd_pipe->pipe_size + 1));
 	while (ats)
 	{
-		if (add_variable(ats->token))
+		if (add_variable(ats->token, &env))
 		{
 			// variable_list_print();
 			ats = ats->next;
 			continue ;
 		}
-		if (!fd_pipe->pipe_size && builtin_control(ats->token))
+		if (!fd_pipe->pipe_size && builtin_control(ats->token, &env))
 		{
 			ats = ats->next;
 			continue ;
 		}
-		pid_info.pid[pid_info.pipe_i] = child(ats->token, envp, fd_pipe, pid_info.pipe_i);
+		pid_info.pid[pid_info.pipe_i] = child(ats->token, envp, fd_pipe, pid_info.pipe_i, env);
 		pid_info.pipe_i++;
 		ats = ats->next;
 	}
@@ -57,7 +57,7 @@ void	make_child(t_ats *ats, char **envp, t_pipe_fd *fd_pipe, t_pid_info pid_info
 	free(pid_info.pid);
 }
 
-void	run_cmd(char *line, char **envp)
+void	run_cmd(char *line, char **envp, t_env *env)
 {
 	t_ats		*ats;
 	t_token		*token;
@@ -68,23 +68,24 @@ void	run_cmd(char *line, char **envp)
 	token = tokenize(line);
 	if (!syntax_check(token))
 		return ;
-	expansion(token);
+	expansion(token, env);
 	redirect_open(token);
 	ats = parser(token);
 	// free(token); todo
-	make_child(ats, envp, fd_pipe, pid_info);
+	make_child(ats, envp, fd_pipe, pid_info, env);
 	free_ats(ats);
 }
 
-t_env		*g_env = NULL;
 int	main(int argc, char **argv, char **envp)
 {
 	char		*line;
 	t_pid_info	pid_info;
+	t_env		*env;
 
 	register_signal();
 	rl_outstream = stderr;
-	init_env(envp);
+	env = NULL;
+	env = init_env(envp);
 	while (1)
 	{
 		line = readline("minishell$ ");
@@ -93,11 +94,11 @@ int	main(int argc, char **argv, char **envp)
 		else
 		{
 			add_history(line);
-			run_cmd(line, envp);
+			run_cmd(line, envp, env);
 			free(line);
 		}
 	}
-	return (WEXITSTATUS(errno));
+	return (errno);
 }
 
 int	error_status(int error_code)
