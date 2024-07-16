@@ -2,30 +2,8 @@
 
 // builtin_cd.c
 
-bool	builtin_cd(t_token *token, t_env **env)
+bool	do_cd(t_token *token, t_env **env, char *path)
 {
-	char	*path;
-
-	if (!token->next)
-	{
-		path = get_env_value("HOME", *env);
-		if (!path)
-		{
-			ft_putendl_fd("cd: HOME not set", 2);
-
-			free(path);
-			return (false);
-		}
-		if (chdir(path) == -1)
-		{
-			ft_putstr_fd("cd: ", 2);
-			perror(path);
-			error_status(256 * 1);
-			return (false);
-		}
-		return (true);
-	}
-	token = token->next;
 	if (token->next)
 	{
 		ft_putendl_fd("minishell: cd: too many arguments", 2);
@@ -50,4 +28,30 @@ bool	builtin_cd(t_token *token, t_env **env)
 		return (false);
 	}
 	return (true);
+}
+
+bool	builtin_cd(t_token *token, t_env **env)
+{
+	char	*path;
+
+	if (!token->next)
+	{
+		path = get_env_value("HOME", *env);
+		if (!path)
+		{
+			ft_putendl_fd("cd: HOME not set", 2);
+			free(path);
+			return (false);
+		}
+		if (chdir(path) == -1)
+		{
+			ft_putstr_fd("cd: ", 2);
+			perror(path);
+			error_status(256 * 1);
+			return (false);
+		}
+		return (true);
+	}
+	token = token->next;
+	return (do_cd(token, env, path));
 }

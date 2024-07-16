@@ -53,7 +53,7 @@ t_ats	*new_ats(t_token *token)
 		free(ats);
 		ats = NULL;
 	}
-	return ats;
+	return (ats);
 }
 
 void	free_ats(t_ats *ats)
@@ -84,7 +84,7 @@ int	ats_list_size(t_ats *ats)
 		size++;
 		ats = ats->next;
 	}
-	return size;
+	return (size);
 }
 
 void	print_ats(t_ats *ats)
