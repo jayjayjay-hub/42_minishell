@@ -71,8 +71,8 @@ void	run_cmd(char *line, char **envp, t_env *env)
 	expansion(token, env);
 	redirect_open(token);
 	ats = parser(token);
-	// free(token); todo
 	make_child(ats, envp, fd_pipe, pid_info, env);
+	// free(token); todo
 	free_ats(ats);
 }
 

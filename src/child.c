@@ -70,7 +70,6 @@ void	do_execve(char **cmd, char **envp)
 {
 	char	*path;
 
-	// /bin/ls や ./a.outを実行するため。
 	path = NULL;
 	if (!ft_strncmp(cmd[0], "/", 1) || !ft_strncmp(cmd[0], "./", 2))
 	{
