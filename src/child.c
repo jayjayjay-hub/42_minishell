@@ -1,31 +1,20 @@
 
 #include "minishell.h"
 
-// 二次元配列を解放する。
-void	dp_free(char **arg)
-{
-	int	i;
-
-	i = -1;
-	while (arg[++i])
-		free(arg[i]);
-	free(arg);
-}
-
 // debug用。二次元配列を出力する。
-static void	dp_print(char **arg)
-{
-	int	i;
+// static void	dp_print(char **arg)
+// {
+// 	int	i;
 
-	i = -1;
-	while (arg[++i])
-	{
-		ft_putstr_fd("arg[", 2);
-		ft_putnbr_fd(i, 2);
-		ft_putstr_fd("]: ", 2);
-		ft_putendl_fd(arg[i], 2);
-	}
-}
+// 	i = -1;
+// 	while (arg[++i])
+// 	{
+// 		ft_putstr_fd("arg[", 2);
+// 		ft_putnbr_fd(i, 2);
+// 		ft_putstr_fd("]: ", 2);
+// 		ft_putendl_fd(arg[i], 2);
+// 	}
+// }
 
 static void	sub_dup2(int first, int second)
 {
@@ -76,7 +65,8 @@ void	do_execve(char **cmd, char **envp)
 		if (access(cmd[0], F_OK) != -1)
 			path = cmd[0];
 		else
-			ft_error("minishell", cmd[0], "No such file or directory", CMD_NOT_FOUND);
+			ft_error("minishell", cmd[0],
+				"No such file or directory", CMD_NOT_FOUND);
 	}
 	else
 		path = search_path(cmd[0], envp);
@@ -86,10 +76,10 @@ void	do_execve(char **cmd, char **envp)
 		ft_error(NULL, NULL, "execve failed", EXIT_FAILURE);
 }
 
-char	**get_cmd(t_token *token)
+void	**do_cmd(t_token *token, char **envp)
 {
 	int			i;
-	char	**cmd;
+	char		**cmd;
 
 	i = 0;
 	cmd = (char **)ft_calloc(token_list_size(token) + 1, sizeof(char *));
@@ -108,13 +98,13 @@ char	**get_cmd(t_token *token)
 		if (!redirect(&token))
 			exit(error_status(256 * 1));
 	}
-	return (cmd);
+	do_execve(cmd, envp);
+	return (NULL);
 }
 
 pid_t	child(t_cmd *command, t_env *env)
 {
 	pid_t	pid;
-	char	**cmd;
 	int		pipe_i;
 
 	pid = fork();
@@ -130,13 +120,13 @@ pid_t	child(t_cmd *command, t_env *env)
 			else if (pipe_i == command->fd_pipe->pipe_size)
 				sub_dup2(command->fd_pipe->fd[2 * pipe_i - 2], 0);
 			else
-				sub_dup2(command->fd_pipe->fd[2 * pipe_i - 2], command->fd_pipe->fd[2 * pipe_i + 1]);
+				sub_dup2(command->fd_pipe->fd[2 * pipe_i - 2],
+					command->fd_pipe->fd[2 * pipe_i + 1]);
 		}
 		close_pipe(command->fd_pipe);
 		if (builtin_control(command->ats->token, &env))
 			exit(WEXITSTATUS(PRINT_ERROR));
-		cmd = get_cmd(command->ats->token);
-		do_execve(cmd, command->envp);
+		do_cmd(command->ats->token, command->envp);
 	}
 	return (pid);
 }

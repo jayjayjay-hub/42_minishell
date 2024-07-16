@@ -233,4 +233,11 @@ bool			builtin_env(t_token *token, t_env *env);
 // builtin_exit.c
 bool			builtin_exit(t_token *token);
 
+// free.c
+void			dp_free(char **arg);
+void			free_command(t_cmd *command);
+
+// heredoc.c
+int				open_heredoc(char *eof);
+
 #endif

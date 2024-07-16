@@ -9,16 +9,6 @@ void	handle_eof(char *line)
 	exit(WEXITSTATUS(errno));
 }
 
-void	free_command(t_cmd *command)
-{
-	free(command->fd_pipe->fd);
-	free(command->fd_pipe);
-	free(command->pid_info.pid);
-	// free_token(command->ats->token); todo
-	free_ats(command->ats);
-	free(command);
-}
-
 void	struct_init(t_cmd *cmd, char **envp)
 {
 	cmd->envp = envp;
