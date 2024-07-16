@@ -13,7 +13,7 @@ void	dp_free(char **arg)
 }
 
 // debug用。二次元配列を出力する。
-void	dp_print(char **arg)
+static void	dp_print(char **arg)
 {
 	int	i;
 
@@ -111,30 +111,32 @@ char	**get_cmd(t_token *token)
 	return (cmd);
 }
 
-pid_t	child(t_token *token, char **envp, t_pipe_fd *fd_pipe, int pipe_i, t_env *env)
+pid_t	child(t_cmd *command, t_env *env)
 {
 	pid_t	pid;
 	char	**cmd;
+	int		pipe_i;
 
 	pid = fork();
 	if (pid == -1)
 		ft_error("minishell", NULL, "fork failed", 1);
 	if (pid == 0)
 	{
-		if (fd_pipe->pipe_size != 0)
+		pipe_i = command->pid_info.pipe_i;
+		if (command->fd_pipe->pipe_size != 0)
 		{
 			if (pipe_i == 0)
-				sub_dup2(0, fd_pipe->fd[2 * pipe_i + 1]);
-			else if (pipe_i == fd_pipe->pipe_size)
-				sub_dup2(fd_pipe->fd[2 * pipe_i - 2], 0);
+				sub_dup2(0, command->fd_pipe->fd[2 * pipe_i + 1]);
+			else if (pipe_i == command->fd_pipe->pipe_size)
+				sub_dup2(command->fd_pipe->fd[2 * pipe_i - 2], 0);
 			else
-				sub_dup2(fd_pipe->fd[2 * pipe_i - 2], fd_pipe->fd[2 * pipe_i + 1]);
+				sub_dup2(command->fd_pipe->fd[2 * pipe_i - 2], command->fd_pipe->fd[2 * pipe_i + 1]);
 		}
-		close_pipe(fd_pipe);
-		if (builtin_control(token, &env))
+		close_pipe(command->fd_pipe);
+		if (builtin_control(command->ats->token, &env))
 			exit(WEXITSTATUS(PRINT_ERROR));
-		cmd = get_cmd(token);
-		do_execve(cmd, envp);
+		cmd = get_cmd(command->ats->token);
+		do_execve(cmd, command->envp);
 	}
 	return (pid);
 }

@@ -9,77 +9,81 @@ void	handle_eof(char *line)
 	exit(WEXITSTATUS(errno));
 }
 
-void	struct_init(t_ats *ats, t_token *token, t_pipe_fd *fd_pipe, t_pid_info *pid_info)
+void	free_command(t_cmd *command)
 {
-	ats = NULL;
-	token = NULL;
-	fd_pipe = NULL;
-	pid_info->pid = NULL;
-	pid_info->pipe_i = 0;
-	pid_info = NULL;
+	free(command->fd_pipe->fd);
+	free(command->fd_pipe);
+	free(command->pid_info.pid);
+	// free_token(command->ats->token); todo
+	free_ats(command->ats);
+	free(command);
 }
 
-void	make_child(t_ats *ats, char **envp, t_pipe_fd *fd_pipe, t_pid_info pid_info, t_env *env)
+void	struct_init(t_cmd *cmd, char **envp)
+{
+	cmd->envp = envp;
+	cmd->ats = NULL;
+	cmd->fd_pipe = NULL;
+	cmd->pid_info.pid = NULL;
+	cmd->pid_info.pipe_i = 0;
+}
+
+void	make_child(t_cmd *command, t_env *env)
 {
 	int i;
-	t_ats *tmp = ats;
+	t_ats *tmp = command->ats;
 
 	i = 0;
-	fd_pipe = create_pipe(ats);
-	pid_info.pid = (pid_t *)malloc(sizeof(pid_t) * (fd_pipe->pipe_size + 1));
-	while (ats)
+	command->fd_pipe = create_pipe(command->ats);
+	command->pid_info.pid = (pid_t *)malloc(sizeof(pid_t) * (command->fd_pipe->pipe_size + 1));
+	while (command->ats)
 	{
-		if (add_variable(ats->token, &env))
+		if (add_variable(command->ats->token, &env))
 		{
 			// variable_list_print();
-			ats = ats->next;
+			command->ats = command->ats->next;
 			continue ;
 		}
-		if (!fd_pipe->pipe_size && builtin_control(ats->token, &env))
+		if (!command->fd_pipe->pipe_size && builtin_control(command->ats->token, &env))
 		{
-			ats = ats->next;
+			command->ats = command->ats->next;
 			continue ;
 		}
-		pid_info.pid[pid_info.pipe_i] = child(ats->token, envp, fd_pipe, pid_info.pipe_i, env);
-		pid_info.pipe_i++;
-		ats = ats->next;
+		command->pid_info.pid[command->pid_info.pipe_i] = child(command, env);
+		command->pid_info.pipe_i++;
+		command->ats = command->ats->next;
 	}
-	close_pipe(fd_pipe);
-	while (pid_info.pipe_i--)
+	close_pipe(command->fd_pipe);
+	while (command->pid_info.pipe_i--)
 	{
-		waitpid(pid_info.pid[i++], &errno, 0);
+		waitpid(command->pid_info.pid[i++], &errno, 0);
 		error_status(errno);
 	}
-	if (!fd_pipe->pipe_size && builtin_check(tmp->token))
+	if (!command->fd_pipe->pipe_size && builtin_check(tmp->token))
 		close_redirect(tmp->token);
-	free(fd_pipe->fd);
-	free(fd_pipe);
-	free(pid_info.pid);
 }
 
 void	run_cmd(char *line, char **envp, t_env *env)
 {
-	t_ats		*ats;
+	t_cmd		*command;
 	t_token		*token;
-	t_pipe_fd	*fd_pipe;
-	t_pid_info 	pid_info;
 
-	struct_init(ats, token, fd_pipe, &pid_info);
+	token = NULL;
+	command = (t_cmd *)malloc(sizeof(t_cmd));
+	struct_init(command, envp);
 	token = tokenize(line);
 	if (!syntax_check(token))
 		return ;
 	expansion(token, env);
 	redirect_open(token);
-	ats = parser(token);
-	make_child(ats, envp, fd_pipe, pid_info, env);
-	// free(token); todo
-	free_ats(ats);
+	command->ats = parser(token);
+	make_child(command, env);
+	free_command(command);
 }
 
 int	main(int argc, char **argv, char **envp)
 {
 	char		*line;
-	t_pid_info	pid_info;
 	t_env		*env;
 
 	register_signal();

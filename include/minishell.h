@@ -113,6 +113,14 @@ typedef struct pid_info
 	int		pipe_i;
 }	t_pid_info;
 
+typedef struct s_cmd
+{
+	char 		**envp;
+	t_ats 		*ats;
+	t_pipe_fd 	*fd_pipe;
+	t_pid_info 	pid_info;
+}	t_cmd;
+
 
 // main.c
 int error_status(int error_code);
@@ -151,7 +159,7 @@ void	print_ats(t_ats *ats);
 t_ats	*new_ats(t_token *token);
 
 // child.c
-pid_t	child(t_token *token, char **envp, t_pipe_fd *fd_pipe, int pipe_i, t_env *env);
+pid_t	child(t_cmd *command, t_env *env);
 
 // pipe.c
 t_pipe_fd *create_pipe(t_ats *ats);
