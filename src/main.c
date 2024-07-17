@@ -60,6 +60,7 @@ void	make_wait_child(t_cmd *command, t_env *env)
 	}
 	if (!command->fd_pipe->pipe_size && builtin_check(tmp->token))
 		close_redirect(tmp->token);
+	free_ats(tmp);
 }
 
 void	command_set(char *line, char **envp, t_env *env)
@@ -76,7 +77,9 @@ void	command_set(char *line, char **envp, t_env *env)
 	expansion(token, env);
 	redirect_open(token);
 	command->ats = parser(token);
+	print_ats(command->ats);
 	make_wait_child(command, env);
+	// free_token(token);
 	free_command(command);
 }
 
@@ -89,6 +92,7 @@ int	main(int argc, char **argv, char **envp)
 	rl_outstream = stderr;
 	env = NULL;
 	env = init_env(envp);
+	// printf("PID: %d\n", getpid());
 	while (1)
 	{
 		line = readline("minishell$ ");

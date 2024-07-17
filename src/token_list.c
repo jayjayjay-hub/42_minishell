@@ -55,7 +55,11 @@ t_token	*new_token(char *str, t_token_type type, int fd)
 			ft_error("ft_strdup", "token->str", strerror(errno), EXIT_FAILURE);
 	}
 	else
-		token->str = str;
+	{
+		token->str = strdup(str);
+		if (!token->str)
+			ft_error("ft_strdup", "token->str", strerror(errno), EXIT_FAILURE);
+	}
 	token->type = type;
 	token->fd = fd;
 	token->backup_fd = -1;
@@ -106,7 +110,7 @@ void	print_token(t_token *token)
 	{
 		printf ("str: %s, type: %d, fd: %d, backup_fd: %d\n",
 			tmp->str, tmp->type, tmp->fd, tmp->backup_fd);
-		printf ("prev: %p, current: %p, next: %p\n", tmp->prev, tmp, tmp->next);
+		// printf ("prev: %p, current: %p, next: %p\n", tmp->prev, tmp, tmp->next);
 		tmp = tmp->next;
 	}
 }

@@ -55,23 +55,37 @@ t_key_value	*get_key_value(char *str)
 	return (key_value);
 }
 
+bool	is_valid_token(t_token *token)
+{
+	while (token)
+	{
+		if (!is_valid_variable(token->str))
+			return (false);
+		token = token->next;
+	}
+	return (true);
+}
+
 bool	add_variable(t_token *token, t_env **env)
 {
 	t_env		*new;
 	t_key_value	*key_value;
 
-	if (!is_valid_variable(token->str))
+	if (!is_valid_token(token))
 		return (false);
-	key_value = get_key_value(token->str);
-	if (edit_env_value(key_value->key, key_value->value, env))
+	while (token)
 	{
-		free(key_value->key);
-		free(key_value->value);
-		return (true);
+		key_value = get_key_value(token->str);
+		if (edit_env_value(key_value->key, key_value->value, env))
+		{
+			free(key_value->key);
+			free(key_value->value);
+		}
+		new = new_key_value(key_value);
+		if (!new)
+			return (false);
+		env_add_back(new, env);
+		token = token->next;
 	}
-	new = new_key_value(key_value);
-	if (!new)
-		return (false);
-	add_back_env(new, env);
 	return (true);
 }

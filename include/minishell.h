@@ -49,6 +49,7 @@ typedef struct s_env
 {
 	char			*key;
 	char			*value;
+	bool			is_export;
 	struct s_env	*next;
 }	t_env;
 
@@ -195,18 +196,19 @@ int				strlen_double_ptr(char **str);
 bool			syntax_check(t_token *token);
 
 // env_list.c
-void			add_back_env(t_env *new, t_env **env);
-char			*get_env_key_from_envp(char *env_line);
-char			*get_env_value_from_envp(char *env_line);
-t_env			*new_env(char *env_line);
+void			env_add_back(t_env *new, t_env **env);
+char			*get_key_from_envp(char *env_line);
+char			*get_value_from_envp(char *env_line);
+t_env			*new_valiable(char *env_line);
 void			free_env(t_env *env);
-void			print_export_env(t_env *env);
+void			print_export(t_env *env);
 void			print_env(t_env *env);
 int				env_list_size(t_env *env);
 char			*get_env_value(char *key, t_env *env);
 bool			edit_env_value(char *key, char *value, t_env **env);
 void			export_env(char *key, char *value, t_env **env);
 t_env			*new_key_value(t_key_value *key_value);
+t_env			*new_export_env(char *env_line);
 
 // env.c
 t_env			*init_env(char **envp);

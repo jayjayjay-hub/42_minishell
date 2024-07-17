@@ -36,7 +36,7 @@ t_ats	*new_ats(t_token *token)
 	if (!ats)
 		ft_error("malloc", "ats", strerror(errno), EXIT_FAILURE);
 	tmp = NULL;
-	// Pipeまでのトークンをats->tokenに追加
+	// Pipeまでのトークンをats->tokenに追加 新しく作成したトークンリストをats->tokenに追加
 	while (token && token->type != PIPE)
 	{
 		token_add_back(&tmp, new_token(token->str, token->type, token->fd));
@@ -50,7 +50,7 @@ t_ats	*new_ats(t_token *token)
 	}
 	else
 	{
-		free(ats);
+		free_ats(ats);
 		ats = NULL;
 	}
 	return (ats);
@@ -91,18 +91,17 @@ void	print_ats(t_ats *ats)
 {
 	int debug = 0;
 
-	printf("<< ats list >>\n");
+	// printf("<< ats list >>\n");
 	while (ats)
 	{
 		printf("<< ats[%d] >>\n", debug);
-		printf("next ats: %p\n", ats->next);
-		printf("prev ats: %p\n", ats->prev);
+		// printf("next ats: %p\n", ats->next);
+		// printf("prev ats: %p\n", ats->prev);
 		print_token(ats->token);
-		printf("\n");
 		printf("prev: %p, current: %p, next: %p\n", ats->prev, ats, ats->next);
 		ats = ats->next;
 		if (debug++ > 10)
 			break ;
 	}
-	printf("<< ats list end >>\n\n");
+	// printf("<< ats list end >>\n\n");
 }

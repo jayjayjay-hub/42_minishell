@@ -9,7 +9,9 @@ typedef struct s_env
 }	t_env;
 */
 
-void	add_back_env(t_env *new, t_env **env)
+/*ここから環境変数の初期化に使用*/
+
+void	env_add_back(t_env *new, t_env **env)
 {
 	t_env	*tmp;
 
@@ -26,7 +28,7 @@ void	add_back_env(t_env *new, t_env **env)
 	}
 }
 
-char	*get_env_key_from_envp(char *env_line)
+char	*get_key_from_envp(char *env_line)
 {
 	int		i;
 	char	*key;
@@ -41,7 +43,7 @@ char	*get_env_key_from_envp(char *env_line)
 	return (key);
 }
 
-char	*get_env_value_from_envp(char *env_line)
+char	*get_value_from_envp(char *env_line)
 {
 	int		i;
 	char	*value;
@@ -57,7 +59,7 @@ char	*get_env_value_from_envp(char *env_line)
 	return (value);
 }
 
-t_env	*new_env(char *env_line)
+t_env	*new_valiable(char *env_line)
 {
 	t_env	*env;
 	char	*key;
@@ -66,10 +68,31 @@ t_env	*new_env(char *env_line)
 	env = malloc(sizeof(t_env));
 	if (!env)
 		ft_error("malloc", "env", strerror(errno), EXIT_FAILURE);
-	key = get_env_key_from_envp(env_line);
-	value = get_env_value_from_envp(env_line);
+	key = get_key_from_envp(env_line);
+	value = get_value_from_envp(env_line);
 	env->key = key;
 	env->value = value;
+	env->is_export = false;
+	env->next = NULL;
+	return (env);
+}
+
+/*ここまで*/
+
+t_env	*new_export_env(char *env_line)
+{
+	t_env	*env;
+	char	*key;
+	char	*value;
+
+	env = malloc(sizeof(t_env));
+	if (!env)
+		ft_error("malloc", "env", strerror(errno), EXIT_FAILURE);
+	key = get_key_from_envp(env_line);
+	value = get_value_from_envp(env_line);
+	env->key = key;
+	env->value = value;
+	env->is_export = true;
 	env->next = NULL;
 	return (env);
 }
@@ -85,6 +108,7 @@ t_env	*new_key_value(t_key_value *key_value)
 		ft_error("malloc", "env", strerror(errno), EXIT_FAILURE);
 	env->key = key_value->key;
 	env->value = key_value->value;
+	env->is_export = false;
 	env->next = NULL;
 	return (env);
 }
@@ -115,7 +139,7 @@ void	export_env(char *key, char *value, t_env **env)
 		tmp = tmp->next;
 	}
 	key_value = ft_strjoin(key, ft_strjoin("=", value));
-	add_back_env(new_env(key_value), env);
+	env_add_back(new_valiable(key_value), env);
 }
 
 char	*get_env_value(char *key, t_env *env)
@@ -172,12 +196,12 @@ void	free_env(t_env *env)
 	}
 }
 
-void	print_export_env(t_env *env)
+void	print_export(t_env *env)
 {
 	t_env	*tmp;
 
 	tmp = env;
-	while (tmp)
+	while (tmp && tmp->is_export)
 	{
 		ft_putstr_fd("declare -x ", 1);
 		ft_putstr_fd(tmp->key, 1);
@@ -198,7 +222,7 @@ void	print_env(t_env *env)
 	t_env	*tmp;
 
 	tmp = env;
-	while (tmp)
+	while (tmp && tmp->is_export)
 	{
 		ft_putstr_fd(tmp->key, 1);
 		ft_putchar_fd('=', 1);

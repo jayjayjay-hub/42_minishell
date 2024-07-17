@@ -96,6 +96,7 @@ int	add_token(t_token **token, char *line, t_token_type type)
 	if (!token_str)
 		return (0);
 	new = new_token(token_str, type, 0);
+	free(token_str);
 	token_add_back(token, new);
 	return (ft_strlen(token_str));
 }
