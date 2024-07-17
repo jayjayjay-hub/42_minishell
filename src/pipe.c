@@ -1,7 +1,7 @@
 
 #include "minishell.h"
 
-t_pipe_fd *create_pipe(t_ats *ats)
+t_pipe_fd	*create_pipe(t_ats *ats)
 {
 	int			i;
 	t_ats		*tmp_ats;

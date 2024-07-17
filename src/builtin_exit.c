@@ -17,18 +17,20 @@ bool	ft_str_isdigit(char *str)
 
 bool	builtin_exit(t_token *token)
 {
+	int	ret;
+
+	ret = 0;
+	ft_putendl_fd("exit", 1);
 	if (token_list_size(token) > 2)
 	{
-		ft_putendl_fd("exit", 2);
 		ft_putendl_fd("minishell: exit: too many arguments", 2);
 		error_status(256 * 1);
 		return (true);
 	}
 	else
 	{
-		ft_putendl_fd("exit", 2);
 		if (!token->next)
-			exit(errno);
+			exit(error_status(PRINT_ERROR));
 		else if (!ft_str_isdigit(token->next->str))
 		{
 			ft_putstr_fd("minishell: exit: ", 2);
@@ -37,7 +39,7 @@ bool	builtin_exit(t_token *token)
 			error_status(256 * 2);
 		}
 		else
-			errno = (size_t)ft_atoi(token->next->str);
-		exit(errno);
+			ret = (size_t)ft_atoi(token->next->str);
+		exit(ret);
 	}
 }

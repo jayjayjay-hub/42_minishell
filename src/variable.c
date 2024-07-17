@@ -34,7 +34,7 @@ bool	is_valid_variable(char *str)
 	return (true);
 }
 
-t_key_value *get_key_value(char *str)
+t_key_value	*get_key_value(char *str)
 {
 	t_key_value	*key_value;
 	char		*tmp;
@@ -55,28 +55,23 @@ t_key_value *get_key_value(char *str)
 	return (key_value);
 }
 
-bool	add_variable(t_token *token)
+bool	add_variable(t_token *token, t_env **env)
 {
-	t_env	*new;
+	t_env		*new;
 	t_key_value	*key_value;
 
-	while (token)
+	if (!is_valid_variable(token->str))
+		return (false);
+	key_value = get_key_value(token->str);
+	if (edit_env_value(key_value->key, key_value->value, env))
 	{
-		if (!is_valid_variable(token->str))
-			return (false);
-		key_value = get_key_value(token->str);
-		if (edit_env_value(key_value->key, key_value->value))
-		{
-			free(key_value->key);
-			free(key_value->value);
-			token = token->next;
-			continue ;
-		}
-		new = new_key_value(key_value);
-		if (!new)
-			return (false);
-		add_back_env(new);
-		token = token->next;
+		free(key_value->key);
+		free(key_value->value);
+		return (true);
 	}
+	new = new_key_value(key_value);
+	if (!new)
+		return (false);
+	add_back_env(new, env);
 	return (true);
 }

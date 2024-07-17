@@ -95,8 +95,7 @@ int	add_token(t_token **token, char *line, t_token_type type)
 		token_str = get_operator(line, type);
 	if (!token_str)
 		return (0);
-	new = new_token(token_str, type, 0, 0);
-	// todo ここbackup_fdの値は初期値０でいい？
+	new = new_token(token_str, type, 0);
 	token_add_back(token, new);
 	return (strlen(token_str));
 }
@@ -139,6 +138,5 @@ t_token	*tokenize(char *line)
 		}
 		line += token_len;
 	}
-	// print_token(token);
 	return (token);
 }

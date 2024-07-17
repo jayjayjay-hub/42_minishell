@@ -24,7 +24,7 @@ void	remove_quote(char *str)
 	str[j] = '\0';
 }
 
-void	variable_expansion(char **str, char **tmp, int *i, int *j)
+void	variable_expansion(char **str, char **tmp, int *i, int *j, t_env *env)
 {
 	char	*key;
 	char	*value;
@@ -32,7 +32,7 @@ void	variable_expansion(char **str, char **tmp, int *i, int *j)
 	char	*tmp2;
 
 	key = get_variable_key((*str) + *i + 1);
-	value = get_env_value(key);
+	value = get_env_value(key, env);
 	if (value)
 	{
 		tmp2 = ft_strjoin(*tmp, value);
@@ -67,7 +67,8 @@ void	pass_single_quote(char **tmp, char **str, int *i, int *j)
 	(*j)++;
 }
 
-void	expansion_double_quote(char **str, char **tmp, int *i, int *j)
+void	expansion_double_quote(char **str,
+	char **tmp, int *i, int *j, t_env *env)
 {
 	(*tmp)[*j] = (*str)[*i];
 	(*i)++;
@@ -75,7 +76,7 @@ void	expansion_double_quote(char **str, char **tmp, int *i, int *j)
 	while ((*str)[*i] && !is_double_quote((*str)[*i]))
 	{
 		if ((*str)[*i] == '$' && (*str)[*i + 1])
-			variable_expansion(str, tmp, i, j);
+			variable_expansion(str, tmp, i, j, env);
 		else
 		{
 			(*tmp)[*j] = (*str)[*i];
@@ -88,7 +89,7 @@ void	expansion_double_quote(char **str, char **tmp, int *i, int *j)
 	(*j)++;
 }
 
-void	expansion_env(char **str)
+void	expansion_env(char **str, t_env *env)
 {
 	int		i;
 	int		j;
@@ -102,9 +103,9 @@ void	expansion_env(char **str)
 		if (is_single_quote((*str)[i]))
 			pass_single_quote(&tmp, str, &i, &j);
 		else if (is_double_quote((*str)[i]))
-			expansion_double_quote(str, &tmp, &i, &j);
+			expansion_double_quote(str, &tmp, &i, &j, env);
 		else if ((*str)[i] == '$' && (*str)[i + 1])
-			variable_expansion(str, &tmp, &i, &j);
+			variable_expansion(str, &tmp, &i, &j, env);
 		else
 			tmp[j++] = (*str)[i++];
 	}
@@ -113,13 +114,13 @@ void	expansion_env(char **str)
 	*str = tmp;
 }
 
-void	expansion(t_token *token)
+void	expansion(t_token *token, t_env *env)
 {
 	while (token)
 	{
 		if (token->type == WORD)
 		{
-			expansion_env(&token->str);
+			expansion_env(&token->str, env);
 			remove_quote(token->str);
 		}
 		token = token->next;

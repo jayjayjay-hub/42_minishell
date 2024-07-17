@@ -39,7 +39,7 @@ t_ats	*new_ats(t_token *token)
 	// Pipeまでのトークンをats->tokenに追加
 	while (token && token->type != PIPE)
 	{
-		token_add_back(&tmp, new_token(token->str, token->type, token->fd, token->backup_fd));
+		token_add_back(&tmp, new_token(token->str, token->type, token->fd));
 		token = token->next;
 	}
 	if (tmp)
@@ -53,7 +53,7 @@ t_ats	*new_ats(t_token *token)
 		free(ats);
 		ats = NULL;
 	}
-	return ats;
+	return (ats);
 }
 
 void	free_ats(t_ats *ats)
@@ -84,14 +84,14 @@ int	ats_list_size(t_ats *ats)
 		size++;
 		ats = ats->next;
 	}
-	return size;
+	return (size);
 }
 
 void	print_ats(t_ats *ats)
 {
 	int debug = 0;
 
-	printf("<< ats list >>\n\n");
+	printf("<< ats list >>\n");
 	while (ats)
 	{
 		printf("<< ats[%d] >>\n", debug);
@@ -99,9 +99,10 @@ void	print_ats(t_ats *ats)
 		printf("prev ats: %p\n", ats->prev);
 		print_token(ats->token);
 		printf("\n");
+		printf("prev: %p, current: %p, next: %p\n", ats->prev, ats, ats->next);
 		ats = ats->next;
 		if (debug++ > 10)
 			break ;
 	}
-	printf("<< ats list end >>\n");
+	printf("<< ats list end >>\n\n");
 }

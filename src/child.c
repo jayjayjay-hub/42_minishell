@@ -1,31 +1,20 @@
 
 #include "minishell.h"
 
-// 二次元配列を解放する。
-void	dp_free(char **arg)
-{
-	int	i;
-
-	i = -1;
-	while (arg[++i])
-		free(arg[i]);
-	free(arg);
-}
-
 // debug用。二次元配列を出力する。
-void	dp_print(char **arg)
-{
-	int	i;
+// static void	dp_print(char **arg)
+// {
+// 	int	i;
 
-	i = -1;
-	while (arg[++i])
-	{
-		ft_putstr_fd("arg[", 2);
-		ft_putnbr_fd(i, 2);
-		ft_putstr_fd("]: ", 2);
-		ft_putendl_fd(arg[i], 2);
-	}
-}
+// 	i = -1;
+// 	while (arg[++i])
+// 	{
+// 		ft_putstr_fd("arg[", 2);
+// 		ft_putnbr_fd(i, 2);
+// 		ft_putstr_fd("]: ", 2);
+// 		ft_putendl_fd(arg[i], 2);
+// 	}
+// }
 
 static void	sub_dup2(int first, int second)
 {
@@ -70,29 +59,27 @@ void	do_execve(char **cmd, char **envp)
 {
 	char	*path;
 
-	// /bin/ls や ./a.outを実行するため。
 	path = NULL;
 	if (!ft_strncmp(cmd[0], "/", 1) || !ft_strncmp(cmd[0], "./", 2))
 	{
 		if (access(cmd[0], F_OK) != -1)
 			path = cmd[0];
 		else
-			ft_error("minishell", cmd[0], "No such file or directory", CMD_NOT_FOUND);
+			ft_error("minishell", cmd[0],
+				"No such file or directory", CMD_NOT_FOUND);
 	}
 	else
 		path = search_path(cmd[0], envp);
 	if (!path)
 		ft_error("minishell", cmd[0], "command not found", CMD_NOT_FOUND);
-	// ft_putendl_fd(path, 2);
-	// dp_print(cmd);
 	if (execve(path, cmd, envp) == -1)
 		ft_error(NULL, NULL, "execve failed", EXIT_FAILURE);
 }
 
-char	**get_cmd(t_token *token)
+void	**do_cmd(t_token *token, char **envp)
 {
 	int			i;
-	char	**cmd;
+	char		**cmd;
 
 	i = 0;
 	cmd = (char **)ft_calloc(token_list_size(token) + 1, sizeof(char *));
@@ -108,35 +95,38 @@ char	**get_cmd(t_token *token)
 			token = token->next;
 			i++;
 		}
-		redirect(&token);
+		if (!redirect(&token))
+			exit(error_status(256 * 1));
 	}
-	return (cmd);
+	do_execve(cmd, envp);
+	return (NULL);
 }
 
-pid_t	child(t_token *token, char **envp, t_pipe_fd *fd_pipe, int pipe_i)
+pid_t	child(t_cmd *command, t_env *env)
 {
 	pid_t	pid;
-	char	**cmd;
+	int		pipe_i;
 
 	pid = fork();
 	if (pid == -1)
 		ft_error("minishell", NULL, "fork failed", 1);
 	if (pid == 0)
 	{
-		if (fd_pipe->pipe_size != 0)
+		pipe_i = command->pid_info.pipe_i;
+		if (command->fd_pipe->pipe_size != 0)
 		{
 			if (pipe_i == 0)
-				sub_dup2(0, fd_pipe->fd[2 * pipe_i + 1]);
-			else if (pipe_i == fd_pipe->pipe_size)
-				sub_dup2(fd_pipe->fd[2 * pipe_i - 2], 0);
+				sub_dup2(0, command->fd_pipe->fd[2 * pipe_i + 1]);
+			else if (pipe_i == command->fd_pipe->pipe_size)
+				sub_dup2(command->fd_pipe->fd[2 * pipe_i - 2], 0);
 			else
-				sub_dup2(fd_pipe->fd[2 * pipe_i - 2], fd_pipe->fd[2 * pipe_i + 1]);
+				sub_dup2(command->fd_pipe->fd[2 * pipe_i - 2],
+					command->fd_pipe->fd[2 * pipe_i + 1]);
 		}
-		close_pipe(fd_pipe);
-		if (builtin_control(token))
-			exit(WEXITSTATUS(errno));
-		cmd = get_cmd(token);
-		do_execve(cmd, envp);
+		close_pipe(command->fd_pipe);
+		if (builtin_control(command->ats->token, &env))
+			exit(WEXITSTATUS(PRINT_ERROR));
+		do_cmd(command->ats->token, command->envp);
 	}
 	return (pid);
 }

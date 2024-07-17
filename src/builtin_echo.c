@@ -7,8 +7,8 @@ bool	builtin_echo(t_token *token)
 	bool	newline;
 
 	newline = true;
-	// debug
-	if (token->next && strlen(token->next->str) == 2 && !strncmp(token->next->str, "-n", 3))
+	if (token->next && strlen(token->next->str) == 2
+		&& !strncmp(token->next->str, "-n", 3))
 	{
 		newline = false;
 		token = token->next;

@@ -9,81 +9,79 @@ void	handle_eof(char *line)
 	exit(WEXITSTATUS(errno));
 }
 
-void	struct_init(t_ats *ats, t_token *token, t_pipe_fd *fd_pipe, t_pid_info *pid_info)
+void	struct_init(t_cmd *cmd, char **envp)
 {
-	ats = NULL;
-	token = NULL;
-	fd_pipe = NULL;
-	pid_info->pid = NULL;
-	pid_info->pipe_i = 0;
-	pid_info = NULL;
+	cmd->envp = envp;
+	cmd->ats = NULL;
+	cmd->fd_pipe = NULL;
+	cmd->pid_info.pid = NULL;
+	cmd->pid_info.pipe_i = 0;
 }
 
-void	make_child(t_ats *ats, char **envp, t_pipe_fd *fd_pipe, t_pid_info pid_info)
+void	make_child(t_cmd *command, t_env *env)
 {
-	int i;
+	int		i;
+	t_ats	*tmp;
 
 	i = 0;
-	fd_pipe = create_pipe(ats);
-	pid_info.pid = (pid_t *)malloc(sizeof(pid_t) * (fd_pipe->pipe_size + 1));
-	while (ats)
+	tmp = command->ats;
+	command->fd_pipe = create_pipe(command->ats);
+	command->pid_info.pid = (pid_t *)malloc(sizeof(pid_t)
+			* (command->fd_pipe->pipe_size + 1));
+	while (command->ats)
 	{
-		if (add_variable(ats->token))
+		if (add_variable(command->ats->token, &env))
 		{
-			// variable_list_print();
-			ats = ats->next;
+			command->ats = command->ats->next;
 			continue ;
 		}
-		if (!fd_pipe->pipe_size && builtin_control(ats->token))
+		if (!command->fd_pipe->pipe_size
+			&& builtin_control(command->ats->token, &env))
 		{
-			ats = ats->next;
+			command->ats = command->ats->next;
 			continue ;
 		}
-		pid_info.pid[pid_info.pipe_i] = child(ats->token, envp, fd_pipe, pid_info.pipe_i);
-		pid_info.pipe_i++;
-		ats = ats->next;
+		command->pid_info.pid[command->pid_info.pipe_i] = child(command, env);
+		command->pid_info.pipe_i++;
+		command->ats = command->ats->next;
 	}
-	close_pipe(fd_pipe);
-	while (pid_info.pipe_i--)
+	close_pipe(command->fd_pipe);
+	while (command->pid_info.pipe_i--)
 	{
-		waitpid(pid_info.pid[i++], &errno, 0);
+		waitpid(command->pid_info.pid[i++], &errno, 0);
 		error_status(errno);
 	}
-	// if (!fd_pipe->pipe_size)
-	// close_redirect(ats->token);
-	free(fd_pipe->fd);
-	free(fd_pipe);
-	free(pid_info.pid);
+	if (!command->fd_pipe->pipe_size && builtin_check(tmp->token))
+		close_redirect(tmp->token);
 }
 
-void	run_cmd(char *line, char **envp)
+void	run_cmd(char *line, char **envp, t_env *env)
 {
-	t_ats		*ats;
+	t_cmd		*command;
 	t_token		*token;
-	t_pipe_fd	*fd_pipe;
-	t_pid_info 	pid_info;
 
-	struct_init(ats, token, fd_pipe, &pid_info);
+	token = NULL;
+	command = (t_cmd *)malloc(sizeof(t_cmd));
+	struct_init(command, envp);
 	token = tokenize(line);
 	if (!syntax_check(token))
 		return ;
-	expansion(token);
+	expansion(token, env);
 	redirect_open(token);
-	ats = parser(token);
-	// print_ats(ats);
-	make_child(ats, envp, fd_pipe, pid_info);
-	free_ats(ats);
+	command->ats = parser(token);
+	make_child(command, env);
+	free_command(command);
 }
 
-t_env		*g_env = NULL;
 int	main(int argc, char **argv, char **envp)
 {
 	char		*line;
-	t_pid_info	pid_info;
+	t_env		*env;
 
 	register_signal();
 	rl_outstream = stderr;
-	init_env(envp);
+	env = NULL;
+	env = init_env(envp);
 	while (1)
 	{
 		line = readline("minishell$ ");
@@ -92,37 +90,21 @@ int	main(int argc, char **argv, char **envp)
 		else
 		{
 			add_history(line);
-			run_cmd(line, envp);
+			run_cmd(line, envp, env);
 			free(line);
 		}
 	}
-	return (WEXITSTATUS(errno));
+	return (errno);
 }
 
 int	error_status(int error_code)
 {
-	static int status;
+	static int	status;
 
 	if (error_code < 0)
 		return (WEXITSTATUS(status));
 	status = error_code;
 	return (WEXITSTATUS(status));
 }
-
-// int main(int argc, char **argv, char **envp)
-// {
-// 	int status = 0;
-// 	t_pid_info pid_info;
-// 	int i = 0;
-// 	char *line = "echo a > out| echo b >> out| echo c >> out| echo d > out| cat out";
-
-// 	pid_info = run_cmd(line, envp);
-// 	while (pid_info.pipe_i--)
-// 	{
-// 		waitpid(pid_info.pid[i], &status, 0);
-// 		i++;
-// 	}
-// 	return(WEXITSTATUS(status));
-// }
 
 // valgrind --leak-check=full -s ./minishell

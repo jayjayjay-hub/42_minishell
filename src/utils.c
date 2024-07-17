@@ -1,8 +1,8 @@
 #include "minishell.h"
 
-int is_metachar(char c)
+int	is_metachar(char c)
 {
-	return (c && strchr("|&;,()<> ", c)); // https://runebook.dev/ja/docs/bash/definitions
+	return (c && strchr("|&;,()<> ", c));
 }
 
 int	is_quote(char c)
@@ -20,9 +20,9 @@ int	is_double_quote(char c)
 	return (c && c == '\"');
 }
 
-int strlen_double_ptr(char **str)
+int	strlen_double_ptr(char **str)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	if (!str)

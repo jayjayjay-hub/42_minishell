@@ -24,7 +24,7 @@ t_parse_tree	*new_parse_tree(t_token *token, int token_count, bool is_parse)
 	{
 		while (token_count > 0)
 		{
-			token_add_back(&tmp, new_token(token->str, token->type, token->fd, token->backup_fd));
+			token_add_back(&tmp, new_token(token->str, token->type, token->fd));
 			token = token->next;
 			token_count--;
 		}
