@@ -6,11 +6,20 @@
 /*   By: kosnakam <kosnakam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:25:38 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/17 15:25:41 by kosnakam         ###   ########.fr       */
+/*   Updated: 2024/07/17 15:43:13 by kosnakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+static bool	error_cd(char *path)
+{
+	ft_putstr_fd("cd: ", 2);
+	perror(path);
+	error_status(256 * 1);
+	free(path);
+	return (false);
+}
 
 bool	do_cd(t_token *token, t_env **env, char *path)
 {
@@ -31,11 +40,7 @@ bool	do_cd(t_token *token, t_env **env, char *path)
 		path = ft_strdup(token->str);
 	if (chdir(path) == -1)
 	{
-		ft_putstr_fd("cd: ", 2);
-		perror(path);
-		error_status(256 * 1);
-		free(path);
-		return (false);
+		return (error_cd(path));
 	}
 	error_status(0);
 	free(path);

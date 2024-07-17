@@ -6,7 +6,7 @@
 /*   By: kosnakam <kosnakam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:25:11 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/17 15:25:31 by kosnakam         ###   ########.fr       */
+/*   Updated: 2024/07/17 15:54:10 by kosnakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,9 +128,6 @@ typedef struct s_cmd
 	t_pid_info	pid_info;
 }	t_cmd;
 
-// main.c
-int				error_status(int error_code);
-
 // tokenizer.c
 t_token			*tokenize(char *line);
 
@@ -139,7 +136,6 @@ t_token			*new_token(char *str, t_token_type type, int fd);
 void			token_add_back(t_token **list, t_token *new);
 void			free_token(t_token *token);
 int				token_list_size(t_token *token);
-void			print_token(t_token *token);
 
 // signal.c
 void			register_signal(void);
@@ -148,6 +144,8 @@ void			signal_handler(int signum);
 // error.c
 void			ft_error(char *cmd, char *target,
 					char *main_message, int status);
+void			handle_eof(char *line);
+int				error_status(int error_code);
 
 // redirect.c
 bool			redirect(t_token **token);
@@ -162,7 +160,6 @@ t_ats			*parser(t_token *token);
 void			add_back_ats(t_ats **list, t_ats *new);
 void			free_ats(t_ats *ats);
 int				ats_list_size(t_ats *ats);
-void			print_ats(t_ats *ats);
 t_ats			*new_ats(t_token *token);
 
 // child.c
@@ -186,9 +183,7 @@ bool			is_al_under(char c);
 bool			add_variable(t_token *token, t_env **env);
 
 // variable_list.c
-// void variable_list_add_back(t_variable *new);
 t_variable		*variable_list_new(char *key, char *value);
-// void variable_list_free(void);
 char			*get_variable_key(char *str);
 
 // utils.c
@@ -248,5 +243,8 @@ void			free_command(t_cmd *command);
 
 // heredoc.c
 int				open_heredoc(char *eof);
+
+// childset.c
+void			make_wait_child(t_cmd *command, t_env *env);
 
 #endif

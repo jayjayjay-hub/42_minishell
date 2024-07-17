@@ -39,7 +39,8 @@ SRC_FILES = main.c token_list.c\
 			builtin_export.c\
 			builtin_env.c\
 			free.c\
-			heredoc.c
+			heredoc.c\
+			childset.c
 
 OJB_FILES = $(SRC_FILES:%.c=%.o)
 
