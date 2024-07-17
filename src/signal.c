@@ -9,9 +9,9 @@ void	signal_handler(int signal)
 		rl_replace_line("", 0);
 		rl_redisplay();
 	}
-	else if (signal == SIGQUIT)
+	if (signal == SIGQUIT)
 	{
-		write(1, "Ctrl + \\\n", 10);
+		write(1, "Quit: 3\n", 8);
 	}
 }
 

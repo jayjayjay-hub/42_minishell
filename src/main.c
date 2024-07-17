@@ -82,6 +82,7 @@ int	main(int argc, char **argv, char **envp)
 	rl_outstream = stderr;
 	env = NULL;
 	env = init_env(envp);
+	// printf("PID: %d\n", getpid());
 	while (1)
 	{
 		line = readline("minishell$ ");
