@@ -27,6 +27,8 @@ bool	do_cd(t_token *token, t_env **env, char *path)
 		free(path);
 		return (false);
 	}
+	error_status(0);
+	free(path);
 	return (true);
 }
 

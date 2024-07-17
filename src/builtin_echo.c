@@ -23,5 +23,6 @@ bool	builtin_echo(t_token *token)
 	}
 	if (newline)
 		write(1, "\n", 1);
+	error_status(0);
 	return (true);
 }

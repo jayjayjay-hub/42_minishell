@@ -27,12 +27,6 @@ void	execve_loop(t_cmd *command, t_env *env)
 			command->ats = command->ats->next;
 			continue ;
 		}
-		if (!command->fd_pipe->pipe_size
-			&& builtin_control(command->ats->token, &env, 0))
-		{
-			command->ats = command->ats->next;
-			continue ;
-		}
 		command->pid_info.pid[command->pid_info.pipe_i] = child(command, env);
 		command->pid_info.pipe_i++;
 		command->ats = command->ats->next;
@@ -50,6 +44,13 @@ void	make_wait_child(t_cmd *command, t_env *env)
 	command->fd_pipe = create_pipe(command->ats);
 	command->pid_info.pid = (pid_t *)malloc(sizeof(pid_t)
 			* (command->fd_pipe->pipe_size + 1));
+	if (!command->fd_pipe->pipe_size
+		&& builtin_control(command->ats->token, &env, 0))
+	{
+		close_redirect(command->ats->token);
+		error_status(PRINT_ERROR);
+		return ;
+	}
 	execve_loop(command, env);
 	close_pipe(command->fd_pipe);
 	while (command->pid_info.pipe_i--)
