@@ -11,8 +11,8 @@ t_env	*init_env(char **envp)
 	env = NULL;
 	while (envp[i])
 	{
-		new = new_env(envp[i]);
-		add_back_env(new, &env);
+		new = new_export_env(envp[i]);
+		env_add_back(new, &env);
 		i++;
 	}
 	return (env);
