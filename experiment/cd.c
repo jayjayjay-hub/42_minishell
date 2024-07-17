@@ -10,17 +10,17 @@ void	ft_error(char *cmd, char *arg, char *msg, int status)
 	if (cmd)
 	{
 		write(2, "minishell: ", 11);
-		write(2, cmd, strlen(cmd));
+		write(2, cmd, ft_strlen(cmd));
 		write(2, ": ", 2);
 	}
 	if (arg)
 	{
-		write(2, arg, strlen(arg));
+		write(2, arg, ft_strlen(arg));
 		write(2, ": ", 2);
 	}
 	if (msg)
 	{
-		write(2, msg, strlen(msg));
+		write(2, msg, ft_strlen(msg));
 		write(2, "\n", 1);
 	}
 	exit(status);

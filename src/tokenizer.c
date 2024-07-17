@@ -3,19 +3,19 @@
 
 t_token_type	check_type(char *line)
 {
-	if (strncmp(line, "|", 1) == 0)
+	if (ft_strncmp(line, "|", 1) == 0)
 		return (PIPE);
-	else if (strncmp(line, "<<", 2) == 0)
+	else if (ft_strncmp(line, "<<", 2) == 0)
 		return (REDIRECT_HERE_DOC);
-	else if (strncmp(line, ">>", 2) == 0)
+	else if (ft_strncmp(line, ">>", 2) == 0)
 		return (REDIRECT_APPEND);
-	else if (strncmp(line, "<", 1) == 0)
+	else if (ft_strncmp(line, "<", 1) == 0)
 		return (REDIRECT_IN);
-	else if (strncmp(line, ">", 1) == 0)
+	else if (ft_strncmp(line, ">", 1) == 0)
 		return (REDIRECT_OUT);
-	else if (strncmp(line, "(", 1) == 0)
+	else if (ft_strncmp(line, "(", 1) == 0)
 		return (BRACKET_LEFT);
-	else if (strncmp(line, ")", 1) == 0)
+	else if (ft_strncmp(line, ")", 1) == 0)
 		return (BRACKET_RIGHT);
 	else
 		return (WORD);
@@ -97,7 +97,7 @@ int	add_token(t_token **token, char *line, t_token_type type)
 		return (0);
 	new = new_token(token_str, type, 0);
 	token_add_back(token, new);
-	return (strlen(token_str));
+	return (ft_strlen(token_str));
 }
 
 bool	pipe_syntax_check(char *line)

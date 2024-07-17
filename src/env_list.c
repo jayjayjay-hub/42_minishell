@@ -104,11 +104,11 @@ void	export_env(char *key, char *value, t_env **env)
 	}
 	while (tmp)
 	{
-		if (strlen(tmp->key) == strlen(key)
-			&& !ft_strncmp(tmp->key, key, strlen(key)))
+		if (ft_strlen(tmp->key) == ft_strlen(key)
+			&& !ft_strncmp(tmp->key, key, ft_strlen(key)))
 		{
 			tmp_value = tmp->value;
-			tmp->value = strdup(value);
+			tmp->value = ft_strdup(value);
 			free(tmp_value);
 			return ;
 		}
@@ -129,8 +129,8 @@ char	*get_env_value(char *key, t_env *env)
 		return (ft_itoa(error_status(PRINT_ERROR)));
 	while (tmp)
 	{
-		if (strlen(tmp->key) == key_len && !ft_strncmp(tmp->key, key, key_len))
-			return (strdup(tmp->value));
+		if (ft_strlen(tmp->key) == key_len && !ft_strncmp(tmp->key, key, key_len))
+			return (ft_strdup(tmp->value));
 		tmp = tmp->next;
 	}
 	return (NULL);
@@ -146,10 +146,10 @@ bool	edit_env_value(char *key, char *value, t_env **env)
 	key_len = ft_strlen(key);
 	while (tmp)
 	{
-		if (strlen(tmp->key) == key_len && !ft_strncmp(tmp->key, key, key_len))
+		if (ft_strlen(tmp->key) == key_len && !ft_strncmp(tmp->key, key, key_len))
 		{
 			tmp_value = tmp->value;
-			tmp->value = strdup(value);
+			tmp->value = ft_strdup(value);
 			free(tmp_value);
 			return (true);
 		}
