@@ -1,20 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   child.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kosnakam <kosnakam@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/17 15:26:38 by kosnakam          #+#    #+#             */
+/*   Updated: 2024/07/17 15:26:41 by kosnakam         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "minishell.h"
-
-// debug用。二次元配列を出力する。
-// static void	dp_print(char **arg)
-// {
-// 	int	i;
-
-// 	i = -1;
-// 	while (arg[++i])
-// 	{
-// 		ft_putstr_fd("arg[", 2);
-// 		ft_putnbr_fd(i, 2);
-// 		ft_putstr_fd("]: ", 2);
-// 		ft_putendl_fd(arg[i], 2);
-// 	}
-// }
 
 static void	sub_dup2(int first, int second)
 {
@@ -24,7 +20,6 @@ static void	sub_dup2(int first, int second)
 		dup2(second, STDOUT_FILENO);
 }
 
-// コマンドが存在するパスを検索する。パスが見つかった場合はそのパスを返す。
 char	*search_path(char *cmd, char **envp)
 {
 	int		i;
@@ -54,7 +49,6 @@ char	*search_path(char *cmd, char **envp)
 	return (NULL);
 }
 
-// コマンドを実行する。コマンドが存在しない場合はエラーを出力する。
 void	do_execve(char **cmd, char **envp)
 {
 	char	*path;
@@ -76,12 +70,14 @@ void	do_execve(char **cmd, char **envp)
 		ft_error(NULL, NULL, "execve failed", EXIT_FAILURE);
 }
 
-void	**do_cmd(t_token *token, char **envp)
+void	**run_cmd(t_ats *ats, char **envp)
 {
 	int			i;
 	char		**cmd;
+	t_token		*token;
 
 	i = 0;
+	token = ats->token;
 	cmd = (char **)ft_calloc(token_list_size(token) + 1, sizeof(char *));
 	if (!cmd)
 		ft_error("malloc", "cmd", "malloc failed", 1);
@@ -98,6 +94,7 @@ void	**do_cmd(t_token *token, char **envp)
 		if (!redirect(&token))
 			exit(error_status(256 * 1));
 	}
+	free_ats(ats);
 	do_execve(cmd, envp);
 	return (NULL);
 }
@@ -124,9 +121,9 @@ pid_t	child(t_cmd *command, t_env *env)
 					command->fd_pipe->fd[2 * pipe_i + 1]);
 		}
 		close_pipe(command->fd_pipe);
-		if (builtin_control(command->ats->token, &env))
-			exit(WEXITSTATUS(PRINT_ERROR));
-		do_cmd(command->ats->token, command->envp);
+		if (builtin_control(command->ats->token, &env, 1))
+			exit(error_status(PRINT_ERROR));
+		run_cmd(command->ats, command->envp);
 	}
 	return (pid);
 }

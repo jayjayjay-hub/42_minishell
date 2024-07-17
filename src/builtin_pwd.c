@@ -1,6 +1,16 @@
-#include "minishell.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   builtin_pwd.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kosnakam <kosnakam@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/17 15:26:16 by kosnakam          #+#    #+#             */
+/*   Updated: 2024/07/17 15:26:17 by kosnakam         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-// builtin_pwd.c
+#include "minishell.h"
 
 bool	builtin_pwd(t_token *token)
 {
@@ -15,6 +25,7 @@ bool	builtin_pwd(t_token *token)
 		return (false);
 	}
 	ft_putendl_fd(buf, 1);
+	error_status(0);
 	free(buf);
 	return (true);
 }

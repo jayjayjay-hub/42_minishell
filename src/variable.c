@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   variable.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/17 15:29:19 by kosnakam          #+#    #+#             */
+/*   Updated: 2024/07/17 15:46:07 by jtakahas         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 bool	is_alnum_under(char c)
@@ -43,7 +55,7 @@ t_key_value	*get_key_value(char *str)
 	key_value = (t_key_value *)malloc(sizeof(t_key_value));
 	if (!key_value)
 		return (NULL);
-	tmp = strchr(str, '=');
+	tmp = ft_strchr(str, '=');
 	if (!tmp)
 	{
 		free(key_value);
@@ -60,18 +72,21 @@ bool	add_variable(t_token *token, t_env **env)
 	t_env		*new;
 	t_key_value	*key_value;
 
-	if (!is_valid_variable(token->str))
+	if (!is_valid_token(token))
 		return (false);
-	key_value = get_key_value(token->str);
-	if (edit_env_value(key_value->key, key_value->value, env))
+	while (token)
 	{
-		free(key_value->key);
-		free(key_value->value);
-		return (true);
+		key_value = get_key_value(token->str);
+		if (edit_env_value(key_value->key, key_value->value, env))
+		{
+			free(key_value->key);
+			free(key_value->value);
+		}
+		new = new_key_value(key_value);
+		if (!new)
+			return (false);
+		env_add_back(new, env);
+		token = token->next;
 	}
-	new = new_key_value(key_value);
-	if (!new)
-		return (false);
-	add_back_env(new, env);
 	return (true);
 }

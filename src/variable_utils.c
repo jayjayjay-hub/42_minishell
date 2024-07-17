@@ -1,31 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
+/*   variable_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kosnakam <kosnakam@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/17 15:27:00 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/17 15:27:01 by kosnakam         ###   ########.fr       */
+/*   Created: 2024/07/17 15:45:20 by jtakahas          #+#    #+#             */
+/*   Updated: 2024/07/17 15:46:12 by jtakahas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_env	*init_env(char **envp)
+bool	is_valid_token(t_token *token)
 {
-	t_env	*env;
-	t_env	*new;
-	int		i;
-
-	env = NULL;
-	i = 0;
-	env = NULL;
-	while (envp[i])
+	while (token)
 	{
-		new = new_export_env(envp[i]);
-		env_add_back(new, &env);
-		i++;
+		if (!is_valid_variable(token->str))
+			return (false);
+		token = token->next;
 	}
-	return (env);
+	return (true);
 }

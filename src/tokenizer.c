@@ -1,21 +1,32 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   tokenizer.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/17 15:28:49 by kosnakam          #+#    #+#             */
+/*   Updated: 2024/07/17 15:49:46 by jtakahas         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "minishell.h"
 
 t_token_type	check_type(char *line)
 {
-	if (strncmp(line, "|", 1) == 0)
+	if (ft_strncmp(line, "|", 1) == 0)
 		return (PIPE);
-	else if (strncmp(line, "<<", 2) == 0)
+	else if (ft_strncmp(line, "<<", 2) == 0)
 		return (REDIRECT_HERE_DOC);
-	else if (strncmp(line, ">>", 2) == 0)
+	else if (ft_strncmp(line, ">>", 2) == 0)
 		return (REDIRECT_APPEND);
-	else if (strncmp(line, "<", 1) == 0)
+	else if (ft_strncmp(line, "<", 1) == 0)
 		return (REDIRECT_IN);
-	else if (strncmp(line, ">", 1) == 0)
+	else if (ft_strncmp(line, ">", 1) == 0)
 		return (REDIRECT_OUT);
-	else if (strncmp(line, "(", 1) == 0)
+	else if (ft_strncmp(line, "(", 1) == 0)
 		return (BRACKET_LEFT);
-	else if (strncmp(line, ")", 1) == 0)
+	else if (ft_strncmp(line, ")", 1) == 0)
 		return (BRACKET_RIGHT);
 	else
 		return (WORD);
@@ -48,41 +59,6 @@ int	get_word_len(char *line)
 	return (len);
 }
 
-char	*get_word(char *line)
-{
-	char	*word;
-	int		word_len;
-	char	quote;
-
-	word_len = get_word_len(line);
-	if (word_len == -1)
-		return (NULL);
-	word = ft_substr(line, 0, word_len);
-	if (!word)
-	{
-		ft_putendl_fd("minishell: malloc failed", 2);
-		return (NULL);
-	}
-	return (word);
-}
-
-char	*get_operator(char *line, t_token_type type)
-{
-	char	*operator;
-	int		len;
-
-	len = 1;
-	if (type == REDIRECT_HERE_DOC || type == REDIRECT_APPEND)
-		len = 2;
-	operator = ft_substr(line, 0, len);
-	if (!operator)
-	{
-		ft_putendl_fd("minishell: malloc failed", 2);
-		return (NULL);
-	}
-	return (operator);
-}
-
 int	add_token(t_token **token, char *line, t_token_type type)
 {
 	t_token		*new;
@@ -96,8 +72,9 @@ int	add_token(t_token **token, char *line, t_token_type type)
 	if (!token_str)
 		return (0);
 	new = new_token(token_str, type, 0);
+	free(token_str);
 	token_add_back(token, new);
-	return (strlen(token_str));
+	return (ft_strlen(new->str));
 }
 
 bool	pipe_syntax_check(char *line)
@@ -114,7 +91,6 @@ bool	pipe_syntax_check(char *line)
 t_token	*tokenize(char *line)
 {
 	t_token			*token;
-	t_token_type	type;
 	int				token_len;
 
 	if (!pipe_syntax_check(line))
@@ -128,8 +104,7 @@ t_token	*tokenize(char *line)
 		line = pass_space(line);
 		if (!*line || *line == '#')
 			break ;
-		type = check_type(line);
-		token_len = add_token(&token, line, type);
+		token_len = add_token(&token, line, check_type(line));
 		if (!token_len)
 		{
 			free_token(token);

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   signal.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kosnakam <kosnakam@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/17 15:28:08 by kosnakam          #+#    #+#             */
+/*   Updated: 2024/07/17 15:28:10 by kosnakam         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 void	signal_handler(int signal)
@@ -6,13 +18,12 @@ void	signal_handler(int signal)
 	{
 		write(1, "\n", 1);
 		rl_on_new_line();
-		// 校舎Macだと動かないけど、俺のUbuntuだと動いた
 		rl_replace_line("", 0);
 		rl_redisplay();
 	}
-	else if (signal == SIGQUIT)
+	if (signal == SIGQUIT)
 	{
-		write(1, "Ctrl + \\\n", 10);
+		write(1, "Quit: 3\n", 8);
 	}
 }
 

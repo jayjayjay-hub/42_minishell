@@ -1,27 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   token_list.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kosnakam <kosnakam@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/17 15:28:30 by kosnakam          #+#    #+#             */
+/*   Updated: 2024/07/17 15:28:32 by kosnakam         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
-
-// list.c
-
-/*
-typedef enum e_token_type
-{
-	WORD,
-	PIPE,
-	REDIRECT_IN,
-	REDIRECT_OUT,
-	REDIRECT_APPEND,
-	MY_EOF,
-}	t_token_type;
-typedef struct s_token
-{
-	char			*str;
-	t_token_type	type;
-	int				fd;
-	int				backup_fd;
-	struct s_token	*next;
-	struct s_token	*prev;
-}	t_token;
-*/
 
 void	token_add_back(t_token **list, t_token *new)
 {
@@ -50,12 +39,16 @@ t_token	*new_token(char *str, t_token_type type, int fd)
 		ft_error("malloc", "token", strerror(errno), EXIT_FAILURE);
 	if (type != WORD)
 	{
-		token->str = strdup(str);
+		token->str = ft_strdup(str);
 		if (!token->str)
 			ft_error("ft_strdup", "token->str", strerror(errno), EXIT_FAILURE);
 	}
 	else
-		token->str = str;
+	{
+		token->str = strdup(str);
+		if (!token->str)
+			ft_error("ft_strdup", "token->str", strerror(errno), EXIT_FAILURE);
+	}
 	token->type = type;
 	token->fd = fd;
 	token->backup_fd = -1;
@@ -94,19 +87,5 @@ void	free_token(t_token *token)
 		}
 		free(token);
 		token = tmp;
-	}
-}
-
-void	print_token(t_token *token)
-{
-	t_token	*tmp;
-
-	tmp = token;
-	while (tmp)
-	{
-		printf ("str: %s, type: %d, fd: %d, backup_fd: %d\n",
-			tmp->str, tmp->type, tmp->fd, tmp->backup_fd);
-		printf ("prev: %p, current: %p, next: %p\n", tmp->prev, tmp, tmp->next);
-		tmp = tmp->next;
 	}
 }

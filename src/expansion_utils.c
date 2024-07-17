@@ -1,31 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
+/*   expansion_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kosnakam <kosnakam@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/17 15:27:00 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/17 15:27:01 by kosnakam         ###   ########.fr       */
+/*   Created: 2024/07/17 15:42:07 by jtakahas          #+#    #+#             */
+/*   Updated: 2024/07/17 15:42:53 by jtakahas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_env	*init_env(char **envp)
+void	remove_quote(char *str)
 {
-	t_env	*env;
-	t_env	*new;
 	int		i;
+	int		j;
+	char	quote;
 
-	env = NULL;
 	i = 0;
-	env = NULL;
-	while (envp[i])
+	j = 0;
+	while (str[i])
 	{
-		new = new_export_env(envp[i]);
-		env_add_back(new, &env);
-		i++;
+		if (is_quote(str[i]))
+		{
+			quote = str[i];
+			i++;
+			while (str[i] && str[i] != quote)
+				str[j++] = str[i++];
+			i++;
+		}
+		else
+			str[j++] = str[i++];
 	}
-	return (env);
+	str[j] = '\0';
 }
