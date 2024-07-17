@@ -36,7 +36,7 @@ t_ats	*new_ats(t_token *token)
 	if (!ats)
 		ft_error("malloc", "ats", strerror(errno), EXIT_FAILURE);
 	tmp = NULL;
-	// Pipeまでのトークンをats->tokenに追加
+	// Pipeまでのトークンをats->tokenに追加 新しく作成したトークンリストをats->tokenに追加
 	while (token && token->type != PIPE)
 	{
 		token_add_back(&tmp, new_token(token->str, token->type, token->fd));

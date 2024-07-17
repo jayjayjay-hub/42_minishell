@@ -55,7 +55,7 @@ t_token	*new_token(char *str, t_token_type type, int fd)
 			ft_error("ft_strdup", "token->str", strerror(errno), EXIT_FAILURE);
 	}
 	else
-		token->str = str;
+		token->str = strdup(str);
 	token->type = type;
 	token->fd = fd;
 	token->backup_fd = -1;

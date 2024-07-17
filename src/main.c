@@ -63,12 +63,13 @@ void	run_cmd(char *line, char **envp, t_env *env)
 	token = NULL;
 	command = (t_cmd *)malloc(sizeof(t_cmd));
 	struct_init(command, envp);
-	token = tokenize(line);
+	token = tokenize(line); // まーろーっくーーーー
 	if (!syntax_check(token))
 		return ;
 	expansion(token, env);
 	redirect_open(token);
 	command->ats = parser(token);
+	free_token(token);
 	make_child(command, env);
 	free_command(command);
 }
