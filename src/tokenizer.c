@@ -57,7 +57,7 @@ char	*get_word(char *line)
 	word_len = get_word_len(line);
 	if (word_len == -1)
 		return (NULL);
-	word = ft_substr(line, 0, word_len);
+	word = ft_substr(line, 0, word_len); // ma-ll-oc
 	if (!word)
 	{
 		ft_putendl_fd("minishell: malloc failed", 2);
@@ -74,7 +74,7 @@ char	*get_operator(char *line, t_token_type type)
 	len = 1;
 	if (type == REDIRECT_HERE_DOC || type == REDIRECT_APPEND)
 		len = 2;
-	operator = ft_substr(line, 0, len);
+	operator = ft_substr(line, 0, len); // ma-ll-oc
 	if (!operator)
 	{
 		ft_putendl_fd("minishell: malloc failed", 2);
@@ -96,8 +96,9 @@ int	add_token(t_token **token, char *line, t_token_type type)
 	if (!token_str)
 		return (0);
 	new = new_token(token_str, type, 0);
+	free(token_str);
 	token_add_back(token, new);
-	return (strlen(token_str));
+	return (strlen(new->str));
 }
 
 bool	pipe_syntax_check(char *line)
