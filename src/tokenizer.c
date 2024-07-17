@@ -98,7 +98,7 @@ int	add_token(t_token **token, char *line, t_token_type type)
 	new = new_token(token_str, type, 0);
 	free(token_str);
 	token_add_back(token, new);
-	return (ft_strlen(token_str));
+	return (ft_strlen(new->str));
 }
 
 bool	pipe_syntax_check(char *line)

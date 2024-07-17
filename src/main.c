@@ -77,8 +77,8 @@ void	command_set(char *line, char **envp, t_env *env)
 	expansion(token, env);
 	redirect_open(token);
 	command->ats = parser(token);
-	free_token(token);
 	make_wait_child(command, env);
+	free_token(token);
 	free_command(command);
 }
 

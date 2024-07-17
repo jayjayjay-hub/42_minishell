@@ -110,7 +110,7 @@ void	print_token(t_token *token)
 	{
 		printf ("str: %s, type: %d, fd: %d, backup_fd: %d\n",
 			tmp->str, tmp->type, tmp->fd, tmp->backup_fd);
-		printf ("prev: %p, current: %p, next: %p\n", tmp->prev, tmp, tmp->next);
+		// printf ("prev: %p, current: %p, next: %p\n", tmp->prev, tmp, tmp->next);
 		tmp = tmp->next;
 	}
 }

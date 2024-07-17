@@ -128,7 +128,7 @@ pid_t	child(t_cmd *command, t_env *env)
 		}
 		close_pipe(command->fd_pipe);
 		if (builtin_control(command->ats->token, &env, 1))
-			exit(WEXITSTATUS(PRINT_ERROR));
+			exit(error_status(PRINT_ERROR));
 		run_cmd(command->ats, command->envp);
 	}
 	return (pid);
