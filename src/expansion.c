@@ -6,7 +6,7 @@
 /*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:27:12 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/17 16:09:14 by jtakahas         ###   ########.fr       */
+/*   Updated: 2024/07/17 16:20:58 by jtakahas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ void	variable_expansion(char **str, char **tmp, t_index *index, t_env *env)
 {
 	char	*key;
 	char	*value;
-	char	quote;
 	char	*tmp2;
 
 	key = get_variable_key((*str) + (*index).i + 1);

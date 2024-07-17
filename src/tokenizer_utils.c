@@ -6,7 +6,7 @@
 /*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:50:00 by jtakahas          #+#    #+#             */
-/*   Updated: 2024/07/17 15:50:01 by jtakahas         ###   ########.fr       */
+/*   Updated: 2024/07/17 16:25:09 by jtakahas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ char	*get_word(char *line)
 {
 	char	*word;
 	int		word_len;
-	char	quote;
 
 	word_len = get_word_len(line);
 	if (word_len == -1)

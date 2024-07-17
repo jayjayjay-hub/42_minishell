@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kosnakam <kosnakam@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:25:11 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/17 16:12:10 by kosnakam         ###   ########.fr       */
+/*   Updated: 2024/07/17 16:23:36 by jtakahas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -233,13 +233,13 @@ bool			builtin_cd(t_token *token, t_env **env);
 bool			builtin_echo(t_token *token);
 
 // builtin_pwd.c
-bool			builtin_pwd(t_token *token);
+bool			builtin_pwd(void);
 
 // builtin_export.c
 bool			builtin_export(t_token *token, t_env **env);
 
 // builtin_env.c
-bool			builtin_env(t_token *token, t_env *env);
+bool			builtin_env(t_env *env);
 
 // builtin_exit.c
 bool			builtin_exit(t_token *token);

@@ -3,18 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_pwd.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kosnakam <kosnakam@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:26:16 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/17 15:26:17 by kosnakam         ###   ########.fr       */
+/*   Updated: 2024/07/17 16:22:52 by jtakahas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-bool	builtin_pwd(t_token *token)
+bool	builtin_pwd(void)
 {
-	char	*path;
 	char	*buf;
 
 	buf = getcwd(NULL, 0);
