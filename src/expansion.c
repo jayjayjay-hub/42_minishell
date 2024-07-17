@@ -3,38 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   expansion.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kosnakam <kosnakam@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:27:12 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/17 15:27:14 by kosnakam         ###   ########.fr       */
+/*   Updated: 2024/07/17 15:42:47 by jtakahas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	remove_quote(char *str)
-{
-	int		i;
-	int		j;
-	char	quote;
-
-	i = 0;
-	j = 0;
-	while (str[i])
-	{
-		if (is_quote(str[i]))
-		{
-			quote = str[i];
-			i++;
-			while (str[i] && str[i] != quote)
-				str[j++] = str[i++];
-			i++;
-		}
-		else
-			str[j++] = str[i++];
-	}
-	str[j] = '\0';
-}
 
 void	variable_expansion(char **str, char **tmp, int *i, int *j, t_env *env)
 {
