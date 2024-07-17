@@ -6,7 +6,7 @@
 /*   By: kosnakam <kosnakam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:25:11 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/17 15:54:10 by kosnakam         ###   ########.fr       */
+/*   Updated: 2024/07/17 16:12:10 by kosnakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,12 @@
 
 // signal
 typedef struct sigaction	t_sig;
+
+typedef struct s_index
+{
+	int	i;
+	int	j;
+}	t_index;
 
 typedef struct s_key_value
 {
@@ -130,6 +136,8 @@ typedef struct s_cmd
 
 // tokenizer.c
 t_token			*tokenize(char *line);
+bool			is_valid_variable(char *str);
+int				get_word_len(char *line);
 
 // list.c
 t_token			*new_token(char *str, t_token_type type, int fd);
@@ -246,5 +254,15 @@ int				open_heredoc(char *eof);
 
 // childset.c
 void			make_wait_child(t_cmd *command, t_env *env);
+
+// expansion_utils.c
+void			remove_quote(char *str);
+
+// variable_utils.c
+bool			is_valid_token(t_token *token);
+
+// tokenizer_utils.c
+char			*get_word(char *line);
+char			*get_operator(char *line, t_token_type type);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: kosnakam <kosnakam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:26:07 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/17 15:58:15 by kosnakam         ###   ########.fr       */
+/*   Updated: 2024/07/17 16:15:04 by kosnakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ bool	builtin_export(t_token *token, t_env **env)
 	int		key_len;
 
 	if (!token->next)
-		return(error_export(*env));
+		return (error_export(*env));
 	token = token->next;
 	while (token)
 	{
@@ -44,6 +44,5 @@ bool	builtin_export(t_token *token, t_env **env)
 			export_env(token->str, NULL, env);
 		token = token->next;
 	}
-	error_status(0);
-	return (true);
+	return (error_status(0), true);
 }
