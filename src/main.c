@@ -64,7 +64,7 @@ void	run_cmd(char *line, char **envp, t_env *env)
 	token = NULL;
 	command = (t_cmd *)malloc(sizeof(t_cmd));
 	struct_init(command, envp);
-	token = tokenize(line); // まーろーっくーーーー
+	token = tokenize(line);
 	if (!syntax_check(token))
 		return ;
 	expansion(token, env);
