@@ -6,7 +6,7 @@
 /*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:25:11 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/17 15:53:05 by jtakahas         ###   ########.fr       */
+/*   Updated: 2024/07/17 16:10:03 by jtakahas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,12 @@
 
 // signal
 typedef struct sigaction	t_sig;
+
+typedef struct s_index
+{
+	int	i;
+	int	j;
+}	t_index;
 
 typedef struct s_key_value
 {
@@ -252,13 +258,13 @@ void			free_command(t_cmd *command);
 int				open_heredoc(char *eof);
 
 // expansion_utils.c
-void	remove_quote(char *str);
+void			remove_quote(char *str);
 
 // variable_utils.c
-bool	is_valid_token(t_token *token);
+bool			is_valid_token(t_token *token);
 
 // tokenizer_utils.c
-char	*get_word(char *line);
-char	*get_operator(char *line, t_token_type type);
+char			*get_word(char *line);
+char			*get_operator(char *line, t_token_type type);
 
 #endif
