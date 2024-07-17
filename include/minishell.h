@@ -213,7 +213,7 @@ t_env			*init_env(char **envp);
 
 // builtin_control.c
 bool			builtin_check(t_token *token);
-bool			builtin_control(t_token *token, t_env **env);
+bool			builtin_control(t_token *token, t_env **env, int child_check);
 
 // builtin_cd.c
 bool			builtin_cd(t_token *token, t_env **env);
@@ -232,6 +232,7 @@ bool			builtin_env(t_token *token, t_env *env);
 
 // builtin_exit.c
 bool			builtin_exit(t_token *token);
+bool			builtin_exit_child(t_token *token);
 
 // free.c
 void			dp_free(char **arg);

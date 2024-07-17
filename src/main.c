@@ -36,7 +36,7 @@ void	make_child(t_cmd *command, t_env *env)
 			continue ;
 		}
 		if (!command->fd_pipe->pipe_size
-			&& builtin_control(command->ats->token, &env))
+			&& builtin_control(command->ats->token, &env, 0))
 		{
 			command->ats = command->ats->next;
 			continue ;
