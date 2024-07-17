@@ -1,31 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   variable_list.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kosnakam <kosnakam@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/17 15:29:02 by kosnakam          #+#    #+#             */
+/*   Updated: 2024/07/17 15:29:14 by kosnakam         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
-
-/*
-typedef struct s_variable
-{
-	char			*key;
-	char			*value;
-	struct s_variable	*next;
-}	t_variable;
-
-// global variable
-t_variable	*variable;
-*/
-
-// void	variable_list_add_back(t_variable *new)
-// {
-// 	t_variable	*tmp;
-
-// 	if (!variable)
-// 	{
-// 		variable = new;
-// 		return ;
-// 	}
-// 	tmp = variable;
-// 	while (tmp->next)
-// 		tmp = tmp->next;
-// 	tmp->next = new;
-// }
 
 t_variable	*variable_list_new(char *key, char *value)
 {
@@ -39,20 +24,6 @@ t_variable	*variable_list_new(char *key, char *value)
 	new->next = NULL;
 	return (new);
 }
-
-// void	variable_list_free(void)
-// {
-// 	t_variable	*tmp;
-
-// 	while (variable)
-// 	{
-// 		tmp = variable->next;
-// 		free(variable->key);
-// 		free(variable->value);
-// 		free(variable);
-// 		variable = tmp;
-// 	}
-// }
 
 char	*get_variable_key(char *str)
 {
@@ -70,51 +41,3 @@ char	*get_variable_key(char *str)
 	key = ft_substr(str, 0, i);
 	return (key);
 }
-
-// char	*get_variable_value(char *key)
-// {
-// 	t_variable	*tmp;
-
-// 	tmp = variable;
-// 	if (!key)
-// 		return (NULL);
-// 	if (key && ft_strlen(key) == 1 && key[0] == '?')
-// 		return (ft_itoa(WEXITSTATUS(errno)));
-// 	while (tmp)
-// 	{
-// 		if (!strcmp(tmp->key, key))
-// 			return (strdup(tmp->value));
-// 		tmp = tmp->next;
-// 	}
-// 	return (NULL);
-// }
-
-// bool	edit_variable(char *key, char *value)
-// {
-// 	t_variable	*tmp;
-
-// 	tmp = variable;
-// 	while (tmp)
-// 	{
-// 		if (!strcmp(tmp->key, key))
-// 		{
-// 			free(tmp->value);
-// 			tmp->value = strdup(value);
-// 			return (true);
-// 		}
-// 		tmp = tmp->next;
-// 	}
-// 	return (false);
-// }
-
-// void	variable_list_print(void)
-// {
-// 	t_variable	*tmp;
-
-// 	tmp = variable;
-// 	while (tmp)
-// 	{
-// 		printf("key = %s, value = %s\n", tmp->key, tmp->value);
-// 		tmp = tmp->next;
-// 	}
-// }

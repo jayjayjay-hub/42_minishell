@@ -1,13 +1,16 @@
-#include "minishell.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ats_list.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kosnakam <kosnakam@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/17 15:30:07 by kosnakam          #+#    #+#             */
+/*   Updated: 2024/07/17 15:30:08 by kosnakam         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-/*
-typedef struct s_ats
-{
-	t_token			*token;
-	struct s_ats	*next;
-	struct s_ats	*prev;
-}	t_ats;
-*/
+#include "minishell.h"
 
 void	add_back_ats(t_ats **list, t_ats *new)
 {
@@ -36,7 +39,6 @@ t_ats	*new_ats(t_token *token)
 	if (!ats)
 		ft_error("malloc", "ats", strerror(errno), EXIT_FAILURE);
 	tmp = NULL;
-	// Pipeまでのトークンをats->tokenに追加 新しく作成したトークンリストをats->tokenに追加
 	while (token && token->type != PIPE)
 	{
 		token_add_back(&tmp, new_token(token->str, token->type, token->fd));
@@ -85,23 +87,4 @@ int	ats_list_size(t_ats *ats)
 		ats = ats->next;
 	}
 	return (size);
-}
-
-void	print_ats(t_ats *ats)
-{
-	int debug = 0;
-
-	// printf("<< ats list >>\n");
-	while (ats)
-	{
-		printf("<< ats[%d] >>\n", debug);
-		// printf("next ats: %p\n", ats->next);
-		// printf("prev ats: %p\n", ats->prev);
-		print_token(ats->token);
-		printf("prev: %p, current: %p, next: %p\n", ats->prev, ats, ats->next);
-		ats = ats->next;
-		if (debug++ > 10)
-			break ;
-	}
-	// printf("<< ats list end >>\n\n");
 }

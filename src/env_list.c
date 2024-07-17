@@ -1,15 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   env_list.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kosnakam <kosnakam@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/17 15:26:55 by kosnakam          #+#    #+#             */
+/*   Updated: 2024/07/17 15:26:57 by kosnakam         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
-
-/*
-typedef struct s_env
-{
-	char	*key;
-	char	*value;
-	struct s_env	*next;
-}	t_env;
-*/
-
-/*ここから環境変数の初期化に使用*/
 
 void	env_add_back(t_env *new, t_env **env)
 {
@@ -76,8 +77,6 @@ t_env	*new_valiable(char *env_line)
 	env->next = NULL;
 	return (env);
 }
-
-/*ここまで*/
 
 t_env	*new_export_env(char *env_line)
 {

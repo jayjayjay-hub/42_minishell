@@ -1,6 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kosnakam <kosnakam@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/17 15:27:41 by kosnakam          #+#    #+#             */
+/*   Updated: 2024/07/17 15:27:43 by kosnakam         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-// eofが来た場合の処理
 void	handle_eof(char *line)
 {
 	write(2, "exit\n", 5);
@@ -91,7 +102,6 @@ int	main(int argc, char **argv, char **envp)
 	rl_outstream = stderr;
 	env = NULL;
 	env = init_env(envp);
-	// printf("PID: %d\n", getpid());
 	while (1)
 	{
 		line = readline("minishell$ ");
@@ -116,5 +126,3 @@ int	error_status(int error_code)
 	status = error_code;
 	return (WEXITSTATUS(status));
 }
-
-// valgrind --leak-check=full -s ./minishell

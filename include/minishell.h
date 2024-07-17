@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kosnakam <kosnakam@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/17 15:25:11 by kosnakam          #+#    #+#             */
+/*   Updated: 2024/07/17 15:25:31 by kosnakam         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
@@ -13,16 +25,10 @@
 # include <signal.h>
 
 # ifdef __linux__
-// 俺のUbuntu環境だと必要でした
 #  include <sys/wait.h>
 #  define S_IREAD S_IRUSR
 #  define S_IWRITE S_IWUSR
 # endif
-
-// # ifdef __APPLE__
-// 	void	rl_replace_line(const char *, int);
-// 	void	rl_on_new_line(void);
-// #endif
 
 # include "libft.h"
 # include "ft_printf.h"
