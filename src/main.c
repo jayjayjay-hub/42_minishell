@@ -18,16 +18,8 @@ void	struct_init(t_cmd *cmd, char **envp)
 	cmd->pid_info.pipe_i = 0;
 }
 
-void	make_child(t_cmd *command, t_env *env)
+void	execve_loop(t_cmd *command, t_env *env)
 {
-	int		i;
-	t_ats	*tmp;
-
-	i = 0;
-	tmp = command->ats;
-	command->fd_pipe = create_pipe(command->ats);
-	command->pid_info.pid = (pid_t *)malloc(sizeof(pid_t)
-			* (command->fd_pipe->pipe_size + 1));
 	while (command->ats)
 	{
 		if (add_variable(command->ats->token, &env))
@@ -45,6 +37,19 @@ void	make_child(t_cmd *command, t_env *env)
 		command->pid_info.pipe_i++;
 		command->ats = command->ats->next;
 	}
+}
+
+void	make_child(t_cmd *command, t_env *env)
+{
+	int		i;
+	t_ats	*tmp;
+
+	i = 0;
+	tmp = command->ats;
+	command->fd_pipe = create_pipe(command->ats);
+	command->pid_info.pid = (pid_t *)malloc(sizeof(pid_t)
+			* (command->fd_pipe->pipe_size + 1));
+	execve_loop(command, env);
 	close_pipe(command->fd_pipe);
 	while (command->pid_info.pipe_i--)
 	{
@@ -55,10 +60,10 @@ void	make_child(t_cmd *command, t_env *env)
 		close_redirect(tmp->token);
 }
 
-void	run_cmd(char *line, char **envp, t_env *env)
+void	command_set(char *line, char **envp, t_env *env)
 {
-	t_cmd		*command;
 	t_token		*token;
+	t_cmd		*command;
 
 	token = NULL;
 	command = (t_cmd *)malloc(sizeof(t_cmd));
@@ -90,7 +95,7 @@ int	main(int argc, char **argv, char **envp)
 		else
 		{
 			add_history(line);
-			run_cmd(line, envp, env);
+			command_set(line, envp, env);
 			free(line);
 		}
 	}
