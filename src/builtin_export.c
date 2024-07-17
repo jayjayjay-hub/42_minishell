@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   builtin_export.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kosnakam <kosnakam@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/17 15:26:07 by kosnakam          #+#    #+#             */
+/*   Updated: 2024/07/17 15:26:12 by kosnakam         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 bool	builtin_export(t_token *token, t_env **env)
@@ -14,7 +26,6 @@ bool	builtin_export(t_token *token, t_env **env)
 	token = token->next;
 	while (token)
 	{
-		// = までをkeyとして取得
 		key_len = 0;
 		while (token->str[key_len] && token->str[key_len] != '=')
 			key_len++;
