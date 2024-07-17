@@ -6,7 +6,7 @@
 /*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:42:11 by jtakahas          #+#    #+#             */
-/*   Updated: 2024/07/17 15:54:40 by jtakahas         ###   ########.fr       */
+/*   Updated: 2024/07/17 16:24:55 by jtakahas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ char	*get_env_value(char *key, t_env *env)
 		return (ft_itoa(error_status(PRINT_ERROR)));
 	while (tmp)
 	{
-		if (ft_strlen(tmp->key) == key_len
+		if ((int)ft_strlen(tmp->key) == key_len
 			&& !ft_strncmp(tmp->key, key, key_len))
 			return (ft_strdup(tmp->value));
 		tmp = tmp->next;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kosnakam <kosnakam@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:26:24 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/17 15:55:30 by kosnakam         ###   ########.fr       */
+/*   Updated: 2024/07/17 16:23:56 by jtakahas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,11 +48,11 @@ bool	do_builtin(t_token *token, t_env **env, int child_check)
 		if (ft_strlen(token->str) == 4 && !ft_strncmp(token->str, "echo", 5))
 			return (builtin_echo(token));
 		if (ft_strlen(token->str) == 3 && !ft_strncmp(token->str, "pwd", 4))
-			return (builtin_pwd(token));
+			return (builtin_pwd());
 		if (ft_strlen(token->str) == 6 && !ft_strncmp(token->str, "export", 7))
 			return (builtin_export(token, env));
 		if (ft_strlen(token->str) == 3 && !ft_strncmp(token->str, "env", 4))
-			return (builtin_env(token, *env));
+			return (builtin_env(*env));
 		token = token->next;
 	}
 	return (true);

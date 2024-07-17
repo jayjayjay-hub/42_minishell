@@ -6,7 +6,7 @@
 /*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:28:49 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/17 15:49:46 by jtakahas         ###   ########.fr       */
+/*   Updated: 2024/07/17 16:20:41 by jtakahas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,6 @@ int	add_token(t_token **token, char *line, t_token_type type)
 {
 	t_token		*new;
 	char		*token_str;
-	char		*rest;
 
 	if (type == WORD)
 		token_str = get_word(line);

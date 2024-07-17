@@ -14,8 +14,8 @@ ERROR_DIR = error/
 
 CC = cc
 LDFRAGS = -lreadline
-# CFLAGS = -Wall -Wextra -Werror
-CFLAGS = -g
+CFLAGS = -Wall -Wextra -Werror
+# CFLAGS = -g
 RM = rm -rf
 NORM = norminette
 

@@ -6,7 +6,7 @@
 /*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:39:46 by jtakahas          #+#    #+#             */
-/*   Updated: 2024/07/17 15:54:25 by jtakahas         ###   ########.fr       */
+/*   Updated: 2024/07/17 16:24:33 by jtakahas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ bool	edit_env_value(char *key, char *value, t_env **env)
 	key_len = ft_strlen(key);
 	while (tmp)
 	{
-		if (ft_strlen(tmp->key) == key_len
+		if ((int)ft_strlen(tmp->key) == key_len
 			&& !ft_strncmp(tmp->key, key, key_len))
 		{
 			tmp_value = tmp->value;
