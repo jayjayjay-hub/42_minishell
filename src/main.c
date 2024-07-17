@@ -53,6 +53,7 @@ void	make_child(t_cmd *command, t_env *env)
 	}
 	if (!command->fd_pipe->pipe_size && builtin_check(tmp->token))
 		close_redirect(tmp->token);
+	free_ats(tmp);
 }
 
 void	run_cmd(char *line, char **envp, t_env *env)

@@ -76,12 +76,14 @@ void	do_execve(char **cmd, char **envp)
 		ft_error(NULL, NULL, "execve failed", EXIT_FAILURE);
 }
 
-void	**do_cmd(t_token *token, char **envp)
+void	**do_cmd(t_ats *ats, char **envp)
 {
 	int			i;
 	char		**cmd;
+	t_token		*token;
 
 	i = 0;
+	token = ats->token;
 	cmd = (char **)ft_calloc(token_list_size(token) + 1, sizeof(char *));
 	if (!cmd)
 		ft_error("malloc", "cmd", "malloc failed", 1);
@@ -98,6 +100,7 @@ void	**do_cmd(t_token *token, char **envp)
 		if (!redirect(&token))
 			exit(error_status(256 * 1));
 	}
+	free_ats(ats);
 	do_execve(cmd, envp);
 	return (NULL);
 }
@@ -126,7 +129,7 @@ pid_t	child(t_cmd *command, t_env *env)
 		close_pipe(command->fd_pipe);
 		if (builtin_control(command->ats->token, &env))
 			exit(WEXITSTATUS(PRINT_ERROR));
-		do_cmd(command->ats->token, command->envp);
+		do_cmd(command->ats, command->envp);
 	}
 	return (pid);
 }

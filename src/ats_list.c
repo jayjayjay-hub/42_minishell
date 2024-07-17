@@ -50,7 +50,7 @@ t_ats	*new_ats(t_token *token)
 	}
 	else
 	{
-		free(ats);
+		free_ats(ats);
 		ats = NULL;
 	}
 	return (ats);
