@@ -6,11 +6,17 @@
 /*   By: kosnakam <kosnakam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:26:07 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/17 15:26:12 by kosnakam         ###   ########.fr       */
+/*   Updated: 2024/07/17 15:58:15 by kosnakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+static bool	error_export(t_env *env)
+{
+	print_export(env);
+	return (true);
+}
 
 bool	builtin_export(t_token *token, t_env **env)
 {
@@ -19,10 +25,7 @@ bool	builtin_export(t_token *token, t_env **env)
 	int		key_len;
 
 	if (!token->next)
-	{
-		print_export(*env);
-		return (true);
-	}
+		return(error_export(*env));
 	token = token->next;
 	while (token)
 	{
