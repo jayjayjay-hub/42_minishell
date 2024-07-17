@@ -58,6 +58,7 @@ bool	do_builtin(t_token *token, t_env **env, int child_check)
 
 bool	builtin_control(t_token *token, t_env **env, int child_check)
 {
+	bool	ret;
 	t_token	*tmp;
 
 	if (!builtin_check(token))
@@ -70,5 +71,8 @@ bool	builtin_control(t_token *token, t_env **env, int child_check)
 		if (!redirect(&tmp))
 			return (true);
 	}
-	return (do_builtin(token, env, child_check));
+	ret = do_builtin(token, env, child_check);
+	if (ret)
+		error_status(0);
+	return (ret);
 }

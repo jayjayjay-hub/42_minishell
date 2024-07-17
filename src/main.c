@@ -6,7 +6,7 @@ void	handle_eof(char *line)
 	write(2, "exit\n", 5);
 	if (line)
 		free(line);
-	exit(WEXITSTATUS(errno));
+	exit(error_status(PRINT_ERROR));
 }
 
 void	struct_init(t_cmd *cmd, char **envp)
@@ -39,9 +39,10 @@ void	execve_loop(t_cmd *command, t_env *env)
 	}
 }
 
-void	make_child(t_cmd *command, t_env *env)
+void	make_wait_child(t_cmd *command, t_env *env)
 {
 	int		i;
+	int		status;
 	t_ats	*tmp;
 
 	i = 0;
@@ -53,8 +54,8 @@ void	make_child(t_cmd *command, t_env *env)
 	close_pipe(command->fd_pipe);
 	while (command->pid_info.pipe_i--)
 	{
-		waitpid(command->pid_info.pid[i++], &errno, 0);
-		error_status(errno);
+		waitpid(command->pid_info.pid[i++], &status, 0);
+		error_status(status);
 	}
 	if (!command->fd_pipe->pipe_size && builtin_check(tmp->token))
 		close_redirect(tmp->token);
@@ -74,7 +75,7 @@ void	command_set(char *line, char **envp, t_env *env)
 	expansion(token, env);
 	redirect_open(token);
 	command->ats = parser(token);
-	make_child(command, env);
+	make_wait_child(command, env);
 	free_command(command);
 }
 

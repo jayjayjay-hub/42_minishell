@@ -23,6 +23,8 @@ bool	builtin_exit(t_token *token)
 	ft_putendl_fd("exit", 1);
 	if (!token->next)
 		exit(error_status(PRINT_ERROR));
+	else if (!ft_strncmp(token->next->str, "$", 1))
+		exit(error_status(0));
 	else if (!ft_str_isdigit(token->next->str))
 	{
 		ft_putstr_fd("minishell: exit: ", 2);
@@ -47,25 +49,24 @@ bool	builtin_exit_child(t_token *token)
 	int	ret;
 
 	ret = 0;
-	if (token_list_size(token) > 2)
+	if (!token->next)
+		exit(error_status(0));
+	else if (!ft_strncmp(token->next->str, "$", 1))
+		exit(error_status(0));
+	else if (!ft_str_isdigit(token->next->str))
+	{
+		ft_putstr_fd("minishell: exit: ", 2);
+		ft_putstr_fd(token->next->str, 2);
+		ft_putendl_fd(": numeric argument required", 2);
+		error_status(256 * 2);
+		return (true);
+	}
+	else if (token_list_size(token) > 2)
 	{
 		error_status(256 * 1);
 		return (true);
 	}
 	else
-	{
-		if (!token->next)
-			exit(error_status(0));
-		else if (!ft_str_isdigit(token->next->str))
-		{
-			ft_putstr_fd("minishell: exit: ", 2);
-			ft_putstr_fd(token->next->str, 2);
-			ft_putendl_fd(": numeric argument required", 2);
-			error_status(256 * 2);
-			return (true);
-		}
-		else
-			ret = (size_t)ft_atoi(token->next->str);
-		exit(ret);
-	}
+		ret = (size_t)ft_atoi(token->next->str);
+	exit(ret);
 }
