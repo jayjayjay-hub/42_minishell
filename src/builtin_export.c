@@ -30,5 +30,6 @@ bool	builtin_export(t_token *token, t_env **env)
 			export_env(token->str, NULL, env);
 		token = token->next;
 	}
+	error_status(0);
 	return (true);
 }

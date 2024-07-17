@@ -60,7 +60,7 @@ char	*get_variable_key(char *str)
 	char	*key;
 
 	i = 0;
-	if (strlen(str) == 1 && str[0] == '?')
+	if (ft_strlen(str) == 1 && str[0] == '?')
 		return (strdup("?"));
 	if (!is_al_under(str[i]))
 		return (NULL);
@@ -78,7 +78,7 @@ char	*get_variable_key(char *str)
 // 	tmp = variable;
 // 	if (!key)
 // 		return (NULL);
-// 	if (key && strlen(key) == 1 && key[0] == '?')
+// 	if (key && ft_strlen(key) == 1 && key[0] == '?')
 // 		return (ft_itoa(WEXITSTATUS(errno)));
 // 	while (tmp)
 // 	{

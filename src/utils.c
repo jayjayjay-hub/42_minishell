@@ -2,7 +2,7 @@
 
 int	is_metachar(char c)
 {
-	return (c && strchr("|&;,()<> ", c));
+	return (c && ft_strchr("|&;,()<> ", c));
 }
 
 int	is_quote(char c)

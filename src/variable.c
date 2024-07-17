@@ -43,7 +43,7 @@ t_key_value	*get_key_value(char *str)
 	key_value = (t_key_value *)malloc(sizeof(t_key_value));
 	if (!key_value)
 		return (NULL);
-	tmp = strchr(str, '=');
+	tmp = ft_strchr(str, '=');
 	if (!tmp)
 	{
 		free(key_value);

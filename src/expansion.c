@@ -97,7 +97,7 @@ void	expansion_env(char **str, t_env *env)
 
 	i = 0;
 	j = 0;
-	tmp = calloc(1, sizeof(char) * (ft_strlen(*str) + 1));
+	tmp = ft_calloc(1, sizeof(char) * (ft_strlen(*str) + 1));
 	while ((*str)[i])
 	{
 		if (is_single_quote((*str)[i]))

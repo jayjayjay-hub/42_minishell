@@ -15,6 +15,7 @@ bool	builtin_pwd(t_token *token)
 		return (false);
 	}
 	ft_putendl_fd(buf, 1);
+	error_status(0);
 	free(buf);
 	return (true);
 }

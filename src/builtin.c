@@ -26,12 +26,16 @@ bool	builtin_check(t_token *token)
 	return (false);
 }
 
-bool	do_builtin(t_token *token, t_env **env)
+bool	do_builtin(t_token *token, t_env **env, int child_check)
 {
 	while (token)
 	{
 		if (ft_strlen(token->str) == 4 && !ft_strncmp(token->str, "exit", 4))
+		{
+			if (child_check)
+				return (builtin_exit_child(token));
 			return (builtin_exit(token));
+		}
 		else if (ft_strlen(token->str) == 2
 			&& !ft_strncmp(token->str, "cd", 3))
 			return (builtin_cd(token, env));
@@ -52,7 +56,7 @@ bool	do_builtin(t_token *token, t_env **env)
 	return (true);
 }
 
-bool	builtin_control(t_token *token, t_env **env)
+bool	builtin_control(t_token *token, t_env **env, int child_check)
 {
 	t_token	*tmp;
 
@@ -66,5 +70,5 @@ bool	builtin_control(t_token *token, t_env **env)
 		if (!redirect(&tmp))
 			return (true);
 	}
-	return (do_builtin(token, env));
+	return (do_builtin(token, env, child_check));
 }

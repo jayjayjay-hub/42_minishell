@@ -76,7 +76,7 @@ void	do_execve(char **cmd, char **envp)
 		ft_error(NULL, NULL, "execve failed", EXIT_FAILURE);
 }
 
-void	**do_cmd(t_ats *ats, char **envp)
+void	**run_cmd(t_ats *ats, char **envp)
 {
 	int			i;
 	char		**cmd;
@@ -127,9 +127,9 @@ pid_t	child(t_cmd *command, t_env *env)
 					command->fd_pipe->fd[2 * pipe_i + 1]);
 		}
 		close_pipe(command->fd_pipe);
-		if (builtin_control(command->ats->token, &env))
+		if (builtin_control(command->ats->token, &env, 1))
 			exit(WEXITSTATUS(PRINT_ERROR));
-		do_cmd(command->ats, command->envp);
+		run_cmd(command->ats, command->envp);
 	}
 	return (pid);
 }
