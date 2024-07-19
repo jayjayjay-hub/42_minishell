@@ -33,13 +33,24 @@ void	execve_loop(t_cmd *command, t_env *env)
 	}
 }
 
-void	make_wait_child(t_cmd *command, t_env *env)
+void	wait_child(t_pid_info pid_info)
 {
-	int		i;
-	int		status;
-	t_ats	*tmp;
+	int	status;
+	int	i;
 
 	i = 0;
+	status = 0;
+	while (pid_info.pipe_i--)
+	{
+		waitpid(pid_info.pid[i++], &status, 0);
+		error_status(status);
+	}
+}
+
+void	make_wait_child(t_cmd *command, t_env *env)
+{
+	t_ats	*tmp;
+
 	tmp = command->ats;
 	command->fd_pipe = create_pipe(command->ats);
 	command->pid_info.pid = (pid_t *)malloc(sizeof(pid_t)
@@ -53,11 +64,7 @@ void	make_wait_child(t_cmd *command, t_env *env)
 	}
 	execve_loop(command, env);
 	close_pipe(command->fd_pipe);
-	while (command->pid_info.pipe_i--)
-	{
-		waitpid(command->pid_info.pid[i++], &status, 0);
-		error_status(status);
-	}
+	wait_child(command->pid_info);
 	if (!command->fd_pipe->pipe_size && builtin_check(tmp->token))
 		close_redirect(tmp->token);
 	free_ats(tmp);
