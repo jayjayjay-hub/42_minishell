@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/17 15:25:11 by kosnakam          #+#    #+#             */
+/*   Updated: 2024/07/17 16:23:36 by jtakahas         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
@@ -13,16 +25,10 @@
 # include <signal.h>
 
 # ifdef __linux__
-// 俺のUbuntu環境だと必要でした
 #  include <sys/wait.h>
 #  define S_IREAD S_IRUSR
 #  define S_IWRITE S_IWUSR
 # endif
-
-// # ifdef __APPLE__
-// 	void	rl_replace_line(const char *, int);
-// 	void	rl_on_new_line(void);
-// #endif
 
 # include "libft.h"
 # include "ft_printf.h"
@@ -38,6 +44,12 @@
 
 // signal
 typedef struct sigaction	t_sig;
+
+typedef struct s_index
+{
+	int	i;
+	int	j;
+}	t_index;
 
 typedef struct s_key_value
 {
@@ -122,18 +134,16 @@ typedef struct s_cmd
 	t_pid_info	pid_info;
 }	t_cmd;
 
-// main.c
-int				error_status(int error_code);
-
 // tokenizer.c
 t_token			*tokenize(char *line);
+bool			is_valid_variable(char *str);
+int				get_word_len(char *line);
 
 // list.c
 t_token			*new_token(char *str, t_token_type type, int fd);
 void			token_add_back(t_token **list, t_token *new);
 void			free_token(t_token *token);
 int				token_list_size(t_token *token);
-void			print_token(t_token *token);
 
 // signal.c
 void			register_signal(void);
@@ -142,6 +152,8 @@ void			signal_handler(int signum);
 // error.c
 void			ft_error(char *cmd, char *target,
 					char *main_message, int status);
+void			handle_eof(char *line);
+int				error_status(int error_code);
 
 // redirect.c
 bool			redirect(t_token **token);
@@ -156,7 +168,6 @@ t_ats			*parser(t_token *token);
 void			add_back_ats(t_ats **list, t_ats *new);
 void			free_ats(t_ats *ats);
 int				ats_list_size(t_ats *ats);
-void			print_ats(t_ats *ats);
 t_ats			*new_ats(t_token *token);
 
 // child.c
@@ -180,9 +191,7 @@ bool			is_al_under(char c);
 bool			add_variable(t_token *token, t_env **env);
 
 // variable_list.c
-// void variable_list_add_back(t_variable *new);
 t_variable		*variable_list_new(char *key, char *value);
-// void variable_list_free(void);
 char			*get_variable_key(char *str);
 
 // utils.c
@@ -224,13 +233,13 @@ bool			builtin_cd(t_token *token, t_env **env);
 bool			builtin_echo(t_token *token);
 
 // builtin_pwd.c
-bool			builtin_pwd(t_token *token);
+bool			builtin_pwd(void);
 
 // builtin_export.c
 bool			builtin_export(t_token *token, t_env **env);
 
 // builtin_env.c
-bool			builtin_env(t_token *token, t_env *env);
+bool			builtin_env(t_env *env);
 
 // builtin_exit.c
 bool			builtin_exit(t_token *token);
@@ -242,5 +251,18 @@ void			free_command(t_cmd *command);
 
 // heredoc.c
 int				open_heredoc(char *eof);
+
+// childset.c
+void			make_wait_child(t_cmd *command, t_env *env);
+
+// expansion_utils.c
+void			remove_quote(char *str);
+
+// variable_utils.c
+bool			is_valid_token(t_token *token);
+
+// tokenizer_utils.c
+char			*get_word(char *line);
+char			*get_operator(char *line, t_token_type type);
 
 #endif

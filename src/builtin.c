@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   builtin.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/17 15:26:24 by kosnakam          #+#    #+#             */
+/*   Updated: 2024/07/17 16:23:56 by jtakahas         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "minishell.h"
 
@@ -7,19 +18,15 @@ bool	builtin_check(t_token *token)
 	{
 		if (ft_strlen(token->str) == 4 && !ft_strncmp(token->str, "exit", 4))
 			return (true);
-		else if (ft_strlen(token->str) == 2 && !ft_strncmp(token->str, "cd", 3))
+		if (ft_strlen(token->str) == 2 && !ft_strncmp(token->str, "cd", 3))
 			return (true);
-		else if (ft_strlen(token->str) == 4
-			&& !ft_strncmp(token->str, "echo", 5))
+		if (ft_strlen(token->str) == 4 && !ft_strncmp(token->str, "echo", 5))
 			return (true);
-		else if (ft_strlen(token->str) == 3
-			&& !ft_strncmp(token->str, "pwd", 4))
+		if (ft_strlen(token->str) == 3 && !ft_strncmp(token->str, "pwd", 4))
 			return (true);
-		else if (ft_strlen(token->str) == 6
-			&& !ft_strncmp(token->str, "export", 7))
+		if (ft_strlen(token->str) == 6 && !ft_strncmp(token->str, "export", 7))
 			return (true);
-		else if (ft_strlen(token->str) == 3
-			&& !ft_strncmp(token->str, "env", 4))
+		if (ft_strlen(token->str) == 3 && !ft_strncmp(token->str, "env", 4))
 			return (true);
 		token = token->next;
 	}
@@ -36,21 +43,16 @@ bool	do_builtin(t_token *token, t_env **env, int child_check)
 				return (builtin_exit_child(token));
 			return (builtin_exit(token));
 		}
-		else if (ft_strlen(token->str) == 2
-			&& !ft_strncmp(token->str, "cd", 3))
+		if (ft_strlen(token->str) == 2 && !ft_strncmp(token->str, "cd", 3))
 			return (builtin_cd(token, env));
-		else if (ft_strlen(token->str) == 4
-			&& !ft_strncmp(token->str, "echo", 5))
+		if (ft_strlen(token->str) == 4 && !ft_strncmp(token->str, "echo", 5))
 			return (builtin_echo(token));
-		else if (ft_strlen(token->str) == 3
-			&& !ft_strncmp(token->str, "pwd", 4))
-			return (builtin_pwd(token));
-		else if (ft_strlen(token->str) == 6
-			&& !ft_strncmp(token->str, "export", 7))
+		if (ft_strlen(token->str) == 3 && !ft_strncmp(token->str, "pwd", 4))
+			return (builtin_pwd());
+		if (ft_strlen(token->str) == 6 && !ft_strncmp(token->str, "export", 7))
 			return (builtin_export(token, env));
-		else if (ft_strlen(token->str) == 3
-			&& !ft_strncmp(token->str, "env", 4))
-			return (builtin_env(token, *env));
+		if (ft_strlen(token->str) == 3 && !ft_strncmp(token->str, "env", 4))
+			return (builtin_env(*env));
 		token = token->next;
 	}
 	return (true);

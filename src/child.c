@@ -1,20 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   child.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kosnakam <kosnakam@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/17 15:26:38 by kosnakam          #+#    #+#             */
+/*   Updated: 2024/07/17 15:26:41 by kosnakam         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "minishell.h"
-
-// debug用。二次元配列を出力する。
-// static void	dp_print(char **arg)
-// {
-// 	int	i;
-
-// 	i = -1;
-// 	while (arg[++i])
-// 	{
-// 		ft_putstr_fd("arg[", 2);
-// 		ft_putnbr_fd(i, 2);
-// 		ft_putstr_fd("]: ", 2);
-// 		ft_putendl_fd(arg[i], 2);
-// 	}
-// }
 
 static void	sub_dup2(int first, int second)
 {
@@ -24,7 +20,6 @@ static void	sub_dup2(int first, int second)
 		dup2(second, STDOUT_FILENO);
 }
 
-// コマンドが存在するパスを検索する。パスが見つかった場合はそのパスを返す。
 char	*search_path(char *cmd, char **envp)
 {
 	int		i;
@@ -54,7 +49,6 @@ char	*search_path(char *cmd, char **envp)
 	return (NULL);
 }
 
-// コマンドを実行する。コマンドが存在しない場合はエラーを出力する。
 void	do_execve(char **cmd, char **envp)
 {
 	char	*path;

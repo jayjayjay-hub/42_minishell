@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   variable.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/17 15:29:19 by kosnakam          #+#    #+#             */
+/*   Updated: 2024/07/17 15:46:07 by jtakahas         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 bool	is_alnum_under(char c)
@@ -53,17 +65,6 @@ t_key_value	*get_key_value(char *str)
 	key_value->key = ft_substr(str, 0, key_len);
 	key_value->value = ft_strdup(tmp + 1);
 	return (key_value);
-}
-
-bool	is_valid_token(t_token *token)
-{
-	while (token)
-	{
-		if (!is_valid_variable(token->str))
-			return (false);
-		token = token->next;
-	}
-	return (true);
 }
 
 bool	add_variable(t_token *token, t_env **env)

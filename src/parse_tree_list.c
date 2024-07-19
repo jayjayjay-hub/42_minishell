@@ -1,13 +1,14 @@
-// parse_tree_list.c
-
-/*
-typedef struct s_parse_tree
-{
-	t_token			*token;
-	struct s_parse_tree	*left;
-	struct s_parse_tree	*right;
-}	t_parse_tree;
-*/
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_tree_list.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kosnakam <kosnakam@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/17 15:27:49 by kosnakam          #+#    #+#             */
+/*   Updated: 2024/07/17 15:27:51 by kosnakam         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "minishell.h"
 

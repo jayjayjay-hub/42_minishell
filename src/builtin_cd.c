@@ -1,6 +1,25 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   builtin_cd.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/17 15:25:38 by kosnakam          #+#    #+#             */
+/*   Updated: 2024/07/17 16:22:15 by jtakahas         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-// builtin_cd.c
+static bool	error_cd(char *path)
+{
+	ft_putstr_fd("cd: ", 2);
+	perror(path);
+	error_status(256 * 1);
+	free(path);
+	return (false);
+}
 
 bool	do_cd(t_token *token, t_env **env, char *path)
 {
@@ -21,11 +40,7 @@ bool	do_cd(t_token *token, t_env **env, char *path)
 		path = ft_strdup(token->str);
 	if (chdir(path) == -1)
 	{
-		ft_putstr_fd("cd: ", 2);
-		perror(path);
-		error_status(256 * 1);
-		free(path);
-		return (false);
+		return (error_cd(path));
 	}
 	error_status(0);
 	free(path);
@@ -36,6 +51,7 @@ bool	builtin_cd(t_token *token, t_env **env)
 {
 	char	*path;
 
+	path = NULL;
 	if (!token->next)
 	{
 		path = get_env_value("HOME", *env);

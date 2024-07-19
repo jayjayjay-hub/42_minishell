@@ -14,8 +14,8 @@ ERROR_DIR = error/
 
 CC = cc
 LDFRAGS = -lreadline
-# CFLAGS = -Wall -Wextra -Werror
-CFLAGS = -g
+CFLAGS = -Wall -Wextra -Werror
+# CFLAGS = -g
 RM = rm -rf
 NORM = norminette
 
@@ -39,7 +39,13 @@ SRC_FILES = main.c token_list.c\
 			builtin_export.c\
 			builtin_env.c\
 			free.c\
-			heredoc.c
+			heredoc.c\
+			childset.c\
+			env_list_utils.c\
+			env_list_utils2.c\
+			expansion_utils.c\
+			variable_utils.c\
+			tokenizer_utils.c
 
 OJB_FILES = $(SRC_FILES:%.c=%.o)
 
