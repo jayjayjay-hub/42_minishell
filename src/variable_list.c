@@ -6,7 +6,7 @@
 /*   By: kosnakam <kosnakam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:29:02 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/17 15:29:14 by kosnakam         ###   ########.fr       */
+/*   Updated: 2024/07/19 16:10:46 by kosnakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ char	*get_variable_key(char *str)
 
 	i = 0;
 	if (ft_strlen(str) == 1 && str[0] == '?')
-		return (strdup("?"));
+		return (ft_strdup("?"));
 	if (!is_al_under(str[i]))
 		return (NULL);
 	i++;

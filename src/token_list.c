@@ -6,7 +6,7 @@
 /*   By: kosnakam <kosnakam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:28:30 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/17 15:28:32 by kosnakam         ###   ########.fr       */
+/*   Updated: 2024/07/19 16:10:41 by kosnakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ t_token	*new_token(char *str, t_token_type type, int fd)
 	}
 	else
 	{
-		token->str = strdup(str);
+		token->str = ft_strdup(str);
 		if (!token->str)
 			ft_error("ft_strdup", "token->str", strerror(errno), EXIT_FAILURE);
 	}
