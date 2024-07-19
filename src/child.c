@@ -54,20 +54,6 @@ char	*search_path(char *cmd, char **envp)
 	return (NULL);
 }
 
-static bool	check_relativepath(char *str)
-{
-	int	i;
-
-	i = 0;
-	while (str[i])
-	{
-		if (str[i] == '/')
-			return (true);
-		i++;
-	}
-	return (false);
-}
-
 // コマンドを実行する。コマンドが存在しない場合はエラーを出力する。
 void	do_execve(char **cmd, char **envp)
 {
@@ -76,7 +62,7 @@ void	do_execve(char **cmd, char **envp)
 	path = NULL;
 	if (!cmd[0])
 		exit(0);
-	if (check_relativepath(cmd[0]))
+	if (ft_strchr(cmd[0], '/'))
 	{
 		if (access(cmd[0], F_OK) != -1)
 			path = cmd[0];

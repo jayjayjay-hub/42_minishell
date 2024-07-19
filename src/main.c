@@ -82,8 +82,10 @@ void	command_set(char *line, char **envp, t_env *env)
 	if (!syntax_check(token))
 		return ;
 	expansion(token, env);
+	// print_token(token);
 	redirect_open(token);
 	command->ats = parser(token);
+	// print_ats(command->ats);
 	make_wait_child(command, env);
 	free_token(token);
 	free_command(command);
