@@ -43,7 +43,7 @@ void	wait_child(t_pid_info pid_info)
 	while (pid_info.pipe_i--)
 	{
 		waitpid(pid_info.pid[i++], &status, 0);
-		error_status(256 * status);
+		error_status(status);
 	}
 }
 
@@ -98,7 +98,6 @@ int	main(int argc, char **argv, char **envp)
 	rl_outstream = stderr;
 	env = NULL;
 	env = init_env(envp);
-	// printf("PID: %d\n", getpid());
 	while (1)
 	{
 		line = readline("minishell$ ");
