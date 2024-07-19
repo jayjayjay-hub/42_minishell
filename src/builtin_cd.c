@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_cd.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kosnakam <kosnakam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:25:38 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/17 16:22:15 by jtakahas         ###   ########.fr       */
+/*   Updated: 2024/07/19 16:34:05 by kosnakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static bool	error_cd(char *path)
 	perror(path);
 	error_status(256 * 1);
 	free(path);
-	return (false);
+	return (true);
 }
 
 bool	do_cd(t_token *token, t_env **env, char *path)
