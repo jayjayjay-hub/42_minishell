@@ -1,0 +1,14 @@
+'pwd > out'
+
+diff KO
+0a1,2
+> /home/kosnakam/Desktominishell$ exit
+> l/kosnakam
+
+
+<< expect >>
+
+
+<< your output >>
+/home/kosnakam/Desktominishell$ exit
+l/kosnakam
