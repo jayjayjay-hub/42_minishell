@@ -6,7 +6,7 @@
 /*   By: kosnakam <kosnakam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:50:27 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/19 16:19:38 by kosnakam         ###   ########.fr       */
+/*   Updated: 2024/07/19 16:30:17 by kosnakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	execve_loop(t_cmd *command, t_env *env)
 	while (command->ats)
 	{
 		if (add_variable(command->ats->token, &env)
-			|| ft_strchr(command->ats->token->str, '\0'))
+			|| command->ats->token->str[0] == '\0')
 		{
 			command->ats = command->ats->next;
 			continue ;
@@ -34,6 +34,7 @@ void	wait_child(t_pid_info pid_info)
 	int		status;
 
 	i = 0;
+	status = 0;
 	while (pid_info.pipe_i--)
 	{
 		waitpid(pid_info.pid[i++], &status, 0);
