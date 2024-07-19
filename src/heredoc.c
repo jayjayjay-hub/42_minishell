@@ -17,9 +17,12 @@ void	read_heredoc(char *eof, int tmp_fd)
 					"here-document delimited by end-of-file", 0);
 				break ;
 			}
-			free(line);
-			if (*line == '\n')
+			if (line[0] == '\n')
+			{
+				free(line);
 				continue ;
+			}
+			free(line);
 			break ;
 		}
 		ft_putendl_fd(line, tmp_fd);

@@ -74,6 +74,8 @@ void	do_execve(char **cmd, char **envp)
 	char	*path;
 
 	path = NULL;
+	if (!cmd[0])
+		exit(0);
 	if (check_relativepath(cmd[0]))
 	{
 		if (access(cmd[0], F_OK) != -1)
