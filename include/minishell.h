@@ -29,7 +29,7 @@
 # include "get_next_line.h"
 
 // exit status
-# define CMD_NOT_FOUND	32512
+# define CMD_NOT_FOUND	127
 
 # define PRINT_ERROR	-1
 

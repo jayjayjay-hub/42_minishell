@@ -35,15 +35,15 @@ void	execve_loop(t_cmd *command, t_env *env)
 
 void	wait_child(t_pid_info pid_info)
 {
-	int	status;
 	int	i;
+	int	status;
 
 	i = 0;
 	status = 0;
 	while (pid_info.pipe_i--)
 	{
 		waitpid(pid_info.pid[i++], &status, 0);
-		error_status(status);
+		error_status(256 * status);
 	}
 }
 
@@ -82,10 +82,8 @@ void	command_set(char *line, char **envp, t_env *env)
 	if (!syntax_check(token))
 		return ;
 	expansion(token, env);
-	// print_token(token);
 	redirect_open(token);
 	command->ats = parser(token);
-	// print_ats(command->ats);
 	make_wait_child(command, env);
 	free_token(token);
 	free_command(command);

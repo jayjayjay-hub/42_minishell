@@ -4,14 +4,14 @@ void	signal_handler(int signal)
 {
 	if (signal == SIGINT)
 	{
-		write(1, "\n", 1);
+		ft_putendl_fd("", 1);
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();
 	}
 	if (signal == SIGQUIT)
 	{
-		write(1, "Quit: 3\n", 8);
+		ft_putendl_fd("Quit: 3", 1);
 	}
 }
 

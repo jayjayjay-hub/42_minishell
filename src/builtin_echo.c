@@ -34,13 +34,13 @@ bool	builtin_echo(t_token *token)
 		token = token->next;
 	while (token && token->type == WORD)
 	{
-		write(1, token->str, ft_strlen(token->str));
+		ft_putstr_fd(token->str, 1);
 		token = token->next;
 		if (token)
-			write(1, " ", 1);
+			ft_putstr_fd(" ", 1);
 	}
 	if (newline)
-		write(1, "\n", 1);
+		ft_putendl_fd(NULL, 1);
 	error_status(0);
 	return (true);
 }
