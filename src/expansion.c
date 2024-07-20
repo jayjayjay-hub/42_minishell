@@ -6,7 +6,7 @@
 /*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:27:12 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/20 12:52:20 by jtakahas         ###   ########.fr       */
+/*   Updated: 2024/07/20 16:55:09 by jtakahas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,28 +54,6 @@ void	pass_single_quote(char **tmp, char **str, int *i, int *j)
 	(*j)++;
 }
 
-void	expansion_double_quote(char **str,
-	char **tmp, t_index *index, t_env *env)
-{
-	(*tmp)[(*index).j] = (*str)[(*index).i];
-	((*index).i)++;
-	((*index).j)++;
-	while ((*str)[(*index).i] && !is_double_quote((*str)[(*index).i]))
-	{
-		if ((*str)[(*index).i] == '$' && (*str)[(*index).i + 1])
-			variable_expansion(str, tmp, index, env);
-		else
-		{
-			(*tmp)[(*index).j] = (*str)[(*index).i];
-			((*index).i)++;
-			((*index).j)++;
-		}
-	}
-	(*tmp)[(*index).j] = (*str)[(*index).i];
-	((*index).i)++;
-	((*index).j)++;
-}
-
 void	expansion_env(char **str, t_env *env)
 {
 	t_index	index;
@@ -88,8 +66,6 @@ void	expansion_env(char **str, t_env *env)
 	{
 		if (is_single_quote((*str)[index.i]))
 			pass_single_quote(&tmp, str, &index.i, &index.j);
-		else if (is_double_quote((*str)[index.i]))
-			expansion_double_quote(str, &tmp, &index, env);
 		else if ((*str)[index.i] == '$' && (*str)[index.i + 1])
 			variable_expansion(str, &tmp, &index, env);
 		else
