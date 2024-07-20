@@ -27,7 +27,7 @@ NORM = norminette
 SRC_FILES = main.c token_list.c\
 			tokenizer.c signal.c\
 			error.c redirect.c\
-			parser.c parse_tree_list.c\
+			parser.c\
 			ats_list.c\
 			child.c pipe.c\
 			variable_list.c variable.c\
