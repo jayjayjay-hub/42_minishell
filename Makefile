@@ -34,7 +34,6 @@ SRC_FILES = main.c token_list.c\
 			expansion.c\
 			utils.c\
 			syntax.c\
-			env_list.c env.c\
 			builtin.c\
 			builtin_exit.c\
 			builtin_cd.c\
@@ -45,8 +44,10 @@ SRC_FILES = main.c token_list.c\
 			free.c\
 			heredoc.c\
 			childset.c\
+			env_list.c\
 			env_list_utils.c\
 			env_list_utils2.c\
+			env_init.c\
 			expansion_utils.c\
 			variable_utils.c\
 			tokenizer_utils.c

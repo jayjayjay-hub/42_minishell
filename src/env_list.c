@@ -6,7 +6,7 @@
 /*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:26:55 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/17 15:40:59 by jtakahas         ###   ########.fr       */
+/*   Updated: 2024/07/20 15:39:08 by jtakahas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,37 +27,6 @@ void	env_add_back(t_env *new, t_env **env)
 			tmp = tmp->next;
 		tmp->next = new;
 	}
-}
-
-char	*get_key_from_envp(char *env_line)
-{
-	int		i;
-	char	*key;
-
-	i = 0;
-	while (env_line[i] && env_line[i] != '=')
-		i++;
-	key = malloc(sizeof(char) * (i + 1));
-	if (!key)
-		ft_error("malloc", "key", strerror(errno), EXIT_FAILURE);
-	ft_strlcpy(key, env_line, i + 1);
-	return (key);
-}
-
-char	*get_value_from_envp(char *env_line)
-{
-	int		i;
-	char	*value;
-
-	i = 0;
-	while (env_line[i] && env_line[i] != '=')
-		i++;
-	if (!env_line[i])
-		return (NULL);
-	value = ft_strdup(env_line + i + 1);
-	if (!value)
-		ft_error("ft_strdup", "value", strerror(errno), EXIT_FAILURE);
-	return (value);
 }
 
 t_env	*new_valiable(char *env_line)
