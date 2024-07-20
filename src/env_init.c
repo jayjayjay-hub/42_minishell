@@ -1,31 +1,34 @@
 #include "minishell.h"
 
-char	*get_key_from_envp(char *env_line)
+char	*get_key_from_str(char *env_line)
 {
-	int		i;
+	int		index;
 	char	*key;
 
-	i = 0;
-	while (env_line[i] && env_line[i] != '=')
-		i++;
-	key = malloc(sizeof(char) * (i + 1));
+	index = 0;
+	while (env_line && env_line[index] && env_line[index] != '=')
+		index++;
+	if (index == 0)
+		return (NULL);
+	key = malloc(sizeof(char) * (index + 1));
 	if (!key)
 		ft_error("malloc", "key", strerror(errno), EXIT_FAILURE);
-	ft_strlcpy(key, env_line, i + 1);
+	ft_strlcpy(key, env_line, index + 1);
 	return (key);
 }
 
-char	*get_value_from_envp(char *env_line)
+char	*get_value_from_str(char *env_line)
 {
-	int		i;
+	int		index;
 	char	*value;
 
-	i = 0;
-	while (env_line[i] && env_line[i] != '=')
-		i++;
-	if (!env_line[i])
+	index = 0;
+	while (env_line && env_line[index] && env_line[index] != '=')
+		index++;
+	if (!env_line[index])
 		return (NULL);
-	value = ft_strdup(env_line + i + 1);
+	index++;
+	value = ft_strdup(env_line + index);
 	if (!value)
 		ft_error("ft_strdup", "value", strerror(errno), EXIT_FAILURE);
 	return (value);

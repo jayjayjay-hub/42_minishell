@@ -6,7 +6,7 @@
 /*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:26:55 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/20 15:39:08 by jtakahas         ###   ########.fr       */
+/*   Updated: 2024/07/20 15:48:53 by jtakahas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,8 @@ t_env	*new_valiable(char *env_line)
 	env = malloc(sizeof(t_env));
 	if (!env)
 		ft_error("malloc", "env", strerror(errno), EXIT_FAILURE);
-	key = get_key_from_envp(env_line);
-	value = get_value_from_envp(env_line);
+	key = get_key_from_str(env_line);
+	value = get_value_from_str(env_line);
 	env->key = key;
 	env->value = value;
 	env->is_export = false;
@@ -56,8 +56,10 @@ t_env	*new_export_env(char *env_line)
 	env = malloc(sizeof(t_env));
 	if (!env)
 		ft_error("malloc", "env", strerror(errno), EXIT_FAILURE);
-	key = get_key_from_envp(env_line);
-	value = get_value_from_envp(env_line);
+	key = get_key_from_str(env_line);
+	if (!key)
+		return (NULL);
+	value = get_value_from_str(env_line);
 	env->key = key;
 	env->value = value;
 	env->is_export = true;
