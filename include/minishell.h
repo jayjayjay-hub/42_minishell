@@ -6,7 +6,7 @@
 /*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:25:11 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/20 16:24:16 by jtakahas         ###   ########.fr       */
+/*   Updated: 2024/07/20 16:32:23 by jtakahas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -231,7 +231,7 @@ bool			builtin_export(t_token *token, t_env **env);
 void			print_export(t_env *env);
 
 // builtin_env.c
-bool			builtin_env(t_env *env);
+bool			builtin_env(t_token *token, t_env *env);
 void			print_env(t_env *env);
 
 // builtin_exit.c

@@ -46,7 +46,6 @@ SRC_FILES = main.c token_list.c\
 			childset.c\
 			env_list.c\
 			env_list_utils.c\
-			env_list_utils2.c\
 			env_init.c\
 			expansion_utils.c\
 			variable_utils.c\
