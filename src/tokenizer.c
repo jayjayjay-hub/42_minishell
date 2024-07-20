@@ -6,7 +6,7 @@
 /*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:28:49 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/17 16:20:41 by jtakahas         ###   ########.fr       */
+/*   Updated: 2024/07/20 12:24:29 by jtakahas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ t_token_type	check_type(char *line)
 		return (REDIRECT_IN);
 	else if (ft_strncmp(line, ">", 1) == 0)
 		return (REDIRECT_OUT);
-	else if (ft_strncmp(line, "(", 1) == 0)
+	else if (ft_strncmp(line, "(", 1) == 0) // todo
 		return (BRACKET_LEFT);
 	else if (ft_strncmp(line, ")", 1) == 0)
 		return (BRACKET_RIGHT);
@@ -78,6 +78,7 @@ int	add_token(t_token **token, char *line, t_token_type type)
 
 bool	pipe_syntax_check(char *line)
 {
+	line = pass_space(line);
 	if (line[0] == '|')
 	{
 		ft_putendl_fd("minishell: syntax error near unexpected token `|'", 2);
