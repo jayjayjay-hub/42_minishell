@@ -6,7 +6,7 @@
 /*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:29:19 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/20 16:14:55 by jtakahas         ###   ########.fr       */
+/*   Updated: 2024/07/20 16:24:09 by jtakahas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,50 +40,5 @@ bool	is_valid_identifier(char *str)
 		index++;
 	if (str[index] && str[index] != '=')
 		return (false);
-	return (true);
-}
-
-t_key_value	*get_key_value(char *str)
-{
-	t_key_value	*key_value;
-	char		*tmp;
-	int			key_len;
-
-	key_value = (t_key_value *)malloc(sizeof(t_key_value));
-	if (!key_value)
-		return (NULL);
-	tmp = ft_strchr(str, '=');
-	if (!tmp)
-	{
-		free(key_value);
-		return (NULL);
-	}
-	key_len = tmp - str;
-	key_value->key = ft_substr(str, 0, key_len);
-	key_value->value = ft_strdup(tmp + 1);
-	return (key_value);
-}
-
-bool	add_variable(t_token *token, t_env **env)
-{
-	t_env		*new;
-	t_key_value	*key_value;
-
-	if (!is_valid_token(token))
-		return (false);
-	while (token)
-	{
-		key_value = get_key_value(token->str);
-		if (edit_env_value(key_value->key, key_value->value, env))
-		{
-			free(key_value->key);
-			free(key_value->value);
-		}
-		new = new_key_value(key_value);
-		if (!new)
-			return (false);
-		env_add_back(new, env);
-		token = token->next;
-	}
 	return (true);
 }
