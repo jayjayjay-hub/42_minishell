@@ -6,7 +6,7 @@
 /*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:29:19 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/17 15:46:07 by jtakahas         ###   ########.fr       */
+/*   Updated: 2024/07/20 16:14:55 by jtakahas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ bool	is_al_under(char c)
 	return (false);
 }
 
-bool	is_valid_variable(char *str)
+bool	is_valid_identifier(char *str)
 {
 	int	index;
 
@@ -38,10 +38,7 @@ bool	is_valid_variable(char *str)
 	index++;
 	while (str[index] && is_alnum_under(str[index]))
 		index++;
-	if (!str[index] || str[index] != '=')
-		return (false);
-	index++;
-	if (!str[index])
+	if (str[index] && str[index] != '=')
 		return (false);
 	return (true);
 }

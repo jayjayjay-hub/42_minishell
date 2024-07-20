@@ -6,7 +6,7 @@
 /*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:26:07 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/20 15:57:49 by jtakahas         ###   ########.fr       */
+/*   Updated: 2024/07/20 16:07:38 by jtakahas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,28 +35,15 @@ void	print_export(t_env *env)
 
 bool	builtin_export(t_token *token, t_env **env)
 {
-	char	*key;
-	char	*value;
-	int		key_len;
+	t_env	*new;
 
 	if (!token->next)
 		return (print_export(*env), true);
 	token = token->next;
 	while (token)
 	{
-		key_len = 0;
-		while (token->str[key_len] && token->str[key_len] != '=')
-			key_len++;
-		if (token->str[key_len] == '=')
-		{
-			key = ft_substr(token->str, 0, key_len);
-			value = ft_strdup(token->str + key_len + 1);
-			export_env(key, value, env);
-			free(key);
-			free(value);
-		}
-		else
-			export_env(token->str, NULL, env);
+		new = new_export_env(token->str);
+		env_add_back(new, env);
 		token = token->next;
 	}
 	return (error_status(0), true);

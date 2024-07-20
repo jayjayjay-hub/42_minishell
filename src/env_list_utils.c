@@ -6,7 +6,7 @@
 /*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:39:46 by jtakahas          #+#    #+#             */
-/*   Updated: 2024/07/20 15:59:22 by jtakahas         ###   ########.fr       */
+/*   Updated: 2024/07/20 16:02:40 by jtakahas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,27 +39,4 @@ int	env_list_size(t_env *env)
 		tmp = tmp->next;
 	}
 	return (size);
-}
-
-bool	edit_env_value(char *key, char *value, t_env **env)
-{
-	t_env	*tmp;
-	char	*tmp_value;
-	int		key_len;
-
-	tmp = *env;
-	key_len = ft_strlen(key);
-	while (tmp)
-	{
-		if ((int)ft_strlen(tmp->key) == key_len
-			&& !ft_strncmp(tmp->key, key, key_len))
-		{
-			tmp_value = tmp->value;
-			tmp->value = ft_strdup(value);
-			free(tmp_value);
-			return (true);
-		}
-		tmp = tmp->next;
-	}
-	return (false);
 }

@@ -6,7 +6,7 @@
 /*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:26:55 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/20 15:52:03 by jtakahas         ###   ########.fr       */
+/*   Updated: 2024/07/20 16:17:33 by jtakahas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,48 @@ void	env_add_back(t_env *new, t_env **env)
 			tmp = tmp->next;
 		tmp->next = new;
 	}
+}
+
+bool	edit_env_value(char *key, char *value, t_env **env)
+{
+	t_env	*tmp;
+	char	*tmp_value;
+	int		key_len;
+
+	tmp = *env;
+	key_len = ft_strlen(key);
+	while (tmp)
+	{
+		if ((int)ft_strlen(tmp->key) == key_len
+			&& !ft_strncmp(tmp->key, key, key_len))
+		{
+			tmp_value = tmp->value;
+			tmp->value = ft_strdup(value);
+			free(tmp_value);
+			return (true);
+		}
+		tmp = tmp->next;
+	}
+	return (false);
+}
+
+char	*get_env_value(char *key, t_env *env)
+{
+	t_env	*tmp;
+	int		key_len;
+
+	tmp = env;
+	key_len = ft_strlen(key);
+	if (key_len == 1 && key[0] == '?')
+		return (ft_itoa(error_status(PRINT_ERROR)));
+	while (tmp)
+	{
+		if ((int)ft_strlen(tmp->key) == key_len
+			&& !ft_strncmp(tmp->key, key, key_len))
+			return (ft_strdup(tmp->value));
+		tmp = tmp->next;
+	}
+	return (NULL);
 }
 
 t_env	*new_variable(char *env_line)

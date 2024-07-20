@@ -6,6 +6,14 @@ char	*get_key_from_str(char *env_line)
 	char	*key;
 
 	index = 0;
+	if (is_valid_identifier(env_line) == false)
+	{
+		ft_putstr_fd("minishell: export: `", STDERR_FILENO);
+		ft_putstr_fd(env_line, STDERR_FILENO);
+		ft_putendl_fd("': not a valid identifier", STDERR_FILENO);
+		error_status(256 * 1);
+		return (NULL);
+	}
 	while (env_line && env_line[index] && env_line[index] != '=')
 		index++;
 	if (index == 0)
