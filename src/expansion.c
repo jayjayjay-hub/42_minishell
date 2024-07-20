@@ -6,7 +6,7 @@
 /*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:27:12 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/17 16:20:58 by jtakahas         ###   ########.fr       */
+/*   Updated: 2024/07/20 12:52:20 by jtakahas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,8 @@ void	expansion(t_token *token, t_env *env)
 	{
 		if (token->type == WORD)
 		{
-			expansion_env(&token->str, env);
+			if (token->prev && token->prev->type != REDIRECT_HERE_DOC)
+				expansion_env(&token->str, env);
 			remove_quote(token->str);
 		}
 		token = token->next;
