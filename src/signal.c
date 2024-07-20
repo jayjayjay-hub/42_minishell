@@ -6,7 +6,7 @@
 /*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:28:08 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/20 11:55:07 by jtakahas         ###   ########.fr       */
+/*   Updated: 2024/07/20 13:41:17 by jtakahas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,11 @@ void	signal_handler(int signal)
 	}
 	if (signal == SIGQUIT)
 	{
+		rl_on_new_line();
+		rl_replace_line("  ", 0);
+		rl_redisplay();
+		rl_replace_line("", 0);
+		rl_redisplay();
 		return ;
 	}
 }
