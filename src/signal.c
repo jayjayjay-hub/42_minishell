@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kosnakam <kosnakam@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jay <jay@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:28:08 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/17 15:28:10 by kosnakam         ###   ########.fr       */
+/*   Updated: 2024/07/20 11:24:04 by jay              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	signal_handler(int signal)
 	}
 	if (signal == SIGQUIT)
 	{
-		ft_putendl_fd("Quit: 3", 1);
+		return ;
 	}
 }
 
