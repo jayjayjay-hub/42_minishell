@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kosnakam <kosnakam@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:27:27 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/17 15:27:30 by kosnakam         ###   ########.fr       */
+/*   Updated: 2024/07/20 14:54:53 by jtakahas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ void	read_heredoc(char *eof, int tmp_fd)
 	while (1)
 	{
 		line = readline("> ");
+		// expantion(&line);
 		if (!line || *line == '\n' || (ft_strlen(line) == ft_strlen(eof)
 				&& !ft_strncmp(line, eof, ft_strlen(line))))
 		{
