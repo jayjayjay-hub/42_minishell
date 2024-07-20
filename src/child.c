@@ -6,7 +6,7 @@
 /*   By: kosnakam <kosnakam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:26:38 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/17 15:26:41 by kosnakam         ###   ########.fr       */
+/*   Updated: 2024/07/20 13:24:06 by kosnakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,15 @@
 static void	sub_dup2(int first, int second)
 {
 	if (first != 0)
-		dup2(first, STDIN_FILENO);
+	{
+		if (dup2(first, STDIN_FILENO) == -1)
+			ft_error("minishell", NULL, "dup2 failed", 1);
+	}
 	if (second != 0)
-		dup2(second, STDOUT_FILENO);
+	{
+		if (dup2(second, STDOUT_FILENO) == -1)
+			ft_error("minishell", NULL, "dup2 failed", 1);
+	}
 }
 
 char	*search_path(char *cmd, char **envp)
@@ -66,6 +72,8 @@ void	do_execve(char **cmd, char **envp)
 	}
 	else
 		path = search_path(cmd[0], envp);
+	if (cmd[0][0] == '\0')
+		ft_error("minishell", "\'\'", "command not found", CMD_NOT_FOUND);
 	if (!path)
 		ft_error("minishell", cmd[0], "command not found", CMD_NOT_FOUND);
 	if (execve(path, cmd, envp) == -1)
