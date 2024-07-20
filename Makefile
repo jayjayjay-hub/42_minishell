@@ -1,8 +1,11 @@
+# project name
 NAME = minishell
 
+# library name
 LIBFT_NAME = libft
 LIBFT_DIR = libft/
 
+# include
 INCLUDE_DIR = include/
 INCLUDE = -I $(INCLUDE_DIR)
 LIBFT_INCLUDE = -I $(LIBFT_DIR)$(INCLUDE_DIR)
@@ -12,14 +15,15 @@ OBJ_DIR = .obj/
 
 ERROR_DIR = error/
 
+# compiler
 CC = cc
 LDFRAGS = -lreadline
 CFLAGS = -Wall -Wextra -Werror
+# debug option
 # CFLAGS = -g
 RM = rm -rf
 NORM = norminette
 
-# 新しいファイルはここに書いていって！
 SRC_FILES = main.c token_list.c\
 			tokenizer.c signal.c\
 			error.c redirect.c\
@@ -106,8 +110,6 @@ diff: all
 	@./tester/my_tester/diff.sh
 
 all_test: all test diff
-
-rebonus: fclean bonus
 
 norm:
 	@echo $(R) "<<< $(NAME) error count >>>" $(X)
