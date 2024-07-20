@@ -6,7 +6,7 @@
 /*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:26:07 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/20 16:07:38 by jtakahas         ###   ########.fr       */
+/*   Updated: 2024/07/20 16:21:14 by jtakahas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ bool	builtin_export(t_token *token, t_env **env)
 	token = token->next;
 	while (token)
 	{
-		new = new_export_env(token->str);
+		new = new_env(token->str, true);
 		env_add_back(new, env);
 		token = token->next;
 	}

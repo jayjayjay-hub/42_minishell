@@ -53,7 +53,7 @@ t_env	*init_env(char **envp)
 	env = NULL;
 	while (envp[i])
 	{
-		new = new_export_env(envp[i]);
+		new = new_env(envp[i], true);
 		env_add_back(new, &env);
 		i++;
 	}

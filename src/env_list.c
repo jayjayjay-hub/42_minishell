@@ -6,7 +6,7 @@
 /*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:26:55 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/20 16:17:33 by jtakahas         ###   ########.fr       */
+/*   Updated: 2024/07/20 16:20:56 by jtakahas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,25 +71,7 @@ char	*get_env_value(char *key, t_env *env)
 	return (NULL);
 }
 
-t_env	*new_variable(char *env_line)
-{
-	t_env	*env;
-	char	*key;
-	char	*value;
-
-	env = malloc(sizeof(t_env));
-	if (!env)
-		ft_error("malloc", "env", strerror(errno), EXIT_FAILURE);
-	key = get_key_from_str(env_line);
-	value = get_value_from_str(env_line);
-	env->key = key;
-	env->value = value;
-	env->is_export = false;
-	env->next = NULL;
-	return (env);
-}
-
-t_env	*new_export_env(char *env_line)
+t_env	*new_env(char *env_line, bool is_export)
 {
 	t_env	*env;
 	char	*key;
@@ -104,7 +86,7 @@ t_env	*new_export_env(char *env_line)
 	value = get_value_from_str(env_line);
 	env->key = key;
 	env->value = value;
-	env->is_export = true;
+	env->is_export = is_export;
 	env->next = NULL;
 	return (env);
 }
