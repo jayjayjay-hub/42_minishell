@@ -6,7 +6,7 @@
 /*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:25:11 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/17 16:23:36 by jtakahas         ###   ########.fr       */
+/*   Updated: 2024/07/20 15:03:08 by jtakahas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,6 @@ typedef enum e_token_type
 	REDIRECT_OUT,
 	REDIRECT_HERE_DOC,
 	REDIRECT_APPEND,
-	BRACKET_LEFT,
-	BRACKET_RIGHT,
 }	t_token_type;
 
 typedef enum e_variable_type
