@@ -6,7 +6,7 @@
 /*   By: kosnakam <kosnakam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:28:54 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/17 15:28:55 by kosnakam         ###   ########.fr       */
+/*   Updated: 2024/07/20 13:48:41 by kosnakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	is_metachar(char c)
 {
-	return (c && ft_strchr("|&;,()<> ", c));
+	return (c && ft_strchr("|<> ", c));
 }
 
 int	is_quote(char c)

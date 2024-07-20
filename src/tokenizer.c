@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kosnakam <kosnakam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:28:49 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/17 16:20:41 by jtakahas         ###   ########.fr       */
+/*   Updated: 2024/07/20 13:45:44 by kosnakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,6 @@ t_token_type	check_type(char *line)
 		return (REDIRECT_IN);
 	else if (ft_strncmp(line, ">", 1) == 0)
 		return (REDIRECT_OUT);
-	else if (ft_strncmp(line, "(", 1) == 0)
-		return (BRACKET_LEFT);
-	else if (ft_strncmp(line, ")", 1) == 0)
-		return (BRACKET_RIGHT);
 	else
 		return (WORD);
 }
