@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_list_utils2.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kosnakam <kosnakam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:42:11 by jtakahas          #+#    #+#             */
-/*   Updated: 2024/07/17 16:24:55 by jtakahas         ###   ########.fr       */
+/*   Updated: 2024/07/20 13:57:12 by kosnakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,8 @@ char	*get_env_value(char *key, t_env *env)
 	t_env	*tmp;
 	int		key_len;
 
+	if (!key)
+		return (NULL);
 	tmp = env;
 	key_len = ft_strlen(key);
 	if (key_len == 1 && key[0] == '?')
