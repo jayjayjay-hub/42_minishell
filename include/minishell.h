@@ -6,7 +6,7 @@
 /*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:25:11 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/20 15:42:57 by jtakahas         ###   ########.fr       */
+/*   Updated: 2024/07/20 15:52:03 by jtakahas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -206,7 +206,7 @@ bool			syntax_check(t_token *token);
 void			env_add_back(t_env *new, t_env **env);
 char			*get_key_from_str(char *env_line);
 char			*get_value_from_str(char *env_line);
-t_env			*new_valiable(char *env_line);
+t_env			*new_variable(char *env_line);
 void			free_env(t_env *env);
 void			print_export(t_env *env);
 void			print_env(t_env *env);

@@ -3,20 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_export.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kosnakam <kosnakam@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:26:07 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/17 16:15:04 by kosnakam         ###   ########.fr       */
+/*   Updated: 2024/07/20 15:56:07 by jtakahas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-static bool	error_export(t_env *env)
-{
-	print_export(env);
-	return (true);
-}
 
 bool	builtin_export(t_token *token, t_env **env)
 {
@@ -25,7 +19,7 @@ bool	builtin_export(t_token *token, t_env **env)
 	int		key_len;
 
 	if (!token->next)
-		return (error_export(*env));
+		return (print_export(*env), true);
 	token = token->next;
 	while (token)
 	{

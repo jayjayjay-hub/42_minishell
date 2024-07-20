@@ -6,7 +6,7 @@
 /*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:42:11 by jtakahas          #+#    #+#             */
-/*   Updated: 2024/07/17 16:24:55 by jtakahas         ###   ########.fr       */
+/*   Updated: 2024/07/20 15:52:03 by jtakahas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void	export_env(char *key, char *value, t_env **env)
 		tmp = tmp->next;
 	}
 	key_value = ft_strjoin(key, ft_strjoin("=", value));
-	env_add_back(new_valiable(key_value), env);
+	env_add_back(new_variable(key_value), env);
 }
 
 char	*get_env_value(char *key, t_env *env)
