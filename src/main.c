@@ -61,7 +61,7 @@ int	main(int argc, char **argv, char **envp)
 			free(line);
 		}
 	}
-	argc = 0;
-	argv = NULL;
+	(void)argc;
+	(void)argv;
 	return (0);
 }

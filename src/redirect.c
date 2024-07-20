@@ -64,9 +64,6 @@ void	redirect_open(t_token *token)
 
 void	close_redirect(t_token *token)
 {
-	t_token	*tmp;
-
-	tmp = token;
 	while (token->next)
 		token = token->next;
 	while (token->prev)
