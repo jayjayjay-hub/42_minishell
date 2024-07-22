@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kosnakam <kosnakam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:28:08 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/22 18:51:43 by jtakahas         ###   ########.fr       */
+/*   Updated: 2024/07/22 19:53:00 by kosnakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,13 +59,13 @@ void	sig_heredoc(void)
 	sigaction(SIGINT, &sa, NULL);
 }
 
-void	sig_stop(void)
+void	sig_quit_set(void)
 {
 	t_sig	stop_sa;
 
-	stop_sa.sa_handler = SIG_IGN;
+	stop_sa.sa_handler = signal_handler;
 	sigemptyset(&stop_sa.sa_mask);
-	sigaddset(&stop_sa.sa_mask, SIGINT);
+	sigaddset(&stop_sa.sa_mask, SIGQUIT);
 	stop_sa.sa_flags = 0;
-	sigaction(SIGINT, &stop_sa, NULL);
+	sigaction(SIGQUIT, &stop_sa, NULL);
 }

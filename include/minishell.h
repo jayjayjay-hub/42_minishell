@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kosnakam <kosnakam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:25:11 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/22 18:49:48 by jtakahas         ###   ########.fr       */
+/*   Updated: 2024/07/22 20:07:55 by kosnakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,7 +128,7 @@ typedef struct s_cmd
 {
 	char		**envp;
 	t_ats		*ats;
-	t_pipe_fd	*fd_pipe;
+	t_pipe_fd	*fdp;
 	t_pid_info	pid_info;
 }	t_cmd;
 
@@ -147,7 +147,7 @@ int				token_list_size(t_token *token);
 void			register_signal(void);
 void			signal_handler(int signum);
 void			sig_heredoc(void);
-void			sig_stop(void);
+void			sig_quit_set(void);
 
 // error.c
 void			ft_error(char *cmd, char *target,
@@ -175,7 +175,7 @@ pid_t			child(t_cmd *command, t_env *env);
 
 // pipe.c
 t_pipe_fd		*create_pipe(t_ats *ats);
-void			close_pipe(t_pipe_fd *fd_pipe);
+void			close_pipe(t_pipe_fd *fdp);
 
 // expansion.c
 void			expansion(t_token *token, t_env *env);
@@ -259,6 +259,7 @@ char			*get_word(char *line);
 char			*get_operator(char *line, t_token_type type);
 
 // signal_child.c
+void			sigint_handler_exit(int sig);
 void			sig_child_exit(int sig);
 void			sig_child(void);
 

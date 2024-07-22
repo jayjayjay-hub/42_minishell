@@ -6,7 +6,7 @@
 /*   By: kosnakam <kosnakam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:27:58 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/17 15:28:00 by kosnakam         ###   ########.fr       */
+/*   Updated: 2024/07/22 20:07:55 by kosnakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,18 +37,18 @@ t_pipe_fd	*create_pipe(t_ats *ats)
 	return (fd);
 }
 
-void	close_pipe(t_pipe_fd *fd_pipe)
+void	close_pipe(t_pipe_fd *fdp)
 {
 	int		i;
 
 	i = 0;
-	if (!fd_pipe || fd_pipe->pipe_size == 0)
+	if (!fdp || fdp->pipe_size == 0)
 		return ;
-	fd_pipe->pipe_size *= 2;
-	while (i < fd_pipe->pipe_size)
+	fdp->pipe_size *= 2;
+	while (i < fdp->pipe_size)
 	{
-		if (fd_pipe->fd[i] != 0 && fd_pipe->fd[i] != 1)
-			close(fd_pipe->fd[i]);
+		if (fdp->fd[i] != 0 && fdp->fd[i] != 1)
+			close(fdp->fd[i]);
 		i++;
 	}
 }
