@@ -6,7 +6,7 @@
 /*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 14:42:55 by jtakahas          #+#    #+#             */
-/*   Updated: 2024/07/22 14:42:56 by jtakahas         ###   ########.fr       */
+/*   Updated: 2024/07/22 15:09:31 by jtakahas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ t_env	*init_env(char **envp)
 	env = NULL;
 	while (envp[i])
 	{
-		new = new_env(envp[i], true);
+		new = new_env(envp[i], true, NULL);
 		env_add_back(new, &env);
 		i++;
 	}

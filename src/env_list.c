@@ -6,7 +6,7 @@
 /*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:26:55 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/22 14:11:48 by jtakahas         ###   ########.fr       */
+/*   Updated: 2024/07/22 15:15:39 by jtakahas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,8 @@ bool	edit_env_value(char *key, char *value, t_env **env)
 	char	*tmp_value;
 	int		key_len;
 
+	if (!key || !env)
+		return (false);
 	tmp = *env;
 	key_len = ft_strlen(key);
 	while (tmp)
@@ -90,22 +92,28 @@ char	*get_key(char *str)
 	return (key);
 }
 
-t_env	*new_env(char *env_line, bool is_export)
+t_env	*new_env(char *env_line, bool is_export, t_env **env)
 {
-	t_env	*env;
+	t_env	*new_env_node;
 	char	*key;
 	char	*value;
 
-	env = malloc(sizeof(t_env));
-	if (!env)
-		ft_error("malloc", "env", strerror(errno), EXIT_FAILURE);
 	key = get_key_from_str(env_line);
 	if (!key)
 		return (NULL);
 	value = get_value_from_str(env_line);
-	env->key = key;
-	env->value = value;
-	env->is_export = is_export;
-	env->next = NULL;
-	return (env);
+	if (edit_env_value(key, value, env))
+	{
+		free(key);
+		free(value);
+		return (NULL);
+	}
+	new_env_node = malloc(sizeof(t_env));
+	if (!new_env_node)
+		ft_error("malloc", "env", strerror(errno), EXIT_FAILURE);
+	new_env_node->key = key;
+	new_env_node->value = value;
+	new_env_node->is_export = is_export;
+	new_env_node->next = NULL;
+	return (new_env_node);
 }
