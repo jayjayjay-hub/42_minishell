@@ -49,7 +49,8 @@ SRC_FILES = main.c token_list.c\
 			env_list_utils.c\
 			env_init.c\
 			expansion_utils.c\
-			tokenizer_utils.c
+			tokenizer_utils.c\
+			signal_child.c
 
 OJB_FILES = $(SRC_FILES:%.c=%.o)
 

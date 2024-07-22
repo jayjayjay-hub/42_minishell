@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   childset.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kosnakam <kosnakam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:50:27 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/22 16:53:29 by jtakahas         ###   ########.fr       */
+/*   Updated: 2024/07/22 18:44:53 by kosnakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,9 @@ void	wait_child(t_pid_info pid_info)
 	while (pid_info.pipe_i--)
 	{
 		waitpid(pid_info.pid[i++], &status, 0);
-		error_status(status);
+		if (status == 2)
+			status = 130 * 256;
+		error_status(WEXITSTATUS(status));
 		register_signal();
 	}
 }
@@ -46,7 +48,8 @@ void	make_wait_child(t_cmd *command, t_env *env)
 	command->pid_info.pid = (pid_t *)malloc(sizeof(pid_t)
 			* (command->fd_pipe->pipe_size + 1));
 	if (!command->fd_pipe->pipe_size
-		&& builtin_control(command->ats->token, &env, 0, command->fd_pipe->pipe_size))
+		&& builtin_control(command->ats->token, &env, 0,
+			command->fd_pipe->pipe_size))
 	{
 		close_redirect(command->ats->token);
 		error_status(PRINT_ERROR);

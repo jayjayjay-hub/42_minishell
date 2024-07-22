@@ -6,7 +6,7 @@
 /*   By: kosnakam <kosnakam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:25:38 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/19 16:34:05 by kosnakam         ###   ########.fr       */
+/*   Updated: 2024/07/22 18:37:32 by kosnakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static bool	error_cd(char *path)
 {
 	ft_putstr_fd("cd: ", 2);
 	perror(path);
-	error_status(256 * 1);
+	error_status(1);
 	free(path);
 	return (true);
 }
@@ -26,7 +26,7 @@ bool	do_cd(t_token *token, t_env **env, char *path)
 	if (token->next)
 	{
 		ft_putendl_fd("minishell: cd: too many arguments", 2);
-		error_status(256 * 1);
+		error_status(1);
 		return (false);
 	}
 	if (!ft_strncmp(token->str, "-", 1) && ft_strlen(token->str) == 1)
@@ -65,7 +65,7 @@ bool	builtin_cd(t_token *token, t_env **env)
 		{
 			ft_putstr_fd("cd: ", 2);
 			perror(path);
-			error_status(256 * 1);
+			error_status(1);
 			return (false);
 		}
 		return (true);

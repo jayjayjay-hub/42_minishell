@@ -6,7 +6,7 @@
 /*   By: kosnakam <kosnakam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:26:00 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/17 15:26:04 by kosnakam         ###   ########.fr       */
+/*   Updated: 2024/07/22 18:37:43 by kosnakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,13 +41,13 @@ bool	builtin_exit(t_token *token)
 		ft_putstr_fd("minishell: exit: ", 2);
 		ft_putstr_fd(token->next->str, 2);
 		ft_putendl_fd(": numeric argument required", 2);
-		error_status(256 * 2);
+		error_status(2);
 		return (true);
 	}
 	else if (token_list_size(token) > 2)
 	{
 		ft_putendl_fd("minishell: exit: too many arguments", 2);
-		error_status(256 * 1);
+		error_status(1);
 		return (true);
 	}
 	else
@@ -69,12 +69,12 @@ bool	builtin_exit_child(t_token *token)
 		ft_putstr_fd("minishell: exit: ", 2);
 		ft_putstr_fd(token->next->str, 2);
 		ft_putendl_fd(": numeric argument required", 2);
-		error_status(256 * 2);
+		error_status(2);
 		return (true);
 	}
 	else if (token_list_size(token) > 2)
 	{
-		error_status(256 * 1);
+		error_status(1);
 		return (true);
 	}
 	else

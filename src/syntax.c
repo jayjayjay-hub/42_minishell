@@ -6,7 +6,7 @@
 /*   By: kosnakam <kosnakam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:28:14 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/17 15:28:15 by kosnakam         ###   ########.fr       */
+/*   Updated: 2024/07/22 18:39:09 by kosnakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ bool	syntax_check(t_token *token)
 			if (!tmp->next || tmp->next->type != WORD)
 			{
 				put_syntax_error(tmp);
-				error_status(256 * 2);
+				error_status(2);
 				free_token(token);
 				return (false);
 			}
