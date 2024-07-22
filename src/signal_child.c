@@ -6,7 +6,7 @@
 /*   By: kosnakam <kosnakam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 17:56:56 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/22 20:01:58 by kosnakam         ###   ########.fr       */
+/*   Updated: 2024/07/22 20:17:11 by kosnakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,17 @@ void	sig_child_quit(int sig)
 	ft_putendl_fd("Quit (core dumped)", 1);
 	rl_on_new_line();
 	rl_replace_line("", 0);
+}
+
+void	sig_quit_set(void)
+{
+	t_sig	stop_sa;
+
+	stop_sa.sa_handler = signal_handler;
+	sigemptyset(&stop_sa.sa_mask);
+	sigaddset(&stop_sa.sa_mask, SIGQUIT);
+	stop_sa.sa_flags = 0;
+	sigaction(SIGQUIT, &stop_sa, NULL);
 }
 
 void	sig_child(void)
