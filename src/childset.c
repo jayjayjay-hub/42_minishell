@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   childset.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jay <jay@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:50:27 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/20 17:27:56 by jay              ###   ########.fr       */
+/*   Updated: 2024/07/22 15:19:40 by jtakahas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ void	execve_loop(t_cmd *command, t_env *env)
 {
 	while (command->ats)
 	{
-		// todo: add variable
 		command->pid_info.pid[command->pid_info.pipe_i] = child(command, env);
 		command->pid_info.pipe_i++;
 		command->ats = command->ats->next;

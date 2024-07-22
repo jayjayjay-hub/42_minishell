@@ -6,7 +6,7 @@
 /*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:25:11 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/22 15:12:58 by jtakahas         ###   ########.fr       */
+/*   Updated: 2024/07/22 15:22:15 by jtakahas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -198,7 +198,7 @@ bool			syntax_check(t_token *token);
 void			env_add_back(t_env *new, t_env **env);
 bool			edit_env_value(char *key, char *value, t_env **env);
 t_env			*new_env(char *env_line, bool is_export, t_env **env);
-char *get_env_value(char *key, t_env *env);
+char			*get_env_value(char *key, t_env *env);
 char			*get_key(char *str);
 
 // env_list_utils.c
@@ -247,9 +247,6 @@ void			make_wait_child(t_cmd *command, t_env *env);
 
 // expansion_utils.c
 void			remove_quote(char *str);
-
-// variable_utils.c
-bool			is_valid_token(t_token *token);
 
 // tokenizer_utils.c
 char			*get_word(char *line);
