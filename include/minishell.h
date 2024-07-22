@@ -6,7 +6,7 @@
 /*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:25:11 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/22 16:53:10 by jtakahas         ###   ########.fr       */
+/*   Updated: 2024/07/22 17:01:02 by jtakahas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,7 +157,7 @@ int				error_status(int error_code);
 
 // redirect.c
 bool			redirect(t_token **token);
-bool			redirect_open(t_token *token);
+bool			redirect_open(t_token *token, t_env *env);
 void			close_redirect(t_token *token);
 
 // parser.c
@@ -179,6 +179,7 @@ void			close_pipe(t_pipe_fd *fd_pipe);
 
 // expansion.c
 void			expansion(t_token *token, t_env *env);
+void			expansion_env(char **str, t_env *env);
 
 // variable.c
 bool			is_alnum_under(char c);
@@ -244,7 +245,7 @@ void			dp_free(char **arg);
 void			free_command(t_cmd *command);
 
 // heredoc.c
-int				open_heredoc(char *eof);
+int				open_heredoc(char *eof, t_env *env);
 
 // childset.c
 void			make_wait_child(t_cmd *command, t_env *env);

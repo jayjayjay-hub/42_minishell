@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kosnakam <kosnakam@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:27:41 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/22 16:36:58 by kosnakam         ###   ########.fr       */
+/*   Updated: 2024/07/22 17:00:20 by jtakahas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	command_set(char *line, char **envp, t_env *env)
 	if (!syntax_check(token))
 		return ;
 	expansion(token, env);
-	here_doc_check = redirect_open(token);
+	here_doc_check = redirect_open(token, env);
 	command->ats = parser(token);
 	if (here_doc_check)
 		make_wait_child(command, env);
