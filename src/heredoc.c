@@ -6,7 +6,7 @@
 /*   By: kosnakam <kosnakam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:27:27 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/22 19:53:00 by kosnakam         ###   ########.fr       */
+/*   Updated: 2024/07/22 20:15:40 by kosnakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int	read_heredoc(char *eof, int tmp_fd, t_env *env)
 	int		status;
 
 	status = 0;
-	sig_quit_set();
+	sig_stop();
 	pid = fork();
 	if (pid == -1)
 		ft_error("minishell", "fork", "fork failed", 0);
@@ -57,7 +57,6 @@ int	read_heredoc(char *eof, int tmp_fd, t_env *env)
 	else
 	{
 		waitpid(pid, &status, 0);
-		sig_quit_set();
 		register_signal();
 	}
 	return (status);

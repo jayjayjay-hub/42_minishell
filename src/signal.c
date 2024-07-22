@@ -6,7 +6,7 @@
 /*   By: kosnakam <kosnakam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:28:08 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/22 19:53:00 by kosnakam         ###   ########.fr       */
+/*   Updated: 2024/07/22 20:16:59 by kosnakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,13 +59,13 @@ void	sig_heredoc(void)
 	sigaction(SIGINT, &sa, NULL);
 }
 
-void	sig_quit_set(void)
+void	sig_stop(void)
 {
 	t_sig	stop_sa;
 
-	stop_sa.sa_handler = signal_handler;
+	stop_sa.sa_handler = SIG_IGN;
 	sigemptyset(&stop_sa.sa_mask);
-	sigaddset(&stop_sa.sa_mask, SIGQUIT);
+	sigaddset(&stop_sa.sa_mask, SIGINT);
 	stop_sa.sa_flags = 0;
-	sigaction(SIGQUIT, &stop_sa, NULL);
+	sigaction(SIGINT, &stop_sa, NULL);
 }
