@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kosnakam <kosnakam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:27:41 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/22 17:00:20 by jtakahas         ###   ########.fr       */
+/*   Updated: 2024/07/22 20:07:55 by kosnakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	struct_init(t_cmd *cmd, char **envp)
 {
 	cmd->envp = envp;
 	cmd->ats = NULL;
-	cmd->fd_pipe = NULL;
+	cmd->fdp = NULL;
 	cmd->pid_info.pid = NULL;
 	cmd->pid_info.pipe_i = 0;
 }

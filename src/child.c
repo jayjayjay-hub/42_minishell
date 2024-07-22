@@ -6,7 +6,7 @@
 /*   By: kosnakam <kosnakam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:26:38 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/22 18:38:42 by kosnakam         ###   ########.fr       */
+/*   Updated: 2024/07/22 20:07:55 by kosnakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,31 +109,31 @@ void	**run_cmd(t_ats *ats, char **envp)
 	return (NULL);
 }
 
-pid_t	child(t_cmd *command, t_env *env)
+pid_t	child(t_cmd *cmd, t_env *env)
 {
 	pid_t	pid;
-	int		pipe_i;
+	int		pi;
 
+	sig_quit_set();
 	pid = fork();
 	if (pid == -1)
 		ft_error("minishell", NULL, "fork failed", 1);
 	if (pid == 0)
 	{
-		pipe_i = command->pid_info.pipe_i;
-		if (command->fd_pipe->pipe_size != 0)
+		pi = cmd->pid_info.pipe_i;
+		if (cmd->fdp->pipe_size != 0)
 		{
-			if (pipe_i == 0)
-				sub_dup2(0, command->fd_pipe->fd[2 * pipe_i + 1]);
-			else if (pipe_i == command->fd_pipe->pipe_size)
-				sub_dup2(command->fd_pipe->fd[2 * pipe_i - 2], 0);
+			if (pi == 0)
+				sub_dup2(0, cmd->fdp->fd[2 * pi + 1]);
+			else if (pi == cmd->fdp->pipe_size)
+				sub_dup2(cmd->fdp->fd[2 * pi - 2], 0);
 			else
-				sub_dup2(command->fd_pipe->fd[2 * pipe_i - 2],
-					command->fd_pipe->fd[2 * pipe_i + 1]);
+				sub_dup2(cmd->fdp->fd[2 * pi - 2], cmd->fdp->fd[2 * pi + 1]);
 		}
-		close_pipe(command->fd_pipe);
-		if (builtin_control(command->ats->token, &env, 1, 1))
+		close_pipe(cmd->fdp);
+		if (builtin_control(cmd->ats->token, &env, 1, 1))
 			exit(error_status(PRINT_ERROR));
-		run_cmd(command->ats, command->envp);
+		run_cmd(cmd->ats, cmd->envp);
 	}
 	return (sig_child(), pid);
 }
