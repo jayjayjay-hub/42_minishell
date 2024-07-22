@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jay <jay@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:28:08 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/20 17:30:01 by jay              ###   ########.fr       */
+/*   Updated: 2024/07/22 16:53:51 by jtakahas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,16 +40,33 @@ void	register_signal(void)
 	sigaction(SIGQUIT, &quit_sa, NULL);
 }
 
+void	sigint_handler_exit(int sig)
+{
+	(void)sig;
+	signal(SIGINT, SIG_DFL);
+	ft_putendl_fd("", 1);
+	rl_on_new_line();
+	kill(0, SIGINT);
+}
 
-// void	register_signal(void)
-// {
-// 	t_sig	sa;
+void	sig_heredoc(void)
+{
+	t_sig	sa;
 
-// 	sa.sa_handler = signal_handler;
-// 	sigemptyset(&sa.sa_mask);
-// 	sigaddset(&sa.sa_mask, SIGINT);
-// 	sigaddset(&sa.sa_mask, SIGQUIT);
-// 	sa.sa_flags = 0;
-// 	sigaction(SIGINT, &sa, NULL);
-// 	sigaction(SIGQUIT, &sa, NULL);
-// }
+	sa.sa_handler = &sigint_handler_exit;
+	sigemptyset(&sa.sa_mask);
+	sigaddset(&sa.sa_mask, SIGINT);
+	sa.sa_flags = SA_RESTART;
+	sigaction(SIGINT, &sa, NULL);
+}
+
+void	sig_stop(void)
+{
+	t_sig	stop_sa;
+
+	stop_sa.sa_handler = SIG_IGN;
+	sigemptyset(&stop_sa.sa_mask);
+	sigaddset(&stop_sa.sa_mask, SIGINT);
+	stop_sa.sa_flags = 0;
+	sigaction(SIGINT, &stop_sa, NULL);
+}

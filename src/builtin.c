@@ -6,13 +6,13 @@
 /*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:26:24 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/22 15:51:39 by jtakahas         ###   ########.fr       */
+/*   Updated: 2024/07/22 16:53:18 by jtakahas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-bool	builtin_check(t_token *token)
+bool	builtin_check(t_token *token, int echo_check)
 {
 	while (token)
 	{
@@ -20,7 +20,7 @@ bool	builtin_check(t_token *token)
 			return (true);
 		if (ft_strlen(token->str) == 2 && !ft_strncmp(token->str, "cd", 3))
 			return (true);
-		if (ft_strlen(token->str) == 4 && !ft_strncmp(token->str, "echo", 5))
+		if (ft_strlen(token->str) == 4 && !ft_strncmp(token->str, "echo", 5) && echo_check)
 			return (true);
 		if (ft_strlen(token->str) == 3 && !ft_strncmp(token->str, "pwd", 4))
 			return (true);
@@ -62,11 +62,11 @@ bool	do_builtin(t_token *token, t_env **env, int child_check)
 	return (true);
 }
 
-bool	builtin_control(t_token *token, t_env **env, int child_check)
+bool	builtin_control(t_token *token, t_env **env, int child_check, int echo_check)
 {
 	t_token	*tmp;
 
-	if (!builtin_check(token))
+	if (!builtin_check(token, echo_check))
 		return (false);
 	tmp = token;
 	while (tmp)

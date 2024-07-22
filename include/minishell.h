@@ -6,7 +6,7 @@
 /*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:25:11 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/22 15:44:48 by jtakahas         ###   ########.fr       */
+/*   Updated: 2024/07/22 16:53:10 by jtakahas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,6 +146,8 @@ int				token_list_size(t_token *token);
 // signal.c
 void			register_signal(void);
 void			signal_handler(int signum);
+void			sig_heredoc(void);
+void			sig_stop(void);
 
 // error.c
 void			ft_error(char *cmd, char *target,
@@ -155,7 +157,7 @@ int				error_status(int error_code);
 
 // redirect.c
 bool			redirect(t_token **token);
-void			redirect_open(t_token *token);
+bool			redirect_open(t_token *token);
 void			close_redirect(t_token *token);
 
 // parser.c
@@ -210,8 +212,8 @@ char			*get_key_from_str(char *env_line);
 char			*get_value_from_str(char *env_line);
 
 // builtin_control.c
-bool			builtin_check(t_token *token);
-bool			builtin_control(t_token *token, t_env **env, int child_check);
+bool			builtin_check(t_token *token, int echo_check);
+bool			builtin_control(t_token *token, t_env **env, int child_check, int echo_check);
 
 // builtin_cd.c
 bool			builtin_cd(t_token *token, t_env **env);
