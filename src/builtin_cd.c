@@ -6,7 +6,7 @@
 /*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:25:38 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/22 18:52:56 by jtakahas         ###   ########.fr       */
+/*   Updated: 2024/07/22 20:26:41 by jtakahas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static bool	error_cd(char *path)
 {
-	ft_putstr_fd("cd: ", 2);
+	ft_putstr_fd("minishell: cd: ", 2);
 	perror(path);
 	error_status(1);
 	free(path);
@@ -64,9 +64,8 @@ bool	do_cd(t_token *token, t_env **env, char *path)
 	else if (!ft_strncmp(token->str, ".", 1) && ft_strlen(token->str) == 1)
 		path = get_env_value("PWD", *env);
 	else if (!ft_strncmp(token->str, "..", 2) && ft_strlen(token->str) == 2)
-		path = prev_path(get_env_value("PWD", *env));
-	else
-		path = ft_strdup(token->str);
+		path = prev_path(getcwd(NULL, 0));
+	else path = ft_strdup(token->str);
 	if (path && chdir(path) == -1)
 		return (error_cd(path));
 	edit_env_value("OLDPWD", get_env_value("PWD", *env), env);
