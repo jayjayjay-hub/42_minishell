@@ -6,7 +6,7 @@
 /*   By: kosnakam <kosnakam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:27:04 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/17 15:51:46 by kosnakam         ###   ########.fr       */
+/*   Updated: 2024/07/22 18:36:05 by kosnakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,7 @@ void	ft_error(char *cmd, char *target, char *main_message, int status)
 	}
 	ft_putendl_fd(main_message, 2);
 	if (status)
-	{
-		exit(WEXITSTATUS(status * 256));
-	}
+		exit(status);
 }
 
 void	handle_eof(char *line)
@@ -44,7 +42,7 @@ int	error_status(int error_code)
 	static int	status;
 
 	if (error_code < 0)
-		return (WEXITSTATUS(status));
+		return (status);
 	status = error_code;
-	return (WEXITSTATUS(status));
+	return (status);
 }

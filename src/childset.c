@@ -6,7 +6,7 @@
 /*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:50:27 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/22 17:06:34 by jtakahas         ###   ########.fr       */
+/*   Updated: 2024/07/22 18:51:13 by jtakahas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,9 @@ void	wait_child(t_pid_info pid_info)
 	while (pid_info.pipe_i--)
 	{
 		waitpid(pid_info.pid[i++], &status, 0);
-		error_status(status);
+		if (status == 2)
+			status = 130 * 256;
+		error_status(WEXITSTATUS(status));
 		register_signal();
 	}
 }

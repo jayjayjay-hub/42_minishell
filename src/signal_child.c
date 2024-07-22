@@ -1,30 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtin_pwd.c                                      :+:      :+:    :+:   */
+/*   signal_child.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kosnakam <kosnakam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/17 15:26:16 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/22 18:37:54 by kosnakam         ###   ########.fr       */
+/*   Created: 2024/07/22 17:56:56 by kosnakam          #+#    #+#             */
+/*   Updated: 2024/07/22 18:45:09 by kosnakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-bool	builtin_pwd(void)
+void	sig_child_exit(int sig)
 {
-	char	*buf;
+	(void)sig;
+	ft_putendl_fd("", 1);
+	rl_on_new_line();
+	rl_replace_line("", 0);
+}
 
-	buf = getcwd(NULL, 0);
-	if (!buf)
-	{
-		perror("pwd");
-		error_status(1);
-		return (false);
-	}
-	ft_putendl_fd(buf, 1);
-	error_status(0);
-	free(buf);
-	return (true);
+void	sig_child(void)
+{
+	t_sig	sa;
+
+	sa.sa_handler = &sig_child_exit;
+	sigemptyset(&sa.sa_mask);
+	sigaddset(&sa.sa_mask, SIGINT);
+	sa.sa_flags = SA_RESTART;
+	sigaction(SIGINT, &sa, NULL);
 }

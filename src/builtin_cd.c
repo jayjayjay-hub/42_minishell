@@ -6,7 +6,7 @@
 /*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:25:38 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/22 18:45:25 by jtakahas         ###   ########.fr       */
+/*   Updated: 2024/07/22 18:52:56 by jtakahas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static bool	error_cd(char *path)
 {
 	ft_putstr_fd("cd: ", 2);
 	perror(path);
-	error_status(256 * 1);
+	error_status(1);
 	free(path);
 	return (true);
 }
@@ -52,7 +52,7 @@ bool	do_cd(t_token *token, t_env **env, char *path)
 	if (token->next)
 	{
 		ft_putendl_fd("minishell: cd: too many arguments", 2);
-		return (error_status(256 * 1), true);
+		return (error_status(1), true);
 	}
 	else if (!ft_strncmp(token->str, "-", 1) && ft_strlen(token->str) == 1)
 	{
@@ -86,14 +86,14 @@ bool	builtin_cd(t_token *token, t_env **env)
 		path = get_env_value("HOME", *env);
 		if (!path)
 			return (ft_putendl_fd("cd: HOME not set", 2),
-				error_status(256 * 1), true);
+				error_status(1), true);
 		else if (path[0] == '\0')
 			return (free(path), true);
 		if (chdir(path) == -1)
 		{
 			ft_putstr_fd("cd: ", 2);
 			perror(path);
-			return (error_status(256 * 1), free(path), true);
+			return (error_status(1), free(path), true);
 		}
 		edit_env_value("OLDPWD", get_env_value("PWD", *env), env);
 		edit_env_value("PWD", getcwd(NULL, 0), env);

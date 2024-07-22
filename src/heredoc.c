@@ -6,18 +6,45 @@
 /*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:27:27 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/22 17:06:56 by jtakahas         ###   ########.fr       */
+/*   Updated: 2024/07/22 18:51:37 by jtakahas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	read_heredoc(char *eof, int tmp_fd, t_env *env)
+void	read_heredoc_prompt(char *eof, int tmp_fd, t_env *env)
 {
 	char	*line;
-	pid_t	pid;
-	int		status = 0;
 
+	while (1)
+	{
+		line = readline("> ");
+		if (!line || *line == '\n' || (ft_strlen(line) == ft_strlen(eof)
+				&& !ft_strncmp(line, eof, ft_strlen(line))))
+		{
+			if (!line)
+			{
+				ft_error("minishell", "warning",
+					"here-document delimited by end-of-file", 0);
+				exit(0);
+			}
+			free(line);
+			if (line[0] == '\n')
+				continue ;
+			exit(0);
+		}
+		expansion_env(&line, env);
+		ft_putendl_fd(line, tmp_fd);
+		free(line);
+	}
+}
+
+int	read_heredoc(char *eof, int tmp_fd, t_env *env)
+{
+	pid_t	pid;
+	int		status;
+
+	status = 0;
 	sig_stop();
 	pid = fork();
 	if (pid == -1)
@@ -25,34 +52,12 @@ int	read_heredoc(char *eof, int tmp_fd, t_env *env)
 	if (pid == 0)
 	{
 		sig_heredoc();
-		while (1)
-		{
-			line = readline("> ");
-			if (!line || *line == '\n' || (ft_strlen(line) == ft_strlen(eof)
-					&& !ft_strncmp(line, eof, ft_strlen(line))))
-			{
-				if (!line)
-				{
-					ft_error("minishell", "warning",
-						"here-document delimited by end-of-file", 0);
-					exit(0);
-				}
-				if (line[0] == '\n')
-				{
-					free(line);
-					continue ;
-				}
-				free(line);
-				exit(0);
-			}
-			expansion_env(&line, env);
-			ft_putendl_fd(line, tmp_fd);
-			free(line);
-		}
+		read_heredoc_prompt(eof, tmp_fd, env);
 	}
 	else
 	{
 		waitpid(pid, &status, 0);
+		sig_stop();
 		register_signal();
 	}
 	return (status);
@@ -75,7 +80,7 @@ int	open_heredoc(char *eof, t_env *env)
 	unlink(HEREDOC);
 	if (here_doc_check == 2)
 	{
-		error_status(130 * 256);
+		error_status(130);
 		return (130);
 	}
 	return (fd);

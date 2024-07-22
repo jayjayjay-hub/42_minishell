@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_init.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kosnakam <kosnakam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 14:42:55 by jtakahas          #+#    #+#             */
-/*   Updated: 2024/07/22 15:09:31 by jtakahas         ###   ########.fr       */
+/*   Updated: 2024/07/22 18:38:05 by kosnakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ char	*get_key_from_str(char *env_line)
 		ft_putstr_fd("minishell: export: `", STDERR_FILENO);
 		ft_putstr_fd(env_line, STDERR_FILENO);
 		ft_putendl_fd("': not a valid identifier", STDERR_FILENO);
-		error_status(256 * 1);
+		error_status(1);
 		return (NULL);
 	}
 	while (env_line && env_line[index] && env_line[index] != '=')

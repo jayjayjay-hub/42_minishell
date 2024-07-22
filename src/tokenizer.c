@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jay <jay@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: kosnakam <kosnakam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:28:49 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/20 17:26:38 by jay              ###   ########.fr       */
+/*   Updated: 2024/07/22 18:38:48 by kosnakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ bool	pipe_syntax_check(char *line)
 	if (line[0] == '|')
 	{
 		ft_putendl_fd("minishell: syntax error near unexpected token `|'", 2);
-		error_status(256 * 1);
+		error_status(1);
 		return (false);
 	}
 	return (true);
@@ -93,7 +93,7 @@ t_token	*tokenize(char *line)
 
 	if (!pipe_syntax_check(line))
 	{
-		error_status(256 * 1);
+		error_status(1);
 		return (NULL);
 	}
 	token = NULL;
@@ -106,7 +106,7 @@ t_token	*tokenize(char *line)
 		if (!token_len)
 		{
 			free_token(token);
-			error_status(256 * 1);
+			error_status(1);
 			return (NULL);
 		}
 		line += token_len;
