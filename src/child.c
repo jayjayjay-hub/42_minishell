@@ -6,7 +6,7 @@
 /*   By: kosnakam <kosnakam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:26:38 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/22 16:31:55 by kosnakam         ###   ########.fr       */
+/*   Updated: 2024/07/22 16:52:10 by kosnakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,11 +114,13 @@ pid_t	child(t_cmd *command, t_env *env)
 	pid_t	pid;
 	int		pipe_i;
 
+	sig_stop();
 	pid = fork();
 	if (pid == -1)
 		ft_error("minishell", NULL, "fork failed", 1);
 	if (pid == 0)
 	{
+		sig_heredoc();
 		pipe_i = command->pid_info.pipe_i;
 		if (command->fd_pipe->pipe_size != 0)
 		{

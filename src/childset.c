@@ -6,7 +6,7 @@
 /*   By: kosnakam <kosnakam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:50:27 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/22 16:32:49 by kosnakam         ###   ########.fr       */
+/*   Updated: 2024/07/22 16:50:16 by kosnakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ void	wait_child(t_pid_info pid_info)
 	{
 		waitpid(pid_info.pid[i++], &status, 0);
 		error_status(status);
+		register_signal();
 	}
 }
 
