@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kosnakam <kosnakam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:28:49 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/17 16:20:41 by jtakahas         ###   ########.fr       */
+/*   Updated: 2024/07/22 18:38:48 by kosnakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,6 @@ t_token_type	check_type(char *line)
 		return (REDIRECT_IN);
 	else if (ft_strncmp(line, ">", 1) == 0)
 		return (REDIRECT_OUT);
-	else if (ft_strncmp(line, "(", 1) == 0)
-		return (BRACKET_LEFT);
-	else if (ft_strncmp(line, ")", 1) == 0)
-		return (BRACKET_RIGHT);
 	else
 		return (WORD);
 }
@@ -59,11 +55,13 @@ int	get_word_len(char *line)
 	return (len);
 }
 
-int	add_token(t_token **token, char *line, t_token_type type)
+int	add_token(t_token **token, char *line)
 {
-	t_token		*new;
-	char		*token_str;
+	t_token			*new;
+	char			*token_str;
+	t_token_type	type;
 
+	type = check_type(line);
 	if (type == WORD)
 		token_str = get_word(line);
 	else
@@ -78,10 +76,11 @@ int	add_token(t_token **token, char *line, t_token_type type)
 
 bool	pipe_syntax_check(char *line)
 {
+	line = pass_space(line);
 	if (line[0] == '|')
 	{
 		ft_putendl_fd("minishell: syntax error near unexpected token `|'", 2);
-		error_status(256 * 1);
+		error_status(1);
 		return (false);
 	}
 	return (true);
@@ -94,7 +93,7 @@ t_token	*tokenize(char *line)
 
 	if (!pipe_syntax_check(line))
 	{
-		error_status(256 * 1);
+		error_status(1);
 		return (NULL);
 	}
 	token = NULL;
@@ -103,11 +102,11 @@ t_token	*tokenize(char *line)
 		line = pass_space(line);
 		if (!*line || *line == '#')
 			break ;
-		token_len = add_token(&token, line, check_type(line));
+		token_len = add_token(&token, line);
 		if (!token_len)
 		{
 			free_token(token);
-			error_status(256 * 1);
+			error_status(1);
 			return (NULL);
 		}
 		line += token_len;

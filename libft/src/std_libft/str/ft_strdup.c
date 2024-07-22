@@ -6,7 +6,7 @@
 /*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/24 15:39:55 by jtakahas          #+#    #+#             */
-/*   Updated: 2023/08/27 15:34:25 by jtakahas         ###   ########.fr       */
+/*   Updated: 2024/07/22 17:57:14 by jtakahas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,5 +14,7 @@
 
 char	*ft_strdup(const char *s1)
 {
+	if (!s1)
+		return (NULL);
 	return (ft_substr(s1, 0, ft_strlen(s1)));
 }

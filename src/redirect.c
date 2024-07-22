@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirect.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kosnakam <kosnakam@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:28:02 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/17 15:28:05 by kosnakam         ###   ########.fr       */
+/*   Updated: 2024/07/22 17:02:01 by jtakahas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ bool	redirect(t_token **token)
 	return (true);
 }
 
-void	redirect_open(t_token *token)
+bool	redirect_open(t_token *token, t_env *env)
 {
 	while (token)
 	{
@@ -54,19 +54,19 @@ void	redirect_open(t_token *token)
 			token->fd = open(token->next->str,
 					O_WRONLY | O_CREAT | O_APPEND, S_IREAD | S_IWRITE);
 		else if (token->type == REDIRECT_HERE_DOC)
-			token->fd = open_heredoc(token->next->str);
+			token->fd = open_heredoc(token->next->str, env);
+		if (token->fd == 130)
+			return (false);
 		if (token->fd == -1)
 			ft_error("minishell", token->next->str,
 				"No such file or directory", 0);
 		token = token->next;
 	}
+	return (true);
 }
 
 void	close_redirect(t_token *token)
 {
-	t_token	*tmp;
-
-	tmp = token;
 	while (token->next)
 		token = token->next;
 	while (token->prev)

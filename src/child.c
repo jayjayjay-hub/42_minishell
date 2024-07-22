@@ -6,7 +6,7 @@
 /*   By: kosnakam <kosnakam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:26:38 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/17 15:26:41 by kosnakam         ###   ########.fr       */
+/*   Updated: 2024/07/22 18:38:42 by kosnakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,15 @@
 static void	sub_dup2(int first, int second)
 {
 	if (first != 0)
-		dup2(first, STDIN_FILENO);
+	{
+		if (dup2(first, STDIN_FILENO) == -1)
+			ft_error("minishell", NULL, "dup2 failed", 1);
+	}
 	if (second != 0)
-		dup2(second, STDOUT_FILENO);
+	{
+		if (dup2(second, STDOUT_FILENO) == -1)
+			ft_error("minishell", NULL, "dup2 failed", 1);
+	}
 }
 
 char	*search_path(char *cmd, char **envp)
@@ -54,7 +60,9 @@ void	do_execve(char **cmd, char **envp)
 	char	*path;
 
 	path = NULL;
-	if (!ft_strncmp(cmd[0], "/", 1) || !ft_strncmp(cmd[0], "./", 2))
+	if (!cmd[0])
+		exit(0);
+	if (ft_strchr(cmd[0], '/'))
 	{
 		if (access(cmd[0], F_OK) != -1)
 			path = cmd[0];
@@ -64,6 +72,8 @@ void	do_execve(char **cmd, char **envp)
 	}
 	else
 		path = search_path(cmd[0], envp);
+	if (cmd[0][0] == '\0')
+		ft_error("minishell", "\'\'", "command not found", CMD_NOT_FOUND);
 	if (!path)
 		ft_error("minishell", cmd[0], "command not found", CMD_NOT_FOUND);
 	if (execve(path, cmd, envp) == -1)
@@ -92,7 +102,7 @@ void	**run_cmd(t_ats *ats, char **envp)
 			i++;
 		}
 		if (!redirect(&token))
-			exit(error_status(256 * 1));
+			exit(error_status(1));
 	}
 	free_ats(ats);
 	do_execve(cmd, envp);
@@ -121,9 +131,9 @@ pid_t	child(t_cmd *command, t_env *env)
 					command->fd_pipe->fd[2 * pipe_i + 1]);
 		}
 		close_pipe(command->fd_pipe);
-		if (builtin_control(command->ats->token, &env, 1))
+		if (builtin_control(command->ats->token, &env, 1, 1))
 			exit(error_status(PRINT_ERROR));
 		run_cmd(command->ats, command->envp);
 	}
-	return (pid);
+	return (sig_child(), pid);
 }

@@ -6,7 +6,7 @@
 /*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:26:55 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/17 15:40:59 by jtakahas         ###   ########.fr       */
+/*   Updated: 2024/07/22 17:56:38 by jtakahas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,69 +29,92 @@ void	env_add_back(t_env *new, t_env **env)
 	}
 }
 
-char	*get_key_from_envp(char *env_line)
+bool	edit_env_value(char *key, char *value, t_env **env)
+{
+	t_env	*tmp;
+	char	*tmp_value;
+	int		key_len;
+
+	if (!key || !env)
+		return (false);
+	tmp = *env;
+	key_len = ft_strlen(key);
+	while (tmp)
+	{
+		if ((int)ft_strlen(tmp->key) == key_len
+			&& !ft_strncmp(tmp->key, key, key_len))
+		{
+			tmp_value = tmp->value;
+			tmp->value = ft_strdup(value);
+			if (tmp_value)
+				free(tmp_value);
+			return (true);
+		}
+		tmp = tmp->next;
+	}
+	return (false);
+}
+
+char	*get_env_value(char *key, t_env *env)
+{
+	t_env	*tmp;
+	int		key_len;
+
+	tmp = env;
+	if (!key)
+		return (NULL);
+	key_len = ft_strlen(key);
+	if (key_len == 1 && key[0] == '?')
+		return (ft_itoa(error_status(PRINT_ERROR)));
+	while (tmp)
+	{
+		if ((int)ft_strlen(tmp->key) == key_len
+			&& !ft_strncmp(tmp->key, key, key_len))
+			return (ft_strdup(tmp->value));
+		tmp = tmp->next;
+	}
+	return (NULL);
+}
+
+char	*get_key(char *str)
 {
 	int		i;
 	char	*key;
 
 	i = 0;
-	while (env_line[i] && env_line[i] != '=')
+	if (ft_strlen(str) == 1 && str[0] == '?')
+		return (ft_strdup("?"));
+	if (!is_al_under(str[i]))
+		return (NULL);
+	i++;
+	while (str[i] && is_alnum_under(str[i]))
 		i++;
-	key = malloc(sizeof(char) * (i + 1));
-	if (!key)
-		ft_error("malloc", "key", strerror(errno), EXIT_FAILURE);
-	ft_strlcpy(key, env_line, i + 1);
+	key = ft_substr(str, 0, i);
 	return (key);
 }
 
-char	*get_value_from_envp(char *env_line)
+t_env	*new_env(char *env_line, bool is_export, t_env **env)
 {
-	int		i;
+	t_env	*new_env_node;
+	char	*key;
 	char	*value;
 
-	i = 0;
-	while (env_line[i] && env_line[i] != '=')
-		i++;
-	if (!env_line[i])
+	key = get_key_from_str(env_line);
+	if (!key)
 		return (NULL);
-	value = ft_strdup(env_line + i + 1);
-	if (!value)
-		ft_error("ft_strdup", "value", strerror(errno), EXIT_FAILURE);
-	return (value);
-}
-
-t_env	*new_valiable(char *env_line)
-{
-	t_env	*env;
-	char	*key;
-	char	*value;
-
-	env = malloc(sizeof(t_env));
-	if (!env)
+	value = get_value_from_str(env_line);
+	if (edit_env_value(key, value, env))
+	{
+		free(key);
+		free(value);
+		return (NULL);
+	}
+	new_env_node = malloc(sizeof(t_env));
+	if (!new_env_node)
 		ft_error("malloc", "env", strerror(errno), EXIT_FAILURE);
-	key = get_key_from_envp(env_line);
-	value = get_value_from_envp(env_line);
-	env->key = key;
-	env->value = value;
-	env->is_export = false;
-	env->next = NULL;
-	return (env);
-}
-
-t_env	*new_export_env(char *env_line)
-{
-	t_env	*env;
-	char	*key;
-	char	*value;
-
-	env = malloc(sizeof(t_env));
-	if (!env)
-		ft_error("malloc", "env", strerror(errno), EXIT_FAILURE);
-	key = get_key_from_envp(env_line);
-	value = get_value_from_envp(env_line);
-	env->key = key;
-	env->value = value;
-	env->is_export = true;
-	env->next = NULL;
-	return (env);
+	new_env_node->key = key;
+	new_env_node->value = value;
+	new_env_node->is_export = is_export;
+	new_env_node->next = NULL;
+	return (new_env_node);
 }

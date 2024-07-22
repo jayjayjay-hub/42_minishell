@@ -1,8 +1,11 @@
+# project name
 NAME = minishell
 
+# library name
 LIBFT_NAME = libft
 LIBFT_DIR = libft/
 
+# include
 INCLUDE_DIR = include/
 INCLUDE = -I $(INCLUDE_DIR)
 LIBFT_INCLUDE = -I $(LIBFT_DIR)$(INCLUDE_DIR)
@@ -12,25 +15,25 @@ OBJ_DIR = .obj/
 
 ERROR_DIR = error/
 
+# compiler
 CC = cc
 LDFRAGS = -lreadline
 CFLAGS = -Wall -Wextra -Werror
+# debug option
 # CFLAGS = -g
 RM = rm -rf
 NORM = norminette
 
-# 新しいファイルはここに書いていって！
 SRC_FILES = main.c token_list.c\
 			tokenizer.c signal.c\
 			error.c redirect.c\
-			parser.c parse_tree_list.c\
+			parser.c\
 			ats_list.c\
 			child.c pipe.c\
-			variable_list.c variable.c\
+			variable.c\
 			expansion.c\
 			utils.c\
 			syntax.c\
-			env_list.c env.c\
 			builtin.c\
 			builtin_exit.c\
 			builtin_cd.c\
@@ -38,14 +41,16 @@ SRC_FILES = main.c token_list.c\
 			builtin_pwd.c\
 			builtin_export.c\
 			builtin_env.c\
+			builtin_unset.c\
 			free.c\
 			heredoc.c\
 			childset.c\
+			env_list.c\
 			env_list_utils.c\
-			env_list_utils2.c\
+			env_init.c\
 			expansion_utils.c\
-			variable_utils.c\
-			tokenizer_utils.c
+			tokenizer_utils.c\
+			signal_child.c
 
 OJB_FILES = $(SRC_FILES:%.c=%.o)
 
@@ -106,8 +111,6 @@ diff: all
 	@./tester/my_tester/diff.sh
 
 all_test: all test diff
-
-rebonus: fclean bonus
 
 norm:
 	@echo $(R) "<<< $(NAME) error count >>>" $(X)

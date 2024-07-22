@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_pwd.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kosnakam <kosnakam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:26:16 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/17 16:22:52 by jtakahas         ###   ########.fr       */
+/*   Updated: 2024/07/22 18:37:54 by kosnakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ bool	builtin_pwd(void)
 	if (!buf)
 	{
 		perror("pwd");
-		error_status(256 * 1);
+		error_status(1);
 		return (false);
 	}
 	ft_putendl_fd(buf, 1);

@@ -1,50 +1,56 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtin_export.c                                   :+:      :+:    :+:   */
+/*   builtin_unset.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/17 15:26:07 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/22 15:13:02 by jtakahas         ###   ########.fr       */
+/*   Created: 2024/07/22 15:25:04 by jtakahas          #+#    #+#             */
+/*   Updated: 2024/07/22 15:49:28 by jtakahas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+// builtin_unset.c
+
 #include "minishell.h"
 
-void	print_export(t_env *env)
+void	unset(char *key, t_env **env)
 {
 	t_env	*tmp;
+	t_env	*prev;
+	int		key_len;
 
-	tmp = env;
-	while (tmp && tmp->is_export)
+	prev = NULL;
+	tmp = *env;
+	key_len = ft_strlen(key);
+	while (tmp)
 	{
-		ft_putstr_fd("declare -x ", 1);
-		ft_putstr_fd(tmp->key, 1);
-		if (tmp->value)
+		if ((int)ft_strlen(tmp->key) == key_len
+			&& !ft_strncmp(tmp->key, key, key_len))
 		{
-			ft_putstr_fd("=\"", 1);
-			ft_putstr_fd(tmp->value, 1);
-			ft_putendl_fd("\"", 1);
+			if (prev)
+				prev->next = tmp->next;
+			else
+				*env = tmp->next;
+			free(tmp->key);
+			free(tmp->value);
+			free(tmp);
+			return ;
 		}
-		else
-			ft_putchar_fd('\n', 1);
+		prev = tmp;
 		tmp = tmp->next;
 	}
 }
 
-bool	builtin_export(t_token *token, t_env **env)
+bool	builtin_unset(t_token *token, t_env **env)
 {
-	t_env	*new;
-
 	if (!token->next)
-		return (print_export(*env), true);
+		return (true);
 	token = token->next;
 	while (token)
 	{
-		new = new_env(token->str, true, env);
-		env_add_back(new, env);
+		unset(token->str, env);
 		token = token->next;
 	}
-	return (error_status(0), true);
+	return (true);
 }

@@ -6,7 +6,7 @@
 /*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:27:41 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/17 16:20:17 by jtakahas         ###   ########.fr       */
+/*   Updated: 2024/07/22 17:00:20 by jtakahas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ void	command_set(char *line, char **envp, t_env *env)
 {
 	t_token		*token;
 	t_cmd		*command;
+	bool		here_doc_check;
 
 	token = NULL;
 	command = (t_cmd *)malloc(sizeof(t_cmd));
@@ -33,9 +34,10 @@ void	command_set(char *line, char **envp, t_env *env)
 	if (!syntax_check(token))
 		return ;
 	expansion(token, env);
-	redirect_open(token);
+	here_doc_check = redirect_open(token, env);
 	command->ats = parser(token);
-	make_wait_child(command, env);
+	if (here_doc_check)
+		make_wait_child(command, env);
 	free_token(token);
 	free_command(command);
 }
@@ -61,7 +63,7 @@ int	main(int argc, char **argv, char **envp)
 			free(line);
 		}
 	}
-	argc = 0;
-	argv = NULL;
+	(void)argc;
+	(void)argv;
 	return (0);
 }
