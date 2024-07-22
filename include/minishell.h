@@ -6,7 +6,7 @@
 /*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:25:11 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/22 15:22:15 by jtakahas         ###   ########.fr       */
+/*   Updated: 2024/07/22 15:44:48 by jtakahas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,7 +181,6 @@ void			expansion(t_token *token, t_env *env);
 // variable.c
 bool			is_alnum_under(char c);
 bool			is_al_under(char c);
-bool			add_variable(t_token *token, t_env **env);
 bool			is_valid_identifier(char *str);
 
 // utils.c
@@ -230,6 +229,9 @@ void			print_export(t_env *env);
 // builtin_env.c
 bool			builtin_env(t_token *token, t_env *env);
 void			print_env(t_env *env);
+
+// builtin_unset.c
+bool			builtin_unset(t_token *token, t_env **env);
 
 // builtin_exit.c
 bool			builtin_exit(t_token *token);

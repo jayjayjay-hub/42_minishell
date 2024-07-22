@@ -41,6 +41,7 @@ SRC_FILES = main.c token_list.c\
 			builtin_pwd.c\
 			builtin_export.c\
 			builtin_env.c\
+			builtin_unset.c\
 			free.c\
 			heredoc.c\
 			childset.c\
