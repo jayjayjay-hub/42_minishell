@@ -6,7 +6,7 @@
 /*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:25:38 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/22 17:50:47 by jtakahas         ###   ########.fr       */
+/*   Updated: 2024/07/22 18:01:21 by jtakahas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,11 @@ bool	builtin_cd(t_token *token, t_env **env)
 		if (!path)
 		{
 			ft_putendl_fd("cd: HOME not set", 2);
+			free(path);
+			return (true);
+		}
+		if (path[0] == '\0')
+		{
 			free(path);
 			return (true);
 		}
