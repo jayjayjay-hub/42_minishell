@@ -6,7 +6,7 @@
 /*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:26:55 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/20 16:20:56 by jtakahas         ###   ########.fr       */
+/*   Updated: 2024/07/22 14:11:48 by jtakahas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,8 @@ char	*get_env_value(char *key, t_env *env)
 	int		key_len;
 
 	tmp = env;
+	if (!key)
+		return (NULL);
 	key_len = ft_strlen(key);
 	if (key_len == 1 && key[0] == '?')
 		return (ft_itoa(error_status(PRINT_ERROR)));
@@ -69,6 +71,23 @@ char	*get_env_value(char *key, t_env *env)
 		tmp = tmp->next;
 	}
 	return (NULL);
+}
+
+char	*get_key(char *str)
+{
+	int		i;
+	char	*key;
+
+	i = 0;
+	if (ft_strlen(str) == 1 && str[0] == '?')
+		return (ft_strdup("?"));
+	if (!is_al_under(str[i]))
+		return (NULL);
+	i++;
+	while (str[i] && is_alnum_under(str[i]))
+		i++;
+	key = ft_substr(str, 0, i);
+	return (key);
 }
 
 t_env	*new_env(char *env_line, bool is_export)

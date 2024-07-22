@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jay <jay@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:25:11 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/20 17:28:13 by jay              ###   ########.fr       */
+/*   Updated: 2024/07/22 13:57:25 by jtakahas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,10 +184,6 @@ bool			is_al_under(char c);
 bool			add_variable(t_token *token, t_env **env);
 bool			is_valid_identifier(char *str);
 
-// variable_list.c
-t_variable		*variable_list_new(char *key, char *value);
-char			*get_variable_key(char *str);
-
 // utils.c
 int				is_quote(char c);
 int				is_metachar(char c);
@@ -203,6 +199,7 @@ void			env_add_back(t_env *new, t_env **env);
 bool			edit_env_value(char *key, char *value, t_env **env);
 t_env			*new_env(char *env_line, bool is_export);
 char			*get_env_value(char *key, t_env *env);
+char			*get_key(char *str);
 
 // env_list_utils.c
 void			free_env(t_env *env);
