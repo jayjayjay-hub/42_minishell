@@ -6,7 +6,7 @@
 /*   By: kosnakam <kosnakam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:25:11 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/20 13:37:31 by kosnakam         ###   ########.fr       */
+/*   Updated: 2024/07/22 15:54:56 by kosnakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,6 +146,8 @@ int				token_list_size(t_token *token);
 // signal.c
 void			register_signal(void);
 void			signal_handler(int signum);
+void			sig_heredoc(void);
+void			sig_stop(void);
 
 // error.c
 void			ft_error(char *cmd, char *target,
@@ -155,7 +157,7 @@ int				error_status(int error_code);
 
 // redirect.c
 bool			redirect(t_token **token);
-void			redirect_open(t_token *token);
+bool			redirect_open(t_token *token);
 void			close_redirect(t_token *token);
 
 // parser.c
