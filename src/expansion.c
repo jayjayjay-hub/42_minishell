@@ -20,7 +20,10 @@ char	*variable_expansion(char *str, t_env *env, int *str_index)
 	str++;
 	key = get_key(str);
 	if (!key)
+	{
+		*str_index += 2;
 		return (NULL);
+	}
 	value = get_env_value(key, env);
 	*str_index += ft_strlen(key) + 1;
 	free(key);
@@ -81,44 +84,39 @@ char	*pass_single_quote(char *str, int *str_index)
 // 	(*j)++;
 // }
 
+void	join_and_free(char **tmp, char *str)
+{
+	char *tmp2;
+
+	if (!str)
+		return ;
+	tmp2 = ft_strjoin(*tmp, str);
+	free(str);
+	free(*tmp);
+	*tmp = tmp2;
+}
+
 void expansion_env(char **str, t_env *env)
 {
 	int index;
 	char *tmp;
-	char *free_tmp;
-	char *value;
 
 	index = 0;
-	free_tmp = ft_calloc(1, sizeof(char) * (ft_strlen(*str) + 1));
+	tmp = ft_calloc(1, sizeof(char) * (ft_strlen(*str) + 1));
 	while ((*str)[index])
 	{
 		if (is_single_quote((*str)[index]))
-		{
-			tmp = ft_strjoin(free_tmp, pass_single_quote(*str + index, &index));
-			free(free_tmp);
-			free_tmp = tmp;
-		}
+			join_and_free(&tmp, pass_single_quote(*str + index, &index));
 		else if ((*str)[index] == '$' && (*str)[index + 1])
-		{
-			value = variable_expansion(*str + index, env, &index);
-			if (value)
-			{
-				tmp = ft_strjoin(free_tmp, value);
-				free(free_tmp);
-				free(value);
-				free_tmp = tmp;
-			}
-		}
+			join_and_free(&tmp, variable_expansion(*str + index, env, &index));
 		else if ((*str)[index])
 		{
-			tmp = ft_strjoin(free_tmp, ft_substr(*str + index, 0, 1));
-			free(free_tmp);
-			free_tmp = tmp;
+			join_and_free(&tmp, ft_substr(*str + index, 0, 1));
 			index++;
 		}
 	}
 	free(*str);
-	*str = free_tmp;
+	*str = tmp;
 }
 
 		// t_index	index;
