@@ -6,7 +6,7 @@
 /*   By: kosnakam <kosnakam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:50:27 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/20 12:17:08 by kosnakam         ###   ########.fr       */
+/*   Updated: 2024/07/22 16:32:49 by kosnakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	make_wait_child(t_cmd *command, t_env *env)
 	command->pid_info.pid = (pid_t *)malloc(sizeof(pid_t)
 			* (command->fd_pipe->pipe_size + 1));
 	if (!command->fd_pipe->pipe_size
-		&& builtin_control(command->ats->token, &env, 0))
+		&& builtin_control(command->ats->token, &env, 0, command->fd_pipe->pipe_size))
 	{
 		close_redirect(command->ats->token);
 		error_status(PRINT_ERROR);
@@ -59,7 +59,7 @@ void	make_wait_child(t_cmd *command, t_env *env)
 	execve_loop(command, env);
 	close_pipe(command->fd_pipe);
 	wait_child(command->pid_info);
-	if (!command->fd_pipe->pipe_size && builtin_check(tmp->token))
+	if (!command->fd_pipe->pipe_size && builtin_check(tmp->token, 0))
 		close_redirect(tmp->token);
 	free_ats(tmp);
 }

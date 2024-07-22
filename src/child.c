@@ -6,7 +6,7 @@
 /*   By: kosnakam <kosnakam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:26:38 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/20 13:24:06 by kosnakam         ###   ########.fr       */
+/*   Updated: 2024/07/22 16:31:55 by kosnakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,7 +131,7 @@ pid_t	child(t_cmd *command, t_env *env)
 					command->fd_pipe->fd[2 * pipe_i + 1]);
 		}
 		close_pipe(command->fd_pipe);
-		if (builtin_control(command->ats->token, &env, 1))
+		if (builtin_control(command->ats->token, &env, 1, 1))
 			exit(error_status(PRINT_ERROR));
 		run_cmd(command->ats, command->envp);
 	}

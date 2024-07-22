@@ -6,7 +6,7 @@
 /*   By: kosnakam <kosnakam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:25:11 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/22 15:54:56 by kosnakam         ###   ########.fr       */
+/*   Updated: 2024/07/22 16:32:25 by kosnakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -223,8 +223,8 @@ t_env			*new_export_env(char *env_line);
 t_env			*init_env(char **envp);
 
 // builtin_control.c
-bool			builtin_check(t_token *token);
-bool			builtin_control(t_token *token, t_env **env, int child_check);
+bool			builtin_check(t_token *token, int echo_check);
+bool			builtin_control(t_token *token, t_env **env, int child_check, int echo_check);
 
 // builtin_cd.c
 bool			builtin_cd(t_token *token, t_env **env);
