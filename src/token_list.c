@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_list.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kosnakam <kosnakam@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:28:30 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/19 16:10:41 by kosnakam         ###   ########.fr       */
+/*   Updated: 2024/07/20 16:38:53 by jtakahas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,18 @@ t_token	*new_token(char *str, t_token_type type, int fd)
 	token->next = NULL;
 	token->prev = NULL;
 	return (token);
+}
+
+void	delete_top_token(t_token **token)
+{
+	t_token	*tmp;
+
+	if (!token || !*token)
+		return ;
+	tmp = (*token)->next;
+	free((*token)->str);
+	free(*token);
+	*token = tmp;
 }
 
 int	token_list_size(t_token *token)

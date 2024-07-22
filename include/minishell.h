@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kosnakam <kosnakam@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:25:11 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/22 16:32:25 by kosnakam         ###   ########.fr       */
+/*   Updated: 2024/07/22 17:01:02 by jtakahas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,7 +134,7 @@ typedef struct s_cmd
 
 // tokenizer.c
 t_token			*tokenize(char *line);
-bool			is_valid_variable(char *str);
+bool			is_valid_identifier(char *str);
 int				get_word_len(char *line);
 
 // list.c
@@ -157,7 +157,7 @@ int				error_status(int error_code);
 
 // redirect.c
 bool			redirect(t_token **token);
-bool			redirect_open(t_token *token);
+bool			redirect_open(t_token *token, t_env *env);
 void			close_redirect(t_token *token);
 
 // parser.c
@@ -177,22 +177,14 @@ pid_t			child(t_cmd *command, t_env *env);
 t_pipe_fd		*create_pipe(t_ats *ats);
 void			close_pipe(t_pipe_fd *fd_pipe);
 
-// parse_tree_list.c
-t_parse_tree	*new_parse_tree(t_token *token, int token_count, bool is_parse);
-void			add_back_parse_tree(t_parse_tree **list, t_parse_tree *new);
-void			free_parse_tree(t_parse_tree *parse_tree);
-
 // expansion.c
 void			expansion(t_token *token, t_env *env);
+void			expansion_env(char **str, t_env *env);
 
 // variable.c
 bool			is_alnum_under(char c);
 bool			is_al_under(char c);
-bool			add_variable(t_token *token, t_env **env);
-
-// variable_list.c
-t_variable		*variable_list_new(char *key, char *value);
-char			*get_variable_key(char *str);
+bool			is_valid_identifier(char *str);
 
 // utils.c
 int				is_quote(char c);
@@ -206,21 +198,19 @@ bool			syntax_check(t_token *token);
 
 // env_list.c
 void			env_add_back(t_env *new, t_env **env);
-char			*get_key_from_envp(char *env_line);
-char			*get_value_from_envp(char *env_line);
-t_env			*new_valiable(char *env_line);
-void			free_env(t_env *env);
-void			print_export(t_env *env);
-void			print_env(t_env *env);
-int				env_list_size(t_env *env);
-char			*get_env_value(char *key, t_env *env);
 bool			edit_env_value(char *key, char *value, t_env **env);
-void			export_env(char *key, char *value, t_env **env);
-t_env			*new_key_value(t_key_value *key_value);
-t_env			*new_export_env(char *env_line);
+t_env			*new_env(char *env_line, bool is_export, t_env **env);
+char			*get_env_value(char *key, t_env *env);
+char			*get_key(char *str);
 
-// env.c
+// env_list_utils.c
+void			free_env(t_env *env);
+int				env_list_size(t_env *env);
+
+// env_init.c
 t_env			*init_env(char **envp);
+char			*get_key_from_str(char *env_line);
+char			*get_value_from_str(char *env_line);
 
 // builtin_control.c
 bool			builtin_check(t_token *token, int echo_check);
@@ -237,9 +227,14 @@ bool			builtin_pwd(void);
 
 // builtin_export.c
 bool			builtin_export(t_token *token, t_env **env);
+void			print_export(t_env *env);
 
 // builtin_env.c
-bool			builtin_env(t_env *env);
+bool			builtin_env(t_token *token, t_env *env);
+void			print_env(t_env *env);
+
+// builtin_unset.c
+bool			builtin_unset(t_token *token, t_env **env);
 
 // builtin_exit.c
 bool			builtin_exit(t_token *token);
@@ -250,16 +245,13 @@ void			dp_free(char **arg);
 void			free_command(t_cmd *command);
 
 // heredoc.c
-int				open_heredoc(char *eof);
+int				open_heredoc(char *eof, t_env *env);
 
 // childset.c
 void			make_wait_child(t_cmd *command, t_env *env);
 
 // expansion_utils.c
 void			remove_quote(char *str);
-
-// variable_utils.c
-bool			is_valid_token(t_token *token);
 
 // tokenizer_utils.c
 char			*get_word(char *line);

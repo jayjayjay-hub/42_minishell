@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   childset.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kosnakam <kosnakam@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:50:27 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/22 16:50:16 by kosnakam         ###   ########.fr       */
+/*   Updated: 2024/07/22 16:53:29 by jtakahas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,6 @@ void	execve_loop(t_cmd *command, t_env *env)
 {
 	while (command->ats)
 	{
-		if (add_variable(command->ats->token, &env))
-		{
-			command->ats = command->ats->next;
-			continue ;
-		}
 		command->pid_info.pid[command->pid_info.pipe_i] = child(command, env);
 		command->pid_info.pipe_i++;
 		command->ats = command->ats->next;

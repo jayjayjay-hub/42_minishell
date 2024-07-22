@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kosnakam <kosnakam@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jay <jay@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:28:49 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/20 13:45:44 by kosnakam         ###   ########.fr       */
+/*   Updated: 2024/07/20 17:26:38 by jay              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,11 +55,13 @@ int	get_word_len(char *line)
 	return (len);
 }
 
-int	add_token(t_token **token, char *line, t_token_type type)
+int	add_token(t_token **token, char *line)
 {
-	t_token		*new;
-	char		*token_str;
+	t_token			*new;
+	char			*token_str;
+	t_token_type	type;
 
+	type = check_type(line);
 	if (type == WORD)
 		token_str = get_word(line);
 	else
@@ -74,6 +76,7 @@ int	add_token(t_token **token, char *line, t_token_type type)
 
 bool	pipe_syntax_check(char *line)
 {
+	line = pass_space(line);
 	if (line[0] == '|')
 	{
 		ft_putendl_fd("minishell: syntax error near unexpected token `|'", 2);
@@ -99,7 +102,7 @@ t_token	*tokenize(char *line)
 		line = pass_space(line);
 		if (!*line || *line == '#')
 			break ;
-		token_len = add_token(&token, line, check_type(line));
+		token_len = add_token(&token, line);
 		if (!token_len)
 		{
 			free_token(token);

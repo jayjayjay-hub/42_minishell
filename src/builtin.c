@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kosnakam <kosnakam@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:26:24 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/22 16:31:41 by kosnakam         ###   ########.fr       */
+/*   Updated: 2024/07/22 16:53:18 by jtakahas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ bool	builtin_check(t_token *token, int echo_check)
 		if (ft_strlen(token->str) == 6 && !ft_strncmp(token->str, "export", 7))
 			return (true);
 		if (ft_strlen(token->str) == 3 && !ft_strncmp(token->str, "env", 4))
+			return (true);
+		if (ft_strlen(token->str) == 5 && !ft_strncmp(token->str, "unset", 6))
 			return (true);
 		token = token->next;
 	}
@@ -52,7 +54,9 @@ bool	do_builtin(t_token *token, t_env **env, int child_check)
 		if (ft_strlen(token->str) == 6 && !ft_strncmp(token->str, "export", 7))
 			return (builtin_export(token, env));
 		if (ft_strlen(token->str) == 3 && !ft_strncmp(token->str, "env", 4))
-			return (builtin_env(*env));
+			return (builtin_env(token, *env));
+		if (ft_strlen(token->str) == 5 && !ft_strncmp(token->str, "unset", 6))
+			return (builtin_unset(token, env));
 		token = token->next;
 	}
 	return (true);

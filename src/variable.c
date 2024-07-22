@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   variable.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kosnakam <kosnakam@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jay <jay@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:29:19 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/20 13:54:26 by kosnakam         ###   ########.fr       */
+/*   Updated: 2024/07/20 17:31:35 by jay              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ bool	is_al_under(char c)
 	return (false);
 }
 
-bool	is_valid_variable(char *str)
+bool	is_valid_identifier(char *str)
 {
 	int	index;
 
@@ -38,55 +38,7 @@ bool	is_valid_variable(char *str)
 	index++;
 	while (str[index] && is_alnum_under(str[index]))
 		index++;
-	if (!str[index] || str[index] != '=')
+	if (str[index] && str[index] != '=')
 		return (false);
-	index++;
-	if (!str[index])
-		return (false);
-	return (true);
-}
-
-t_key_value	*get_key_value(char *str)
-{
-	t_key_value	*key_value;
-	char		*tmp;
-	int			key_len;
-
-	key_value = (t_key_value *)malloc(sizeof(t_key_value));
-	if (!key_value)
-		return (NULL);
-	tmp = ft_strchr(str, '=');
-	if (!tmp)
-	{
-		free(key_value);
-		return (NULL);
-	}
-	key_len = tmp - str;
-	key_value->key = ft_substr(str, 0, key_len);
-	key_value->value = ft_strdup(tmp + 1);
-	return (key_value);
-}
-
-bool	add_variable(t_token *token, t_env **env)
-{
-	t_env		*new;
-	t_key_value	*key_value;
-
-	if (!is_valid_token(token))
-		return (false);
-	while (token)
-	{
-		key_value = get_key_value(token->str);
-		if (edit_env_value(key_value->key, key_value->value, env))
-		{
-			free(key_value->key);
-			free(key_value->value);
-		}
-		new = new_key_value(key_value);
-		if (!new)
-			return (false);
-		env_add_back(new, env);
-		token = token->next;
-	}
 	return (true);
 }

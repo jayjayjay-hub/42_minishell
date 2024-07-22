@@ -6,7 +6,7 @@
 /*   By: kosnakam <kosnakam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:28:08 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/22 17:24:48 by kosnakam         ###   ########.fr       */
+/*   Updated: 2024/07/22 17:30:01 by kosnakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ void	signal_handler(int sig)
 	rl_on_new_line();
 	rl_replace_line("", 0);
 	rl_redisplay();
+	(void)sig;
 }
 
 void	register_signal(void)
@@ -69,4 +70,3 @@ void	sig_stop(void)
 	stop_sa.sa_flags = 0;
 	sigaction(SIGINT, &stop_sa, NULL);
 }
-
