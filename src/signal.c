@@ -6,7 +6,7 @@
 /*   By: kosnakam <kosnakam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:28:08 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/22 16:45:26 by kosnakam         ###   ########.fr       */
+/*   Updated: 2024/07/22 17:24:48 by kosnakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void	sig_heredoc(void)
 {
 	t_sig	sa;
 
-	sa.sa_handler = &sigint_handler_exit;
+	sa.sa_handler = sigint_handler_exit;
 	sigemptyset(&sa.sa_mask);
 	sigaddset(&sa.sa_mask, SIGINT);
 	sa.sa_flags = SA_RESTART;
