@@ -6,7 +6,7 @@
 /*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:27:27 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/22 17:02:18 by jtakahas         ###   ########.fr       */
+/*   Updated: 2024/07/22 17:06:56 by jtakahas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int	read_heredoc(char *eof, int tmp_fd, t_env *env)
 {
 	char	*line;
 	pid_t	pid;
-	int	status = 0;
+	int		status = 0;
 
 	sig_stop();
 	pid = fork();

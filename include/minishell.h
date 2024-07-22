@@ -6,7 +6,7 @@
 /*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:25:11 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/22 17:01:02 by jtakahas         ###   ########.fr       */
+/*   Updated: 2024/07/22 17:07:31 by jtakahas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -214,7 +214,8 @@ char			*get_value_from_str(char *env_line);
 
 // builtin_control.c
 bool			builtin_check(t_token *token, int echo_check);
-bool			builtin_control(t_token *token, t_env **env, int child_check, int echo_check);
+bool			builtin_control(t_token *token,
+					t_env **env, int child_check, int echo_check);
 
 // builtin_cd.c
 bool			builtin_cd(t_token *token, t_env **env);

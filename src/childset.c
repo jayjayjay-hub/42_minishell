@@ -6,7 +6,7 @@
 /*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:50:27 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/22 16:53:29 by jtakahas         ###   ########.fr       */
+/*   Updated: 2024/07/22 17:06:34 by jtakahas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,8 @@ void	make_wait_child(t_cmd *command, t_env *env)
 	command->pid_info.pid = (pid_t *)malloc(sizeof(pid_t)
 			* (command->fd_pipe->pipe_size + 1));
 	if (!command->fd_pipe->pipe_size
-		&& builtin_control(command->ats->token, &env, 0, command->fd_pipe->pipe_size))
+		&& builtin_control(command->ats->token,
+			&env, 0, command->fd_pipe->pipe_size))
 	{
 		close_redirect(command->ats->token);
 		error_status(PRINT_ERROR);
