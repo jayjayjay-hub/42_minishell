@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_cd.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kosnakam <kosnakam@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:25:38 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/19 16:34:05 by kosnakam         ###   ########.fr       */
+/*   Updated: 2024/07/22 17:50:47 by jtakahas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ bool	builtin_cd(t_token *token, t_env **env)
 		{
 			ft_putendl_fd("cd: HOME not set", 2);
 			free(path);
-			return (false);
+			return (true);
 		}
 		if (chdir(path) == -1)
 		{

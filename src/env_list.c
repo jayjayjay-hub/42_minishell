@@ -6,7 +6,7 @@
 /*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:26:55 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/22 15:15:39 by jtakahas         ###   ########.fr       */
+/*   Updated: 2024/07/22 17:56:38 by jtakahas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,8 @@ bool	edit_env_value(char *key, char *value, t_env **env)
 		{
 			tmp_value = tmp->value;
 			tmp->value = ft_strdup(value);
-			free(tmp_value);
+			if (tmp_value)
+				free(tmp_value);
 			return (true);
 		}
 		tmp = tmp->next;
