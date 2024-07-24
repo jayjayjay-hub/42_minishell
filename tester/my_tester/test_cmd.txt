@@ -9,8 +9,12 @@
 pwd
 echo
 ls
-#./.out
-#/out
+./.out
+a.out
+./a.out
+ls
+llll
+/out
 .out
 nosuchfile
 

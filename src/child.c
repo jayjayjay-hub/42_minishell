@@ -6,7 +6,7 @@
 /*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:26:38 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/24 11:27:14 by jtakahas         ###   ########.fr       */
+/*   Updated: 2024/07/24 11:32:52 by jtakahas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ char	*search_path(char *cmd, t_env *env)
 
 	i = 0;
 	paths = ft_split(get_env_value("PATH", env), ':');
-	i = 0;
 	while (paths[i])
 	{
 		tmp_ret = ft_strjoin(paths[i], "/");
