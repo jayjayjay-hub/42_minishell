@@ -6,7 +6,7 @@
 /*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:26:38 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/24 11:21:50 by jtakahas         ###   ########.fr       */
+/*   Updated: 2024/07/24 11:27:14 by jtakahas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,19 +35,15 @@ char	*search_path(char *cmd, t_env *env)
 
 	i = 0;
 	paths = ft_split(get_env_value("PATH", env), ':');
-	for (i = 0; paths[i]; i++)
-		printf("paths[%d]: %s\n", i, paths[i]);
 	i = 0;
 	while (paths[i])
 	{
 		tmp_ret = ft_strjoin(paths[i], "/");
 		ret = ft_strjoin(tmp_ret, cmd);
-		printf("ret: %s\n", ret);
 		if (access(ret, F_OK) == 0)
 		{
 			dp_free(paths);
 			free(tmp_ret);
-			printf("ret: %s\n", ret);
 			return (ret);
 		}
 		free(tmp_ret);
@@ -65,7 +61,7 @@ void	do_execve(char **cmd, char **envp, t_env *env)
 	path = NULL;
 	if (!cmd[0])
 		exit(0);
-	if (ft_strchr(cmd[0], '/') || !ft_strnstr(cmd[0], "./", 2))
+	if (ft_strchr(cmd[0], '/'))
 	{
 		if (access(cmd[0], F_OK) != -1)
 			path = cmd[0];
@@ -74,16 +70,13 @@ void	do_execve(char **cmd, char **envp, t_env *env)
 				"No such file or directory", CMD_NOT_FOUND);
 	}
 	else
-		// path = search_path(cmd[0], envp);
 		path = search_path(cmd[0], env);
-
-	printf("path: %s\n", path);
 
 	if (cmd[0][0] == '\0')
 		ft_error("minishell", "\'\'", "command not found", CMD_NOT_FOUND);
 	if (!path)
 		ft_error("minishell", cmd[0], "command not found", CMD_NOT_FOUND);
-	if (execve("./a.out", cmd, envp) == -1)
+	if (execve(path, cmd, envp) == -1)
 		ft_error(NULL, NULL, "execve failed", EXIT_FAILURE);
 }
 
