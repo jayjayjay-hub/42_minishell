@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kosnakam <kosnakam@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:27:27 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/22 20:15:40 by kosnakam         ###   ########.fr       */
+/*   Updated: 2024/07/24 15:37:31 by jtakahas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,9 @@ void	read_heredoc_prompt(char *eof, int tmp_fd, t_env *env)
 					"here-document delimited by end-of-file", 0);
 				exit(0);
 			}
-			free(line);
 			if (line[0] == '\n')
 				continue ;
+			free(line);
 			exit(0);
 		}
 		expansion_env(&line, env);
