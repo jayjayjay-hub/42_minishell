@@ -6,7 +6,7 @@
 /*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:26:24 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/22 18:50:48 by jtakahas         ###   ########.fr       */
+/*   Updated: 2024/07/24 15:22:38 by jtakahas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,25 +14,21 @@
 
 bool	builtin_check(t_token *token, int echo_check)
 {
-	while (token)
-	{
-		if (ft_strlen(token->str) == 4 && !ft_strncmp(token->str, "exit", 4))
-			return (true);
-		if (ft_strlen(token->str) == 2 && !ft_strncmp(token->str, "cd", 3))
-			return (true);
-		if (ft_strlen(token->str) == 4 && !ft_strncmp(token->str, "echo", 5)
-			&& echo_check)
-			return (true);
-		if (ft_strlen(token->str) == 3 && !ft_strncmp(token->str, "pwd", 4))
-			return (true);
-		if (ft_strlen(token->str) == 6 && !ft_strncmp(token->str, "export", 7))
-			return (true);
-		if (ft_strlen(token->str) == 3 && !ft_strncmp(token->str, "env", 4))
-			return (true);
-		if (ft_strlen(token->str) == 5 && !ft_strncmp(token->str, "unset", 6))
-			return (true);
-		token = token->next;
-	}
+	if (ft_strlen(token->str) == 4 && !ft_strncmp(token->str, "exit", 4))
+		return (true);
+	if (ft_strlen(token->str) == 2 && !ft_strncmp(token->str, "cd", 3))
+		return (true);
+	if (ft_strlen(token->str) == 4 && !ft_strncmp(token->str, "echo", 5)
+		&& echo_check)
+		return (true);
+	if (ft_strlen(token->str) == 3 && !ft_strncmp(token->str, "pwd", 4))
+		return (true);
+	if (ft_strlen(token->str) == 6 && !ft_strncmp(token->str, "export", 7))
+		return (true);
+	if (ft_strlen(token->str) == 3 && !ft_strncmp(token->str, "env", 4))
+		return (true);
+	if (ft_strlen(token->str) == 5 && !ft_strncmp(token->str, "unset", 6))
+		return (true);
 	return (false);
 }
 

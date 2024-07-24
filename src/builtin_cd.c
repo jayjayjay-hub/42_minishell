@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_cd.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kosnakam <kosnakam@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:25:38 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/24 12:50:57 by kosnakam         ###   ########.fr       */
+/*   Updated: 2024/07/24 15:27:35 by jtakahas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,8 @@ bool	do_cd(t_token *token, t_env **env, char *path)
 	else if (!ft_strncmp(token->str, "..", 2) && ft_strlen(token->str) == 2)
 	{
 		tmp = getcwd(NULL, 0);
-		path = prev_path(tmp);
+		if (!(!ft_strncmp(tmp, "/", 1) && ft_strlen(tmp) == 1))
+			path = prev_path(tmp);
 		free(tmp);
 	}
 	else
