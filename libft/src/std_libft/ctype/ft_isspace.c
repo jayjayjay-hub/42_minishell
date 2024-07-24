@@ -6,7 +6,7 @@
 /*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 17:28:53 by jtakahas          #+#    #+#             */
-/*   Updated: 2024/05/09 17:33:53 by jtakahas         ###   ########.fr       */
+/*   Updated: 2024/07/24 14:59:22 by jtakahas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	ft_isspace(int nbr)
 {
-	if (nbr == ' ' || (9 <= nbr && nbr <= 13))
+	if (nbr == ' ' || ('\t' <= nbr && nbr <= '\r'))
 		return (1);
 	return (0);
 }

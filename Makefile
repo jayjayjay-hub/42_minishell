@@ -18,7 +18,9 @@ ERROR_DIR = error/
 # compiler
 CC = cc
 LDFRAGS = -lreadline -fsanitize=address,undefined
-CFLAGS = -Wall -Wextra -Werror -fsanitize=address,undefined
+CFLAGS = -Wall -Wextra -Werror -fsanitize=address,undefined -g
+# LDFRAGS = -lreadline
+# CFLAGS = -Wall -Wextra -Werror
 # debug option
 # CFLAGS = -g
 RM = rm -rf

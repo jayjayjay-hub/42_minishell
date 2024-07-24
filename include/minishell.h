@@ -6,7 +6,7 @@
 /*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:25:11 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/24 14:06:03 by jtakahas         ###   ########.fr       */
+/*   Updated: 2024/07/24 14:52:19 by jtakahas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,6 +177,10 @@ void			close_pipe(t_pipe_fd *fdp);
 void			expansion(t_token **token, t_env *env);
 void			expansion_env(char **str, t_env *env);
 
+// expansion_utils.c
+void			join_and_free(char **tmp, char *str);
+void			remove_quote(char *str);
+
 // variable.c
 bool			is_alnum_under(char c);
 bool			is_al_under(char c);
@@ -246,9 +250,6 @@ int				open_heredoc(char *eof, t_env *env);
 
 // childset.c
 void			make_wait_child(t_cmd *command, t_env *env);
-
-// expansion_utils.c
-void			remove_quote(char *str);
 
 // tokenizer_utils.c
 char			*get_word(char *line);

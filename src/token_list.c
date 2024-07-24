@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/17 15:28:30 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/24 14:06:07 by jtakahas         ###   ########.fr       */
+/*   Created: 2024/07/24 14:29:38 by jtakahas          #+#    #+#             */
+/*   Updated: 2024/07/24 14:29:39 by jtakahas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,8 @@ void	free_token(t_token *token)
 	while (token)
 	{
 		tmp = token->next;
-		free(token->str);
+		if (token->str)
+			free(token->str);
 		if (!tmp)
 		{
 			free(token);
