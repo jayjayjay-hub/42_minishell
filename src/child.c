@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   child.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kosnakam <kosnakam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:26:38 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/24 11:32:52 by jtakahas         ###   ########.fr       */
+/*   Updated: 2024/07/24 12:13:41 by kosnakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,22 +29,23 @@ static void	sub_dup2(int first, int second)
 char	*search_path(char *cmd, t_env *env)
 {
 	int		i;
+	char	*ret;
+	char	*tmp;
 	char	**paths;
 	char	*tmp_ret;
-	char	*ret;
 
 	i = 0;
-	paths = ft_split(get_env_value("PATH", env), ':');
+	tmp = get_env_value("PATH", env);
+	if (!tmp)
+		ft_error("minishell", cmd, "No such file or directory", CMD_NOT_FOUND);
+	paths = ft_split(tmp, ':');
+	free(tmp);
 	while (paths[i])
 	{
 		tmp_ret = ft_strjoin(paths[i], "/");
 		ret = ft_strjoin(tmp_ret, cmd);
 		if (access(ret, F_OK) == 0)
-		{
-			dp_free(paths);
-			free(tmp_ret);
-			return (ret);
-		}
+			return (dp_free(paths), free(tmp_ret), ret);
 		free(tmp_ret);
 		free(ret);
 		i++;
@@ -70,11 +71,10 @@ void	do_execve(char **cmd, char **envp, t_env *env)
 	}
 	else
 		path = search_path(cmd[0], env);
-
-	if (cmd[0][0] == '\0')
-		ft_error("minishell", "\'\'", "command not found", CMD_NOT_FOUND);
 	if (!path)
 		ft_error("minishell", cmd[0], "command not found", CMD_NOT_FOUND);
+	if (cmd[0][0] == '\0')
+		ft_error("minishell", "\'\'", "command not found", CMD_NOT_FOUND);
 	if (execve(path, cmd, envp) == -1)
 		ft_error(NULL, NULL, "execve failed", EXIT_FAILURE);
 }
