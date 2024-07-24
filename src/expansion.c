@@ -6,7 +6,7 @@
 /*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 14:44:58 by jtakahas          #+#    #+#             */
-/*   Updated: 2024/07/22 17:23:14 by jtakahas         ###   ########.fr       */
+/*   Updated: 2024/07/24 13:28:17 by jtakahas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,9 +48,12 @@ void	join_and_free(char **tmp, char *str)
 	char	*tmp2;
 
 	if (!str)
-		return ;
-	tmp2 = ft_strjoin(*tmp, str);
-	free(str);
+		tmp2 = ft_strjoin(*tmp, "\0");
+	else
+	{
+		tmp2 = ft_strjoin(*tmp, str);
+		free(str);
+	}
 	free(*tmp);
 	*tmp = tmp2;
 }
@@ -78,21 +81,27 @@ void	expansion_env(char **str, t_env *env)
 	*str = tmp;
 }
 
-void	expansion(t_token *token, t_env *env)
+void	expansion(t_token **token, t_env *env)
 {
 	t_token	*tmp;
 
-	tmp = token;
-	while (token)
+	tmp = *token;
+	while (*token)
 	{
-		if (token->type == WORD)
+		if ((*token)->type == WORD)
 		{
-			if (token->prev && token->prev->type != REDIRECT_HERE_DOC)
-				expansion_env(&token->str, env);
-			else if (token_list_size(tmp) == 1)
-				expansion_env(&token->str, env);
-			remove_quote(token->str);
+			if (((*token)->prev && (*token)->prev->type != REDIRECT_HERE_DOC)
+				|| token_list_size(*token) == 1)
+				expansion_env(&(*token)->str, env);
+			if ((*token)->str[0] == '\0')
+			{
+				*token = delete_token(token);
+				printf("delete\n");
+				continue ;
+			}
+			else
+				remove_quote((*token)->str);
 		}
-		token = token->next;
+		*token = (*token)->next;
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:27:41 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/22 20:09:19 by jtakahas         ###   ########.fr       */
+/*   Updated: 2024/07/24 13:15:25 by jtakahas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,12 @@ void	command_set(char *line, char **envp, t_env *env)
 	token = tokenize(line);
 	if (!syntax_check(token))
 		return (free(command));
-	expansion(token, env);
+	expansion(&token, env);
+	if (!token)
+	{
+		printf("token is NULL\n");
+		return (free_command(command));
+	}
 	here_doc_check = redirect_open(token, env);
 	command->ats = parser(token);
 	if (here_doc_check)

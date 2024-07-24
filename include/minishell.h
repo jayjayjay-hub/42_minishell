@@ -6,7 +6,7 @@
 /*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:25:11 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/24 12:32:00 by jtakahas         ###   ########.fr       */
+/*   Updated: 2024/07/24 13:08:50 by jtakahas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,7 +142,8 @@ t_token			*new_token(char *str, t_token_type type, int fd);
 void			token_add_back(t_token **list, t_token *new);
 void			free_token(t_token *token);
 int				token_list_size(t_token *token);
-void			delete_token(t_token **token);
+t_token			*delete_token(t_token **token);
+void print_token(t_token *token);
 
 // error.c
 void			ft_error(char *cmd, char *target,
@@ -173,7 +174,7 @@ t_pipe_fd		*create_pipe(t_ats *ats);
 void			close_pipe(t_pipe_fd *fdp);
 
 // expansion.c
-void			expansion(t_token *token, t_env *env);
+void			expansion(t_token **token, t_env *env);
 void			expansion_env(char **str, t_env *env);
 
 // variable.c
