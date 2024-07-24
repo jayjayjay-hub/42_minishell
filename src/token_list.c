@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/17 15:28:30 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/20 16:38:53 by jtakahas         ###   ########.fr       */
+/*   Created: 2024/07/24 14:29:38 by jtakahas          #+#    #+#             */
+/*   Updated: 2024/07/24 14:29:39 by jtakahas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,16 +57,31 @@ t_token	*new_token(char *str, t_token_type type, int fd)
 	return (token);
 }
 
-void	delete_top_token(t_token **token)
+bool	delete_token(t_token **token)
 {
 	t_token	*tmp;
+	t_token	*nepre;
+	bool	ret;
 
+	ret = false;
 	if (!token || !*token)
-		return ;
-	tmp = (*token)->next;
-	free((*token)->str);
-	free(*token);
-	*token = tmp;
+		return (false);
+	tmp = *token;
+	if (tmp->prev)
+		tmp->prev->next = tmp->next;
+	if (tmp->next)
+		tmp->next->prev = tmp->prev;
+	if (tmp->next)
+	{
+		nepre = tmp->next;
+		ret = true;
+	}
+	else
+		nepre = tmp->prev;
+	free(tmp->str);
+	free(tmp);
+	*token = nepre;
+	return (ret);
 }
 
 int	token_list_size(t_token *token)
@@ -91,7 +106,8 @@ void	free_token(t_token *token)
 	while (token)
 	{
 		tmp = token->next;
-		free(token->str);
+		if (token->str)
+			free(token->str);
 		if (!tmp)
 		{
 			free(token);
@@ -101,3 +117,23 @@ void	free_token(t_token *token)
 		token = tmp;
 	}
 }
+
+// void	print_token(t_token *token)
+// {
+// 	if (token == NULL)
+// 	{
+// 		printf("token is NULL\n");
+// 		return ;
+// 	}
+// 	printf("token size: %d\n", token_list_size(token));
+// 	while (token)
+// 	{
+// 		printf("str: '%s'\n", token->str);
+// 		printf("type: %d\n", token->type);
+// 		printf("fd: %d\n", token->fd);
+// 		printf("backup_fd: %d\n", token->backup_fd);
+// 		printf("next: %p\n", token->next);
+// 		printf("prev: %p\n", token->prev);
+// 		token = token->next;
+// 	}
+// }

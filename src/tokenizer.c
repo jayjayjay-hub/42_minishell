@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kosnakam <kosnakam@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:28:49 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/22 18:38:48 by kosnakam         ###   ########.fr       */
+/*   Updated: 2024/07/24 15:04:27 by jtakahas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	get_word_len(char *line)
 	char	quote;
 
 	len = 0;
-	while (line[len] && !is_metachar(line[len]))
+	while (line[len] && !is_metachar(line[len]) && !ft_isspace(line[len]))
 	{
 		if (is_quote(line[len]))
 		{

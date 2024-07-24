@@ -6,7 +6,7 @@
 /*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:42:07 by jtakahas          #+#    #+#             */
-/*   Updated: 2024/07/17 15:42:53 by jtakahas         ###   ########.fr       */
+/*   Updated: 2024/07/24 14:51:25 by jtakahas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,4 +34,19 @@ void	remove_quote(char *str)
 			str[j++] = str[i++];
 	}
 	str[j] = '\0';
+}
+
+void	join_and_free(char **tmp, char *str)
+{
+	char	*tmp2;
+
+	if (!str)
+		tmp2 = ft_strjoin(*tmp, "\0");
+	else
+	{
+		tmp2 = ft_strjoin(*tmp, str);
+		free(str);
+	}
+	free(*tmp);
+	*tmp = tmp2;
 }

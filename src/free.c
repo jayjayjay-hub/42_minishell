@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kosnakam <kosnakam@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:27:21 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/22 20:07:55 by kosnakam         ###   ########.fr       */
+/*   Updated: 2024/07/24 13:11:00 by jtakahas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,9 @@ void	free_command(t_cmd *command)
 			free(command->fdp->fd);
 		free(command->fdp);
 	}
-	free(command->pid_info.pid);
-	free_ats(command->ats);
+	if (command->pid_info.pid)
+		free(command->pid_info.pid);
+	if (command->ats)
+		free_ats(command->ats);
 	free(command);
 }

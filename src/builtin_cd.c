@@ -6,7 +6,7 @@
 /*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:25:38 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/24 10:32:45 by jtakahas         ###   ########.fr       */
+/*   Updated: 2024/07/24 15:27:35 by jtakahas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,13 +47,31 @@ static char	*prev_path(char *path)
 	return (new_path);
 }
 
+static bool	control_env_cd(t_env **env, char *path)
+{
+	char	*old;
+	char	*home;
+
+	if (path && chdir(path) == -1)
+		return (error_cd(path));
+	old = get_env_value("PWD", *env);
+	home = getcwd(NULL, 0);
+	edit_env_value("OLDPWD", old, env);
+	edit_env_value("PWD", home, env);
+	error_status(0);
+	free(path);
+	free(home);
+	free(old);
+	return (true);
+}
+
 bool	do_cd(t_token *token, t_env **env, char *path)
 {
+	char	*tmp;
+
 	if (token->next)
-	{
-		ft_putendl_fd("minishell: cd: too many arguments", 2);
-		return (error_status(1), true);
-	}
+		return (ft_putendl_fd("minishell: cd: too many arguments", 2),
+			error_status(1), true);
 	else if (!ft_strncmp(token->str, "-", 1) && ft_strlen(token->str) == 1)
 	{
 		path = get_env_value("OLDPWD", *env);
@@ -64,22 +82,22 @@ bool	do_cd(t_token *token, t_env **env, char *path)
 	else if (!ft_strncmp(token->str, ".", 1) && ft_strlen(token->str) == 1)
 		path = get_env_value("PWD", *env);
 	else if (!ft_strncmp(token->str, "..", 2) && ft_strlen(token->str) == 2)
-		path = prev_path(getcwd(NULL, 0));
+	{
+		tmp = getcwd(NULL, 0);
+		if (!(!ft_strncmp(tmp, "/", 1) && ft_strlen(tmp) == 1))
+			path = prev_path(tmp);
+		free(tmp);
+	}
 	else
 		path = ft_strdup(token->str);
-	if (path && chdir(path) == -1)
-		return (error_cd(path));
-	edit_env_value("OLDPWD", get_env_value("PWD", *env), env);
-	edit_env_value("PWD", getcwd(NULL, 0), env);
-	error_status(0);
-	free(path);
-	return (true);
+	return (control_env_cd(env, path));
 }
 
 bool	builtin_cd(t_token *token, t_env **env)
 {
+	char	*old;
 	char	*path;
-	char	*value;
+	char	*home;
 
 	path = NULL;
 	if (!token->next)
@@ -93,12 +111,11 @@ bool	builtin_cd(t_token *token, t_env **env)
 		if (chdir(path) == -1)
 			return (ft_putstr_fd("cd: ", 2),
 				perror(path), error_status(1), free(path), true);
-		value = get_env_value("PWD", *env);
-		edit_env_value("OLDPWD", value, env);
-		free(value);
-		value = getcwd(NULL, 0);
-		edit_env_value("PWD", value, env);
-		return (free(path), free(value), true);
+		old = get_env_value("PWD", *env);
+		edit_env_value("OLDPWD", old, env);
+		home = getcwd(NULL, 0);
+		edit_env_value("PWD", home, env);
+		return (free(path), free(old), free(home), true);
 	}
 	token = token->next;
 	return (do_cd(token, env, path));

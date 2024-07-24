@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kosnakam <kosnakam@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:25:11 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/22 20:20:29 by kosnakam         ###   ########.fr       */
+/*   Updated: 2024/07/24 14:52:19 by jtakahas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,11 +137,13 @@ t_token			*tokenize(char *line);
 bool			is_valid_identifier(char *str);
 int				get_word_len(char *line);
 
-// list.c
+// token_list.c
 t_token			*new_token(char *str, t_token_type type, int fd);
 void			token_add_back(t_token **list, t_token *new);
 void			free_token(t_token *token);
 int				token_list_size(t_token *token);
+bool			delete_token(t_token **token);
+// void			print_token(t_token *token);
 
 // error.c
 void			ft_error(char *cmd, char *target,
@@ -172,8 +174,12 @@ t_pipe_fd		*create_pipe(t_ats *ats);
 void			close_pipe(t_pipe_fd *fdp);
 
 // expansion.c
-void			expansion(t_token *token, t_env *env);
+void			expansion(t_token **token, t_env *env);
 void			expansion_env(char **str, t_env *env);
+
+// expansion_utils.c
+void			join_and_free(char **tmp, char *str);
+void			remove_quote(char *str);
 
 // variable.c
 bool			is_alnum_under(char c);
@@ -244,9 +250,6 @@ int				open_heredoc(char *eof, t_env *env);
 
 // childset.c
 void			make_wait_child(t_cmd *command, t_env *env);
-
-// expansion_utils.c
-void			remove_quote(char *str);
 
 // tokenizer_utils.c
 char			*get_word(char *line);

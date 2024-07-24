@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/22 14:44:58 by jtakahas          #+#    #+#             */
-/*   Updated: 2024/07/22 17:23:14 by jtakahas         ###   ########.fr       */
+/*   Created: 2024/07/24 14:50:58 by jtakahas          #+#    #+#             */
+/*   Updated: 2024/07/24 15:54:21 by jtakahas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,16 +43,22 @@ char	*pass_single_quote(char *str, int *str_index)
 	return (ft_substr(str, 0, index));
 }
 
-void	join_and_free(char **tmp, char *str)
+void	pass_double_quote(char *str, char **tmp, int *index, t_env *env)
 {
-	char	*tmp2;
-
-	if (!str)
-		return ;
-	tmp2 = ft_strjoin(*tmp, str);
-	free(str);
-	free(*tmp);
-	*tmp = tmp2;
+	join_and_free(tmp, ft_substr(str + *index, 0, 1));
+	(*index)++;
+	while (str[*index] && !is_double_quote(str[*index]))
+	{
+		if (str[*index] == '$' && str[(*index) + 1])
+			join_and_free(tmp, variable_expansion(str + *index, env, index));
+		else
+		{
+			join_and_free(tmp, ft_substr(str + *index, 0, 1));
+			(*index)++;
+		}
+	}
+	join_and_free(tmp, ft_substr(str + *index, 0, 1));
+	(*index)++;
 }
 
 void	expansion_env(char **str, t_env *env)
@@ -64,7 +70,9 @@ void	expansion_env(char **str, t_env *env)
 	tmp = ft_calloc(1, sizeof(char) * (ft_strlen(*str) + 1));
 	while ((*str)[index])
 	{
-		if (is_single_quote((*str)[index]))
+		if (is_double_quote((*str)[index]))
+			pass_double_quote(*str, &tmp, &index, env);
+		else if (is_single_quote((*str)[index]))
 			join_and_free(&tmp, pass_single_quote(*str + index, &index));
 		else if ((*str)[index] == '$' && (*str)[index + 1])
 			join_and_free(&tmp, variable_expansion(*str + index, env, &index));
@@ -78,21 +86,31 @@ void	expansion_env(char **str, t_env *env)
 	*str = tmp;
 }
 
-void	expansion(t_token *token, t_env *env)
+void	expansion(t_token **token, t_env *env)
 {
-	t_token	*tmp;
+	int		size;
 
-	tmp = token;
-	while (token)
+	size = token_list_size(*token);
+	while (*token)
 	{
-		if (token->type == WORD)
+		if ((*token)->type == WORD && (((*token)->prev
+					&& (*token)->prev->type != REDIRECT_HERE_DOC) || size == 1))
 		{
-			if (token->prev && token->prev->type != REDIRECT_HERE_DOC)
-				expansion_env(&token->str, env);
-			else if (token_list_size(tmp) == 1)
-				expansion_env(&token->str, env);
-			remove_quote(token->str);
+			expansion_env(&(*token)->str, env);
+			if ((*token)->str[0] == '\0')
+			{
+				if (delete_token(token))
+					continue ;
+				else
+					break ;
+			}
+			else
+				remove_quote((*token)->str);
 		}
-		token = token->next;
+		if (!(*token)->next)
+			break ;
+		*token = (*token)->next;
 	}
+	while ((*token) && (*token)->prev)
+		*token = (*token)->prev;
 }
