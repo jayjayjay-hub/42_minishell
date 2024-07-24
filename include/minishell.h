@@ -6,7 +6,7 @@
 /*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:25:11 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/24 13:45:01 by jtakahas         ###   ########.fr       */
+/*   Updated: 2024/07/24 14:06:03 by jtakahas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,7 +142,7 @@ t_token			*new_token(char *str, t_token_type type, int fd);
 void			token_add_back(t_token **list, t_token *new);
 void			free_token(t_token *token);
 int				token_list_size(t_token *token);
-t_token			*delete_token(t_token **token);
+bool			delete_token(t_token **token);
 // void			print_token(t_token *token);
 
 // error.c

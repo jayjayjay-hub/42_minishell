@@ -6,7 +6,7 @@
 /*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 14:44:58 by jtakahas          #+#    #+#             */
-/*   Updated: 2024/07/24 13:32:10 by jtakahas         ###   ########.fr       */
+/*   Updated: 2024/07/24 14:11:17 by jtakahas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,20 +83,21 @@ void	expansion_env(char **str, t_env *env)
 
 void	expansion(t_token **token, t_env *env)
 {
-	int	size;
+	int		size;
 
 	size = token_list_size(*token);
 	while (*token)
 	{
-		if ((*token)->type == WORD)
+		if ((*token)->type == WORD && (((*token)->prev
+					&& (*token)->prev->type != REDIRECT_HERE_DOC) || size == 1))
 		{
-			if (((*token)->prev && (*token)->prev->type != REDIRECT_HERE_DOC)
-				|| size == 1)
-				expansion_env(&(*token)->str, env);
+			expansion_env(&(*token)->str, env);
 			if ((*token)->str[0] == '\0')
 			{
-				*token = delete_token(token);
-				continue ;
+				if (delete_token(token))
+					continue ;
+				else
+					break ;
 			}
 			else
 				remove_quote((*token)->str);

@@ -6,7 +6,7 @@
 /*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:27:41 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/24 13:33:56 by jtakahas         ###   ########.fr       */
+/*   Updated: 2024/07/24 13:52:26 by jtakahas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	command_set(char *line, char **envp, t_env *env)
 	struct_init(command, envp);
 	token = tokenize(line);
 	if (!syntax_check(token))
-		return (free(command));
+		return (free_command(command), free_token(token));
 	expansion(&token, env);
 	if (!token)
 		return (free_command(command));
