@@ -1,0 +1,12 @@
+Makefile
+a.out
+error
+experiment
+f
+include
+libft
+ls
+minishell
+src
+test.c
+tester

@@ -6,7 +6,7 @@
 /*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:28:30 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/24 12:51:47 by jtakahas         ###   ########.fr       */
+/*   Updated: 2024/07/24 13:45:30 by jtakahas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,15 +60,13 @@ t_token	*new_token(char *str, t_token_type type, int fd)
 t_token	*delete_token(t_token **token)
 {
 	t_token	*tmp;
-	t_token *next;
+	t_token	*next;
 
 	if (!token || !*token)
 		return (NULL);
 	tmp = *token;
-	// 先頭以外の場合
 	if (tmp->prev)
 		tmp->prev->next = tmp->next;
-	// 最後尾以外の場合
 	if (tmp->next)
 		tmp->next->prev = tmp->prev;
 	next = tmp->next;
@@ -111,22 +109,22 @@ void	free_token(t_token *token)
 	}
 }
 
-void	print_token(t_token *token)
-{
-	if (token == NULL)
-	{
-		printf("token is NULL\n");
-		return ;
-	}
-	printf("token size: %d\n", token_list_size(token));
-	while (token)
-	{
-		printf("str: '%s'\n", token->str);
-		printf("type: %d\n", token->type);
-		printf("fd: %d\n", token->fd);
-		printf("backup_fd: %d\n", token->backup_fd);
-		printf("next: %p\n", token->next);
-		printf("prev: %p\n", token->prev);
-		token = token->next;
-	}
-}
+// void	print_token(t_token *token)
+// {
+// 	if (token == NULL)
+// 	{
+// 		printf("token is NULL\n");
+// 		return ;
+// 	}
+// 	printf("token size: %d\n", token_list_size(token));
+// 	while (token)
+// 	{
+// 		printf("str: '%s'\n", token->str);
+// 		printf("type: %d\n", token->type);
+// 		printf("fd: %d\n", token->fd);
+// 		printf("backup_fd: %d\n", token->backup_fd);
+// 		printf("next: %p\n", token->next);
+// 		printf("prev: %p\n", token->prev);
+// 		token = token->next;
+// 	}
+// }
