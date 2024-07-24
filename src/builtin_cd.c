@@ -6,7 +6,7 @@
 /*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:25:38 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/22 20:26:41 by jtakahas         ###   ########.fr       */
+/*   Updated: 2024/07/24 10:32:45 by jtakahas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,8 @@ bool	do_cd(t_token *token, t_env **env, char *path)
 		path = get_env_value("PWD", *env);
 	else if (!ft_strncmp(token->str, "..", 2) && ft_strlen(token->str) == 2)
 		path = prev_path(getcwd(NULL, 0));
-	else path = ft_strdup(token->str);
+	else
+		path = ft_strdup(token->str);
 	if (path && chdir(path) == -1)
 		return (error_cd(path));
 	edit_env_value("OLDPWD", get_env_value("PWD", *env), env);
@@ -78,6 +79,7 @@ bool	do_cd(t_token *token, t_env **env, char *path)
 bool	builtin_cd(t_token *token, t_env **env)
 {
 	char	*path;
+	char	*value;
 
 	path = NULL;
 	if (!token->next)
@@ -89,14 +91,14 @@ bool	builtin_cd(t_token *token, t_env **env)
 		else if (path[0] == '\0')
 			return (free(path), true);
 		if (chdir(path) == -1)
-		{
-			ft_putstr_fd("cd: ", 2);
-			perror(path);
-			return (error_status(1), free(path), true);
-		}
-		edit_env_value("OLDPWD", get_env_value("PWD", *env), env);
-		edit_env_value("PWD", getcwd(NULL, 0), env);
-		return (true);
+			return (ft_putstr_fd("cd: ", 2),
+				perror(path), error_status(1), free(path), true);
+		value = get_env_value("PWD", *env);
+		edit_env_value("OLDPWD", value, env);
+		free(value);
+		value = getcwd(NULL, 0);
+		edit_env_value("PWD", value, env);
+		return (free(path), free(value), true);
 	}
 	token = token->next;
 	return (do_cd(token, env, path));
