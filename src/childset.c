@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   childset.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kosnakam <kosnakam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:50:27 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/22 18:51:13 by jtakahas         ###   ########.fr       */
+/*   Updated: 2024/07/22 20:07:55 by kosnakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,21 +44,21 @@ void	make_wait_child(t_cmd *command, t_env *env)
 	t_ats	*tmp;
 
 	tmp = command->ats;
-	command->fd_pipe = create_pipe(command->ats);
+	command->fdp = create_pipe(command->ats);
 	command->pid_info.pid = (pid_t *)malloc(sizeof(pid_t)
-			* (command->fd_pipe->pipe_size + 1));
-	if (!command->fd_pipe->pipe_size
+			* (command->fdp->pipe_size + 1));
+	if (!command->fdp->pipe_size
 		&& builtin_control(command->ats->token,
-			&env, 0, command->fd_pipe->pipe_size))
+			&env, 0, command->fdp->pipe_size))
 	{
 		close_redirect(command->ats->token);
 		error_status(PRINT_ERROR);
 		return ;
 	}
 	execve_loop(command, env);
-	close_pipe(command->fd_pipe);
+	close_pipe(command->fdp);
 	wait_child(command->pid_info);
-	if (!command->fd_pipe->pipe_size && builtin_check(tmp->token, 0))
+	if (!command->fdp->pipe_size && builtin_check(tmp->token, 0))
 		close_redirect(tmp->token);
 	free_ats(tmp);
 }

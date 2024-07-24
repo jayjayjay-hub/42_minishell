@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jtakahas <jtakahas@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kosnakam <kosnakam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:27:27 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/22 18:51:37 by jtakahas         ###   ########.fr       */
+/*   Updated: 2024/07/22 20:15:40 by kosnakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,6 @@ int	read_heredoc(char *eof, int tmp_fd, t_env *env)
 	else
 	{
 		waitpid(pid, &status, 0);
-		sig_stop();
 		register_signal();
 	}
 	return (status);

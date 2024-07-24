@@ -6,7 +6,7 @@
 /*   By: kosnakam <kosnakam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 15:27:21 by kosnakam          #+#    #+#             */
-/*   Updated: 2024/07/22 15:52:46 by kosnakam         ###   ########.fr       */
+/*   Updated: 2024/07/22 20:07:55 by kosnakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,11 @@ void	free_command(t_cmd *command)
 {
 	if (!command)
 		return ;
-	if (command->fd_pipe)
+	if (command->fdp)
 	{
-		if (command->fd_pipe->fd)
-			free(command->fd_pipe->fd);
-		free(command->fd_pipe);
+		if (command->fdp->fd)
+			free(command->fdp->fd);
+		free(command->fdp);
 	}
 	free(command->pid_info.pid);
 	free_ats(command->ats);
