@@ -1,9 +1,25 @@
-# not ignore
+!.git
 
-!include/*
-!srcs/*
-Makefile
-!libft/*
+.obj
 
-# Ignore everything in the root except the .gitignore file
-/*
+libft/.obj
+
+libft/libft
+
+*.out
+
+minishell
+
+cases_*
+
+expect/
+
+out/
+
+tester/my_tester/test_cmd_error.txt
+
+error/
+
+*pdf
+
+.vscode
