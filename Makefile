@@ -32,7 +32,6 @@ SRC_FILES = main.c token_list.c\
 			parser.c\
 			ats_list.c\
 			child.c pipe.c\
-			variable.c\
 			expansion.c\
 			utils.c\
 			syntax.c\
@@ -50,6 +49,7 @@ SRC_FILES = main.c token_list.c\
 			env_list.c\
 			env_list_utils.c\
 			env_init.c\
+			env_utils.c\
 			expansion_utils.c\
 			tokenizer_utils.c\
 			signal_child.c
