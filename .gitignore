@@ -1,16 +1,21 @@
-# 実行ファイルやオブジェクトファイルを無視する
-libft.a
-minishell
 .obj/
-libft/.obj/
-libft/*.a
+minishell
 .vscode/
-
-# not ignore
-!include/*
-!srcs/*
-!Makefile
-!libft/*
-
-# pdfファイルを無視する
 *.pdf
+
+# # 実行ファイルやオブジェクトファイルを無視する
+# libft.a
+# minishell
+# .obj/
+# libft/.obj/
+# libft/*.a
+# .vscode/
+
+# # not ignore
+# !include/*
+# !srcs/*
+# !Makefile
+# !libft/*
+
+# # pdfファイルを無視する
+# *.pdf
